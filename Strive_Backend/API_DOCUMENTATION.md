@@ -24,7 +24,7 @@ python manage.py migrate
 python manage.py runserver       
 
 
-python manage.py startapp users  # create a new app
+python manage.py startapp users 
 python manage.py createsuperuser # admin account
 
 '''
