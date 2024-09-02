@@ -68,7 +68,7 @@ The patient registration is divided into 3 steps:
   "registration_type": "patient",  
   "first_name": "John",
   "last_name": "Doe",
-  "date_of_birth": "1990-05-10",  // Format: YYYY-MM-DD
+  "date_of_birth": "1990-05-10", 
   "gender": "male",  // Options: "male", "female", "other"
   "phone_number": "03001234567",
   "whatsapp_number": "03001234567",
