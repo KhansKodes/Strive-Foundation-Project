@@ -25,7 +25,7 @@ python manage.py runserver
 
 
 python manage.py startapp users 
-python manage.py createsuperuser # admin account
+python manage.py createsuperuser 
 
 '''
 ## Base URL
