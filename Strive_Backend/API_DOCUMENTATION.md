@@ -1,9 +1,5 @@
 # Strive Foundation - Patient Registration API Documentation
 
-## Overview
-
-The Patient Registration API has been completely redesigned to support a 3-step registration process for patients and caregivers. This API allows users to register as either a patient or caregiver and complete their registration through three distinct steps each step is requireded seperatly.
-
 
 #To run this project you need to did this first
 
