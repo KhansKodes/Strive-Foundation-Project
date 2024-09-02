@@ -21,7 +21,7 @@ python manage.py makemigrations  # create DB migration files
 python manage.py migrate
 
 #Step 5
-python manage.py runserver       # start server
+python manage.py runserver       
 
 
 python manage.py startapp users  # create a new app
