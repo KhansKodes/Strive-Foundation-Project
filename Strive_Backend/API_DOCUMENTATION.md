@@ -101,7 +101,7 @@ The patient registration is divided into 3 steps:
 ```
 
 
-examined_by_doctor: "yes"  // Options: "yes", "no"
+
 family_history: "no"  // Options: "yes", "no"
 gene_test_report: [FILE]  // PDF, JPG, PNG, DOC, DOCX (max 10MB)
 ```
