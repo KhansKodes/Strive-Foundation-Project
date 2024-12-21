@@ -103,7 +103,7 @@ The patient registration is divided into 3 steps:
 
 
 
-gene_test_report: [FILE]  // PDF, JPG, PNG, DOC, DOCX (max 10MB)
+
 ```
 
 **Response:**
