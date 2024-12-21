@@ -99,7 +99,7 @@ The patient registration is divided into 3 steps:
 
 **Request Body (Form Data):**
 ```
-sma_type: "type_2"  // Options: "type_1", "type_2", "type_3", "type_4"
+
 date_of_diagnosis: "2020-03-15"  // Format: YYYY-MM-DD
 examined_by_doctor: "yes"  // Options: "yes", "no"
 family_history: "no"  // Options: "yes", "no"
