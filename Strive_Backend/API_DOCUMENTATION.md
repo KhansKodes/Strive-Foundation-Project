@@ -113,7 +113,7 @@ requested_amount_pkr: "50000.00"  // Decimal format
 contribution_amount_pkr: "5000.00"  // Decimal format
 cycle_number: 1  // Integer
 description: "Monthly treatment costs for SMA Type 2"
-additional_info: "Patient requires monthly injections"  // Optional
+
 
 ```
 
