@@ -99,10 +99,7 @@ The patient registration is divided into 3 steps:
 
 
 ```json
-{
 
-
-}
 ```
 
 ### 3. Patient Registration - Step 3: Financial Assistance
