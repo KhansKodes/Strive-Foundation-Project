@@ -110,7 +110,7 @@ The patient registration is divided into 3 steps:
 ```
 doctors_prescription: [FILE]  // PDF, JPG, PNG, DOC, DOCX (max 10MB)
 requested_amount_pkr: "50000.00"  // Decimal format
-contribution_amount_pkr: "5000.00"  // Decimal format
+
 
 
 
