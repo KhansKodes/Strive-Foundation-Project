@@ -98,7 +98,6 @@ The patient registration is divided into 3 steps:
 **Content-Type:** `multipart/form-data`
 
 
-**Response:**
 ```json
 {
   "message": "Step 2 completed successfully",
