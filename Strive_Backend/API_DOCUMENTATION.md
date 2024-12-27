@@ -112,7 +112,7 @@ doctors_prescription: [FILE]  // PDF, JPG, PNG, DOC, DOCX (max 10MB)
 requested_amount_pkr: "50000.00"  // Decimal format
 contribution_amount_pkr: "5000.00"  // Decimal format
 cycle_number: 1  // Integer
-description: "Monthly treatment costs for SMA Type 2"
+
 
 
 ```
