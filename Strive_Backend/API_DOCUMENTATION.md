@@ -106,7 +106,7 @@ The patient registration is divided into 3 steps:
 
 
 
-**Request Body (Form Data):**
+
 ```
 
 
