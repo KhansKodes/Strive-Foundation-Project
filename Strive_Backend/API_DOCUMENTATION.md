@@ -98,10 +98,6 @@ The patient registration is divided into 3 steps:
 **Content-Type:** `multipart/form-data`
 
 
-```json
-
-```
-
 ### 3. Patient Registration - Step 3: Financial Assistance
 
 **Endpoint:** `POST /api/patient-registration/step3/`
