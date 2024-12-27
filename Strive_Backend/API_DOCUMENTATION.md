@@ -104,7 +104,7 @@ The patient registration is divided into 3 steps:
 
 **Description:** Submit financial assistance requirements and complete registration
 
-**Content-Type:** `multipart/form-data`
+
 
 **Request Body (Form Data):**
 ```
