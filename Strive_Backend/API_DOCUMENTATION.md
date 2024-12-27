@@ -100,7 +100,7 @@ The patient registration is divided into 3 steps:
 
 ```json
 {
-  "message": "Step 2 completed successfully",
+
   "patient_id": 1,
   "step_completed": 2,
   "next_step": "step3"
