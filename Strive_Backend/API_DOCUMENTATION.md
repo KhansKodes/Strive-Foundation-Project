@@ -114,7 +114,7 @@ contribution_amount_pkr: "5000.00"  // Decimal format
 cycle_number: 1  // Integer
 description: "Monthly treatment costs for SMA Type 2"
 additional_info: "Patient requires monthly injections"  // Optional
-supporting_documents: [FILE]  // Optional - PDF, JPG, PNG, DOC, DOCX, ZIP, RAR (max 10MB)
+
 ```
 
 **Response:**
