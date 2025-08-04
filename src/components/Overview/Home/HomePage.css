@@ -1,0 +1,6 @@
+.HomePage {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;   
+  margin-bottom: 20px;    
+}
