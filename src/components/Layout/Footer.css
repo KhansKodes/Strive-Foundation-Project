@@ -1,0 +1,164 @@
+/* Footer.css */
+.footer {
+  position: relative;
+  background: linear-gradient(90deg, #553CDA 0%, #4E21CA 100%);
+  color: #fff;
+  overflow: hidden;
+  padding: 30px 100px;
+  font-family: sans-serif;
+  border-radius: 45px 45px 0px 0px;
+}
+
+/* subtle hands-pattern at bottom */
+.footer::before {
+  content: '';
+  position: absolute;
+  bottom: -100px;                /* so the hands sit just below the bottom bar */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;                 /* fill the full viewport width */
+  height: 100px;                /* enough height to show all the hands */
+  background: url('../../assets/images/Hands.png') no-repeat bottom center;
+  background-size: cover;       /* cover the pseudo-element completely */
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+
+/* three-column layout */
+.footer-content {
+  display: flex;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+  /* max-width: 1200px; */
+  /* margin: 0 auto; */
+  position: relative;
+  z-index: 1;
+  /* padding: 0 20px 40px; */
+}
+
+.footer-col {
+  flex: 1;
+  /* min-width: 200px; */
+  margin: 0 20px 0px 0;
+  /* border: 1px solid #000; */
+  /* text-align: center; */
+  /* border: 1px solid #000; */
+}
+
+.footer-col h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+.footer-col h3::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #00ff00;
+  margin-top: 4px;
+}
+
+/* lists */
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+.footer-col ul li {
+  margin-bottom: 0.6rem;
+}
+.footer-col ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color .3s;
+}
+.footer-col ul li a:hover {
+  color: #00ff00;
+}
+
+/* contact icons */
+.contact-info li svg {
+  margin-right: 8px;
+  color: #00ff00;
+}
+
+/* bottom bar */
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding: 20px 0px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.footer-bottom p {
+  margin: 5px 0;
+  font-size: .9rem;
+}
+.footer-bottom a {
+  color: #00ff00;
+  text-decoration: none;
+}
+
+/*──────────────────────────*/
+/* RESPONSIVE BREAKPOINTS   */
+/*──────────────────────────*/
+@media (min-width: 1200px) {
+  .footer::before {
+    height: 350px;
+  }
+}
+
+
+/* Medium screens: stack less important columns */
+@media (max-width: 992px) {
+  .footer-col {
+    flex: 0 0 45%;
+    margin: 20px 0;
+  }
+}
+
+/* Small screens: single-column, centered */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .footer-col {
+    flex: none;
+    width: 100%;
+    max-width: 360px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  .contact-info li {
+    justify-content: center;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Extra small: reduce padding & font-sizes */
+@media (max-width: 480px) {
+  .footer {
+    padding-top: 40px;
+  }
+  .footer-col h3 {
+    font-size: 1.1rem;
+  }
+  .footer-col ul li,
+  .contact-info li span {
+    font-size: .9rem;
+  }
+  .footer-bottom p {
+    font-size: .8rem;
+  }
+}

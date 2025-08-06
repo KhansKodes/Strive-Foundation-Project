@@ -1,0 +1,178 @@
+/* — Split & equal heights — */
+.UrgentNeedSection .split-container {
+  display: flex;
+  gap: 1rem;
+  padding: 20px 100px;
+  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.UrgentNeedSection .urgent-need-panel,
+.UrgentNeedSection .get-involved-panel {
+  display: flex;
+  flex-direction: column;
+}
+.UrgentNeedSection .urgent-need-panel { width: 60%; }
+.UrgentNeedSection .get-involved-panel { width: 40%; }
+
+/* — Shared header — */
+.UrgentNeedSection .urgent-header {
+  position: relative;
+  background: #f0f0f0;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.UrgentNeedSection .urgent-header-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 150px; height: 100%;
+  background-image: url('https://picsum.photos/150/60?blur=3');
+  background-size: cover;
+  background-position: center;
+  filter: blur(0) grayscale(1);
+  mask-image: linear-gradient(to right, black 30%, transparent);
+}
+.UrgentNeedSection .urgent-header h2 {
+  position: relative;
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.3em;
+  color: #555;
+}
+
+/* — Carousel wrapper — */
+.UrgentNeedSection .urgent-slider-wrapper {
+  flex: 1;            /* stretch to match “get involved” */
+  overflow: hidden;
+}
+.UrgentNeedSection .urgent-slider {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+/* — Each slide = 100% of wrapper — */
+.UrgentNeedSection .slide {
+  flex: 0 0 calc(100% / var(--slides));
+  display: flex;
+  gap: 1rem;
+  justify-content: space-evenly;
+}
+
+/* we’ll set --slides via inline style */
+.UrgentNeedSection .urgent-slider {
+  --slides: 3; /* overridden by inline style width=300% */
+}
+
+/* — Two cards per slide — */
+.UrgentNeedSection .urgent-card {
+  flex: 0 0 calc((100% - 1rem) / 2);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+.UrgentNeedSection .card-image img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.UrgentNeedSection .card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* — Donation bar — */
+.UrgentNeedSection .donation-bar {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+.UrgentNeedSection .donation-label {
+  font-weight: 600; flex: 0 0 70px;
+}
+.UrgentNeedSection .progress {
+  flex: 1; background: #ccc;
+  height: 8px; border-radius: 4px;
+  margin: 0 0.5rem; overflow: hidden;
+}
+.UrgentNeedSection .progress-filled {
+  height: 100%; background: #f5a623;
+}
+.UrgentNeedSection .donation-pct {
+  font-weight: 600; flex: 0 0 35px; text-align: right;
+}
+
+/* — Get Involved card — */
+.UrgentNeedSection .involved-card {
+  flex: 1; /* stretch */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+.UrgentNeedSection .involved-card .card-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.UrgentNeedSection .involved-card .card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* — Shared button — */
+.UrgentNeedSection .donate-button {
+  background: #d0021b;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  margin-top: auto;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.UrgentNeedSection .donate-button:hover {
+  background: #b00119;
+}
+
+/* — Responsive — */
+@media (max-width: 768px) {
+  .UrgentNeedSection .split-container {
+    flex-direction: column;
+  }
+  .UrgentNeedSection .urgent-need-panel,
+  .UrgentNeedSection .get-involved-panel {
+    width: 100%;
+  }
+  .UrgentNeedSection .urgent-card {
+    flex: 0 0 100%;
+  }
+  .UrgentNeedSection .urgent-header h2 {
+    font-size: 1.6rem;
+    padding-left: 4rem;
+  }
+}
+
+
+.UrgentNeedSection .line{
+  width: 7px;
+  background-color: #333;
+  border: none;
+}
+
+@media (max-width: 1350px) {
+  .UrgentNeedSection .split-container {
+    padding: 20px 40px;
+}
+}
