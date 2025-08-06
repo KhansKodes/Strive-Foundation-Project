@@ -34,18 +34,10 @@ export default function StriveLifeClubPage() {
         <div className="slc-hero-overlay"></div>
         <div className="slc-hero-content">
           <div className="slc-hero-title-row">
-            <span className="slc-hero-icon">❤️</span>
             <h1 className="slc-hero-title">STRIVE LIFE CLUB</h1>
-          </div>
-          <div className="slc-hero-subtitle">
-            eridicating spinal muscular atrophy in pakistan
           </div>
           <button className="button-73">DONATE NOW!</button>
           <br />
-          <div className="slc-hero-desc">
-            <strong>What We Provide</strong><br />
-            Outline the full treatment package: medication, repeated cycles, diagnostics, follow-up.
-          </div>
         </div>
       </div>
 

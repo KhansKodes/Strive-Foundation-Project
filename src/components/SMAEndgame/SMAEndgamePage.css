@@ -10,7 +10,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0px 100px;
+  padding: 0px 240px;
   padding-bottom: 70px;
 
 }
@@ -54,7 +54,7 @@
 .sma-fg-objectives-banner {
   margin: 30px auto 0 auto;
   /* width: 82%; */
-  background: linear-gradient(90deg,rgba(194,194,194,0.9) 0, #dbdbdb 50%,rgba(194,194,194,0.88) 100%);
+  background: linear-gradient(90deg,rgba(81, 81, 81, 0.9) 0, #ffffff 50%,rgba(81, 81, 81, 0.9) 100%);
   /* border-radius: 7px; */
   /* padding: 0.6em 0; */
   text-align: center;
@@ -131,7 +131,7 @@
 }
 .sma-fg-fiveyear-btn {
   pointer-events: auto;
-  padding: 13px 52px;
+  padding:10px 20px;
   font-size: 1.32rem;
   background: #e7fa3e;
   color: #353e0a;
@@ -139,12 +139,13 @@
   border: none;
   font-weight: 800;
   letter-spacing: 0.03em;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   cursor: pointer;
   transition: all 0.17s;
   position: relative;
   top: 0;
   margin-bottom: 2px;
+  border: 1px solid #00000050;
 }
 .sma-fg-fiveyear-btn:hover {
   background: #e3f62b;
@@ -152,11 +153,11 @@
 }
 .sma-fg-fiveyear-link {
   color: #595959;
-  margin-top: 7px;
-  font-size: 1.08rem;
+  font-size: 0.8rem;
   font-weight: 500;
   pointer-events: auto;
 }
+.sma-fg-fiveyear-link:hover{}
 
 /* --- CARDS BAR WITH RIBBON ARROW --- */
 .sma-fg-cards-bar {

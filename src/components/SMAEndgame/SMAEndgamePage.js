@@ -63,10 +63,11 @@ export default function SMAEndgamePage() {
           </div>
         </div>
         <div className="sma-fg-fiveyear-section">
-          <button className="sma-fg-fiveyear-btn">Five Year plan</button>
+          <button className="sma-fg-fiveyear-btn">Five Year plan
           <div className="sma-fg-fiveyear-link">
             View & download the full roadmap
           </div>
+          </button>
         </div>
       </div>
 

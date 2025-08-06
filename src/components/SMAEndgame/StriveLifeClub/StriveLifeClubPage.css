@@ -42,11 +42,12 @@
 
 .slc-hero-title {
   color: #fff;
-  font-size: 2.7rem;
-  font-weight: bold;
-  letter-spacing: 2px;
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: 10px;
   text-shadow: 0 2px 8px #222;
-  margin: 0;
+  margin-top: -35px;
+  margin-bottom: 5px;
 }
 
 .slc-hero-icon {
@@ -106,8 +107,8 @@
   position: relative;
   width: 100%;
   /* max-width: 600px; */
-  padding: 0px 100px;
-  margin: -50px auto 38px auto;
+  padding: 0px 400px;
+  margin: -250px auto 38px auto;
   z-index: 3;
   border-radius: 18px;
   /* overflow: hidden; */
