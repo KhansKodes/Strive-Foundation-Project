@@ -76,20 +76,24 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                 user.last_name = data.get('last_name')
                 user.save()
                 
-                # Store step 1 data in existing Patient model fields creatively
-                # We'll use JSON format to store multiple pieces of info in text fields
+                # Store ALL step data in diagnosis_info field as JSON (TEXT field - unlimited length)
                 import json
                 
-                # Create registration info as JSON
-                step1_info = {
-                    'registration_type': data.get('registration_type'),
-                    'phone_number': data.get('phone_number'),
-                    'whatsapp_number': data.get('whatsapp_number'),
-                    'address': data.get('address'),
-                    'city': data.get('city'),
-                    'province_state': data.get('province_state'),
-                    'country': data.get('country'),
-                    'step_completed': 1
+                # Create comprehensive registration data structure
+                registration_data = {
+                    'step1': {
+                        'registration_type': data.get('registration_type'),
+                        'phone_number': data.get('phone_number'),
+                        'whatsapp_number': data.get('whatsapp_number'),
+                        'address': data.get('address'),
+                        'city': data.get('city'),
+                        'province_state': data.get('province_state'),
+                        'country': data.get('country'),
+                        'completed': True
+                    },
+                    'step2': {'completed': False},
+                    'step3': {'completed': False},
+                    'current_step': 1
                 }
                 
                 # Create or update patient record using existing fields
@@ -98,21 +102,29 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                     defaults={
                         'date_of_birth': data.get('date_of_birth'),
                         'gender': data.get('gender', 'Male'),
-                        'diagnosis_info': json.dumps(step1_info),  # Store step1 data here
+                        'diagnosis_info': json.dumps(registration_data),  # Store all data here
                         'treatment_status': 'Step 1 Completed',
-                        'caregiver_name': data.get('registration_type', 'patient'),
-                        'caregiver_contact': data.get('phone_number', '')
+                        'caregiver_name': data.get('registration_type', 'patient')[:100],  # Truncate to fit
+                        'caregiver_contact': data.get('phone_number', '')[:20]  # Truncate to fit
                     }
                 )
                 
                 if not created:
-                    # Update existing patient
+                    # Update existing patient - preserve any existing step2/step3 data
+                    try:
+                        existing_data = json.loads(patient.diagnosis_info)
+                        existing_data['step1'] = registration_data['step1']
+                        existing_data['current_step'] = 1
+                        registration_data = existing_data
+                    except (json.JSONDecodeError, KeyError):
+                        pass  # Use new registration_data if existing data is invalid
+                    
                     patient.date_of_birth = data.get('date_of_birth')
                     patient.gender = data.get('gender', 'Male')
-                    patient.diagnosis_info = json.dumps(step1_info)
+                    patient.diagnosis_info = json.dumps(registration_data)
                     patient.treatment_status = 'Step 1 Completed'
-                    patient.caregiver_name = data.get('registration_type', 'patient')
-                    patient.caregiver_contact = data.get('phone_number', '')
+                    patient.caregiver_name = data.get('registration_type', 'patient')[:100]  # Truncate to fit
+                    patient.caregiver_contact = data.get('phone_number', '')[:20]  # Truncate to fit
                     patient.save()
                 
                 return Response({
@@ -160,17 +172,30 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
         with transaction.atomic():
             import json
             
-            # Store step 2 data in patient's caregiver_name field as JSON
-            step2_info = {
+            # Get existing registration data and add step 2
+            try:
+                registration_data = json.loads(patient.diagnosis_info)
+            except (json.JSONDecodeError, KeyError):
+                # If no existing data, create structure
+                registration_data = {
+                    'step1': {'completed': True},
+                    'step2': {'completed': False},
+                    'step3': {'completed': False},
+                    'current_step': 1
+                }
+            
+            # Add step 2 data
+            registration_data['step2'] = {
                 'sma_type': request.data.get('sma_type'),
                 'date_of_diagnosis': request.data.get('date_of_diagnosis'),
                 'examined_by_doctor': request.data.get('examined_by_doctor'),
                 'family_history': request.data.get('family_history'),
-                'step_completed': 2
+                'completed': True
             }
+            registration_data['current_step'] = 2
             
-            # Update patient record - store step 2 in caregiver_name field
-            patient.caregiver_name = json.dumps(step2_info)
+            # Update patient record - store all data in diagnosis_info (TEXT field)
+            patient.diagnosis_info = json.dumps(registration_data)
             patient.treatment_status = 'Step 2 Completed'
             patient.save()
             
@@ -179,7 +204,7 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                 'patient_id': patient.id,
                 'step_completed': 2,
                 'next_step': 'step3',
-                'data': step2_info
+                'data': registration_data['step2']
             }, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['post'], url_path='step3')
@@ -210,18 +235,31 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
         with transaction.atomic():
             import json
             
-            # Store step 3 data in patient's caregiver_contact field as JSON
-            step3_info = {
+            # Get existing registration data and add step 3
+            try:
+                registration_data = json.loads(patient.diagnosis_info)
+            except (json.JSONDecodeError, KeyError):
+                # If no existing data, create structure
+                registration_data = {
+                    'step1': {'completed': True},
+                    'step2': {'completed': True},
+                    'step3': {'completed': False},
+                    'current_step': 2
+                }
+            
+            # Add step 3 data
+            registration_data['step3'] = {
                 'requested_amount_pkr': str(request.data.get('requested_amount_pkr')),
                 'contribution_amount_pkr': str(request.data.get('contribution_amount_pkr')),
                 'cycle_number': request.data.get('cycle_number'),
                 'description': request.data.get('description'),
                 'additional_info': request.data.get('additional_info', ''),
-                'step_completed': 3
+                'completed': True
             }
+            registration_data['current_step'] = 3
             
-            # Update patient record - store step 3 in caregiver_contact field
-            patient.caregiver_contact = json.dumps(step3_info)
+            # Update patient record - store all data in diagnosis_info (TEXT field)
+            patient.diagnosis_info = json.dumps(registration_data)
             patient.treatment_status = 'Registration Completed'
             patient.save()
             
@@ -230,7 +268,7 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                 'patient_id': patient.id,
                 'step_completed': 3,
                 'is_registration_complete': True,
-                'data': step3_info
+                'data': registration_data['step3']
             }, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'], url_path='status')
