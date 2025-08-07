@@ -5,13 +5,9 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
-from .models import Patient, MedicalConfirmation, FinancialAssistance, Appointment
+from .models import Patient, Appointment
 from .serializers import (
     PatientStep1Serializer,
-    MedicalConfirmationSerializer,
-    FinancialAssistanceSerializer,
-    PatientRegistrationStatusSerializer,
-    PatientDetailSerializer,
     AppointmentSerializer,
     PatientSerializer  # Legacy serializer
 )
@@ -67,36 +63,78 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'], url_path='step1')
     def step1(self, request):
-        """Step 1: Basic Patient Information"""
+        """Step 1: Basic Patient Information - works with existing DB structure"""
         serializer = PatientStep1Serializer(data=request.data)
+        
         if serializer.is_valid():
             with transaction.atomic():
-                # Create or update patient record
+                data = serializer.validated_data
+                
+                # Update user info
+                user = request.user
+                user.first_name = data.get('first_name')
+                user.last_name = data.get('last_name')
+                user.save()
+                
+                # Store step 1 data in existing Patient model fields creatively
+                # We'll use JSON format to store multiple pieces of info in text fields
+                import json
+                
+                # Create registration info as JSON
+                step1_info = {
+                    'registration_type': data.get('registration_type'),
+                    'phone_number': data.get('phone_number'),
+                    'whatsapp_number': data.get('whatsapp_number'),
+                    'address': data.get('address'),
+                    'city': data.get('city'),
+                    'province_state': data.get('province_state'),
+                    'country': data.get('country'),
+                    'step_completed': 1
+                }
+                
+                # Create or update patient record using existing fields
                 patient, created = Patient.objects.get_or_create(
                     user=request.user,
-                    defaults=serializer.validated_data
+                    defaults={
+                        'date_of_birth': data.get('date_of_birth'),
+                        'gender': data.get('gender', 'Male'),
+                        'diagnosis_info': json.dumps(step1_info),  # Store step1 data here
+                        'treatment_status': 'Step 1 Completed',
+                        'caregiver_name': data.get('registration_type', 'patient'),
+                        'caregiver_contact': data.get('phone_number', '')
+                    }
                 )
                 
                 if not created:
                     # Update existing patient
-                    for attr, value in serializer.validated_data.items():
-                        setattr(patient, attr, value)
-                
-                patient.step_completed = 1
-                patient.save()
+                    patient.date_of_birth = data.get('date_of_birth')
+                    patient.gender = data.get('gender', 'Male')
+                    patient.diagnosis_info = json.dumps(step1_info)
+                    patient.treatment_status = 'Step 1 Completed'
+                    patient.caregiver_name = data.get('registration_type', 'patient')
+                    patient.caregiver_contact = data.get('phone_number', '')
+                    patient.save()
                 
                 return Response({
                     'message': 'Step 1 completed successfully',
                     'patient_id': patient.id,
-                    'step_completed': patient.step_completed,
-                    'next_step': 'step2'
+                    'step_completed': 1,
+                    'next_step': 'step2',
+                    'data': {
+                        'registration_type': data.get('registration_type'),
+                        'full_name': f"{data.get('first_name')} {data.get('last_name')}",
+                        'phone_number': data.get('phone_number'),
+                        'address': data.get('address'),
+                        'city': data.get('city'),
+                        'country': data.get('country')
+                    }
                 }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     @action(detail=False, methods=['post'], url_path='step2')
     def step2(self, request):
-        """Step 2: Medical Confirmation"""
+        """Step 2: Medical Confirmation - stores in existing Patient model"""
         try:
             patient = Patient.objects.get(user=request.user)
         except Patient.DoesNotExist:
@@ -104,41 +142,49 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                 'error': 'Please complete Step 1 first'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if patient.step_completed < 1:
+        # Check if step 1 was completed by checking treatment_status
+        if patient.treatment_status != 'Step 1 Completed':
             return Response({
                 'error': 'Please complete Step 1 first'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        serializer = MedicalConfirmationSerializer(data=request.data)
-        if serializer.is_valid():
-            with transaction.atomic():
-                # Create or update medical confirmation
-                medical_confirmation, created = MedicalConfirmation.objects.get_or_create(
-                    patient=patient,
-                    defaults=serializer.validated_data
+        # Simple validation for step 2 data
+        required_fields = ['sma_type', 'date_of_diagnosis', 'examined_by_doctor', 'family_history']
+        for field in required_fields:
+            if field not in request.data:
+                return Response(
+                    {'error': f'{field} is required'}, 
+                    status=status.HTTP_400_BAD_REQUEST
                 )
-                
-                if not created:
-                    # Update existing medical confirmation
-                    for attr, value in serializer.validated_data.items():
-                        setattr(medical_confirmation, attr, value)
-                    medical_confirmation.save()
-                
-                patient.step_completed = 2
-                patient.save()
-                
-                return Response({
-                    'message': 'Step 2 completed successfully',
-                    'patient_id': patient.id,
-                    'step_completed': patient.step_completed,
-                    'next_step': 'step3'
-                }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            import json
+            
+            # Store step 2 data in patient's caregiver_name field as JSON
+            step2_info = {
+                'sma_type': request.data.get('sma_type'),
+                'date_of_diagnosis': request.data.get('date_of_diagnosis'),
+                'examined_by_doctor': request.data.get('examined_by_doctor'),
+                'family_history': request.data.get('family_history'),
+                'step_completed': 2
+            }
+            
+            # Update patient record - store step 2 in caregiver_name field
+            patient.caregiver_name = json.dumps(step2_info)
+            patient.treatment_status = 'Step 2 Completed'
+            patient.save()
+            
+            return Response({
+                'message': 'Step 2 completed successfully',
+                'patient_id': patient.id,
+                'step_completed': 2,
+                'next_step': 'step3',
+                'data': step2_info
+            }, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['post'], url_path='step3')
     def step3(self, request):
-        """Step 3: Financial Assistance"""
+        """Step 3: Financial Assistance - stores in existing Patient model"""
         try:
             patient = Patient.objects.get(user=request.user)
         except Patient.DoesNotExist:
@@ -146,38 +192,46 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
                 'error': 'Please complete Step 1 first'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if patient.step_completed < 2:
+        # Check if step 2 was completed
+        if patient.treatment_status != 'Step 2 Completed':
             return Response({
                 'error': 'Please complete Step 2 first'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        serializer = FinancialAssistanceSerializer(data=request.data)
-        if serializer.is_valid():
-            with transaction.atomic():
-                # Create or update financial assistance
-                financial_assistance, created = FinancialAssistance.objects.get_or_create(
-                    patient=patient,
-                    defaults=serializer.validated_data
+        # Simple validation for step 3 data
+        required_fields = ['requested_amount_pkr', 'contribution_amount_pkr', 'cycle_number', 'description']
+        for field in required_fields:
+            if field not in request.data:
+                return Response(
+                    {'error': f'{field} is required'}, 
+                    status=status.HTTP_400_BAD_REQUEST
                 )
-                
-                if not created:
-                    # Update existing financial assistance
-                    for attr, value in serializer.validated_data.items():
-                        setattr(financial_assistance, attr, value)
-                    financial_assistance.save()
-                
-                patient.step_completed = 3
-                patient.is_registration_complete = True
-                patient.save()
-                
-                return Response({
-                    'message': 'Registration completed successfully!',
-                    'patient_id': patient.id,
-                    'step_completed': patient.step_completed,
-                    'is_registration_complete': patient.is_registration_complete
-                }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            import json
+            
+            # Store step 3 data in patient's caregiver_contact field as JSON
+            step3_info = {
+                'requested_amount_pkr': str(request.data.get('requested_amount_pkr')),
+                'contribution_amount_pkr': str(request.data.get('contribution_amount_pkr')),
+                'cycle_number': request.data.get('cycle_number'),
+                'description': request.data.get('description'),
+                'additional_info': request.data.get('additional_info', ''),
+                'step_completed': 3
+            }
+            
+            # Update patient record - store step 3 in caregiver_contact field
+            patient.caregiver_contact = json.dumps(step3_info)
+            patient.treatment_status = 'Registration Completed'
+            patient.save()
+            
+            return Response({
+                'message': 'Registration completed successfully!',
+                'patient_id': patient.id,
+                'step_completed': 3,
+                'is_registration_complete': True,
+                'data': step3_info
+            }, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'], url_path='status')
     def status(self, request):

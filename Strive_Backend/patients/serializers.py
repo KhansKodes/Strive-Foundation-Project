@@ -1,50 +1,20 @@
 from rest_framework import serializers
-from .models import Patient, MedicalConfirmation, FinancialAssistance, Appointment
+from .models import Patient, Appointment
 
 
-class PatientStep1Serializer(serializers.ModelSerializer):
-    """Serializer for Step 1: Basic Patient Information"""
-    
-    class Meta:
-        model = Patient
-        fields = '__all__'
-        read_only_fields = ('user', 'step_completed', 'is_registration_complete', 'created_at', 'updated_at')
-
-
-class MedicalConfirmationSerializer(serializers.ModelSerializer):
-    """Serializer for Step 2: Medical Confirmation"""
-    
-    class Meta:
-        model = MedicalConfirmation
-        fields = '__all__'
-        read_only_fields = ('patient', 'created_at', 'updated_at')
-
-
-class FinancialAssistanceSerializer(serializers.ModelSerializer):
-    """Serializer for Step 3: Financial Assistance"""
-    
-    class Meta:
-        model = FinancialAssistance
-        fields = '__all__'
-        read_only_fields = ('patient', 'created_at', 'updated_at')
-
-
-class PatientRegistrationStatusSerializer(serializers.ModelSerializer):
-    """Serializer to check registration status"""
-    
-    class Meta:
-        model = Patient
-        fields = '__all__'
-        read_only_fields = ('user', 'created_at', 'updated_at')
-
-
-class PatientDetailSerializer(serializers.ModelSerializer):
-    """Detailed serializer for complete patient information"""
-    
-    class Meta:
-        model = Patient
-        fields = '__all__'
-        read_only_fields = ('user', 'created_at', 'updated_at')
+class PatientStep1Serializer(serializers.Serializer):
+    """Serializer for Step 1: Basic Patient Information - works with existing DB structure"""
+    registration_type = serializers.ChoiceField(choices=[('patient', 'Patient'), ('caregiver', 'Caregiver')], default='patient')
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
+    date_of_birth = serializers.DateField()
+    gender = serializers.ChoiceField(choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')], default='Male')
+    phone_number = serializers.CharField(max_length=20)
+    whatsapp_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    address = serializers.CharField()
+    city = serializers.CharField(max_length=100)
+    province_state = serializers.CharField(max_length=100)
+    country = serializers.CharField(max_length=100)
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -53,7 +23,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
-        read_only_fields = ('patient', 'created_at', 'updated_at')
+        read_only_fields = ('patient',)
 
 
 # Main serializer following codebase pattern
