@@ -8,32 +8,36 @@ from django.shortcuts import get_object_or_404
 from .models import Patient, Appointment
 from .serializers import (
     PatientStep1Serializer,
+    PatientListSerializer,
     AppointmentSerializer,
     PatientSerializer  # Legacy serializer
 )
 
 
-class IsPatientOrCaregiver(permissions.BasePermission):
-    """Permission for patients or caregivers"""
+class IsPatientOrCaregiverOrAdmin(permissions.BasePermission):
+    """Permission for patients, caregivers, or admin users"""
     def has_permission(self, request, view):
         return (
             request.user.is_authenticated and 
-            request.user.role in ['patient', 'caregiver']
+            request.user.role in ['patient', 'caregiver', 'admin']
         )
 
 
 class PatientRegistrationViewSet(viewsets.ModelViewSet):
     """ViewSet for handling 3-step patient registration"""
-    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiver]
+    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiverOrAdmin]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     
     def get_queryset(self):
-        """Return patients associated with the current user"""
+        """Return patients associated with the current user, or all patients for admin"""
+        if self.request.user.role == 'admin':
+            return Patient.objects.all()
         return Patient.objects.filter(user=self.request.user)
     
     def get_serializer_class(self):
         """Return appropriate serializer based on action"""
-        # We keep only serializers we actually defined to avoid import issues.
+        if self.action == 'list':
+            return PatientListSerializer
         return PatientStep1Serializer
     
     def get_parsers(self):
@@ -346,6 +350,37 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='status')
     def status(self, request):
         """Get registration status derived from Patient model and stored JSON."""
+        # For admin users, return all patients' status
+        if request.user.role == 'admin':
+            patients = Patient.objects.all()
+            patient_statuses = []
+            
+            for patient in patients:
+                import json
+                step_completed = 0
+                is_complete = False
+                try:
+                    data = json.loads(patient.diagnosis_info)
+                    if data.get('current_step'):
+                        step_completed = int(data['current_step'])
+                    is_complete = patient.treatment_status == 'Registration Completed'
+                except Exception:
+                    pass
+                
+                patient_statuses.append({
+                    'id': patient.id,
+                    'user_email': patient.user.email,
+                    'full_name': patient.full_name,
+                    'step_completed': step_completed,
+                    'is_registration_complete': is_complete
+                })
+            
+            return Response({
+                'count': len(patient_statuses),
+                'patients': patient_statuses
+            })
+        
+        # For regular users, return their own status
         try:
             patient = Patient.objects.get(user=request.user)
         except Patient.DoesNotExist:
@@ -422,10 +457,12 @@ class PatientRegistrationViewSet(viewsets.ModelViewSet):
 class AppointmentViewSet(viewsets.ModelViewSet):
     """ViewSet for patient appointments"""
     serializer_class = AppointmentSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiver]
+    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiverOrAdmin]
 
     def get_queryset(self):
-        """Return appointments for the current user's patient profile"""
+        """Return appointments for the current user's patient profile, or all appointments for admin"""
+        if self.request.user.role == 'admin':
+            return Appointment.objects.all()
         try:
             patient = Patient.objects.get(user=self.request.user)
             return Appointment.objects.filter(patient=patient)
@@ -446,9 +483,11 @@ class PatientViewSet(viewsets.ModelViewSet):
     """Legacy ViewSet - for backward compatibility"""
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiver]
+    permission_classes = [permissions.IsAuthenticated, IsPatientOrCaregiverOrAdmin]
 
     def get_queryset(self):
+        if self.request.user.role == 'admin':
+            return Patient.objects.all()
         return Patient.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):

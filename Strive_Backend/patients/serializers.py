@@ -1,6 +1,54 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from .models import Patient, Appointment
 
+User = get_user_model()
+
+class PatientSerializer(serializers.ModelSerializer):
+    """Main Patient serializer following codebase pattern"""
+    email = serializers.EmailField(source='user.email', read_only=True)
+    
+    class Meta:
+        model = Patient
+        fields = ('id', 'email', 'full_name', 'phone', 'treatment_status', 'diagnosis_info')
+        read_only_fields = ('user',)
+
+class PatientListSerializer(serializers.ModelSerializer):
+    """Serializer for listing patients"""
+    email = serializers.EmailField(source='user.email')
+    full_name = serializers.CharField()
+    phone = serializers.CharField()
+    registration_type = serializers.SerializerMethodField()
+    registration_status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Patient
+        fields = ('id', 'email', 'full_name', 'phone', 'registration_type', 'registration_status', 'treatment_status')
+
+    def get_registration_type(self, obj):
+        try:
+            import json
+            data = json.loads(obj.diagnosis_info)
+            return data.get('step1', {}).get('registration_type', 'unknown')
+        except:
+            return 'unknown'
+
+    def get_registration_status(self, obj):
+        try:
+            import json
+            data = json.loads(obj.diagnosis_info)
+            step = data.get('current_step', 0)
+            is_complete = obj.treatment_status == 'Registration Completed'
+            return {
+                'step_completed': step,
+                'is_registration_complete': is_complete
+            }
+        except:
+            return {
+                'step_completed': 0,
+                'is_registration_complete': False
+            }
 
 class PatientStep1Serializer(serializers.Serializer):
     """Serializer for Step 1: Basic Patient/ Caregiver Information.
@@ -116,7 +164,6 @@ class PatientStep1Serializer(serializers.Serializer):
         
         return data
 
-
 class AppointmentSerializer(serializers.ModelSerializer):
     """Serializer for patient appointments"""
     
@@ -124,12 +171,3 @@ class AppointmentSerializer(serializers.ModelSerializer):
         model = Appointment
         fields = '__all__'
         read_only_fields = ('patient',)
-
-
-class PatientSerializer(serializers.ModelSerializer):
-    """Main Patient serializer following codebase pattern"""
-    
-    class Meta:
-        model = Patient
-        fields = '__all__'
-        read_only_fields = ('user',)
