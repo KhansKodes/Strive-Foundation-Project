@@ -63,27 +63,23 @@ export default function SMAEndgamePage() {
           </div>
         </div>
         <div className="sma-fg-fiveyear-section">
-          <button className="sma-fg-fiveyear-btn">Five Year plan
-          <div className="sma-fg-fiveyear-link">
-            View & download the full roadmap
-          </div>
-          </button>
+          <a
+            className="sma-fg-fiveyear-btn"
+            href="/dummy-sma-roadmap.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download={false}  // let browser open PDF, remove if you want forced download
+          >
+            Five Year plan
+            <div className="sma-fg-fiveyear-link">
+              View &amp; download the full roadmap
+            </div>
+          </a>
         </div>
       </div>
 
       {/* CARDS BAR - RIBBON ARROW STYLE */}
       <div className="sma-fg-cards-bar">
-        {/* <svg
-          className="sma-fg-card-arrow-svg"
-          viewBox="0 0 920 54"
-          width="100%"
-          height="54"
-          preserveAspectRatio="none"
-        >
-          <rect x="20" y="20" width="870" height="14" rx="4" fill="#0d7e92ff" />
-          <polygon points="0,27 20,20 20,34" fill="#427be5ff" />
-          <polygon points="890,20 920,27 890,34" fill="#427be5ff" />
-        </svg> */}
         <div className="sma-fg-cards-container">
           <Link to="/sma-endgame/life-club" className="button-92 sma-fg-card sma-fg-card-left">
             <FaHeart className="sma-fg-card-icon" />

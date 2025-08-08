@@ -306,3 +306,40 @@
     padding: 0;
   }
 }
+
+
+/* Event link styling & card enhancement */
+.event-title.event-link {
+  color: #005bb5;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.16s, text-shadow 0.16s;
+  font-weight: 800;
+  border-bottom: 1.5px dotted #005bb555;
+  padding-bottom: 1px;
+}
+.event-title.event-link:hover {
+  color: #0d2f72;
+  text-shadow: 0 2px 6px #005bb51c;
+  border-bottom: 2px solid #005bb5;
+  background: linear-gradient(90deg, #f2faff 0%, #eaf5ff 100%);
+  border-radius: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+/* Enhance card style on timeline items */
+.OurLegacyPage-timeline-item {
+  background: linear-gradient(90deg, #eaf6ff 0%, #f7faff 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #005bb506;
+  padding: 16px 22px;
+  margin-bottom: 24px;
+  transition: box-shadow 0.18s, background 0.2s;
+  display: flex;
+  align-items: center;
+}
+.OurLegacyPage-timeline-item:hover {
+  box-shadow: 0 8px 28px #005bb517;
+  background: linear-gradient(90deg, #e3eeff 0%, #f7fbff 100%);
+}

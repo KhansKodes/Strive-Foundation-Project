@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './OurLegacyPage.css';
 
+// Collage images and styles
 const bgImageUrl = 'https://picsum.photos/id/1005/180/120'; // Dummy background image
 
 const collageImages = [
@@ -25,32 +27,28 @@ const collageStyles = [
   { left: '80%',  top: '120px', width: 220, zIndex: 2, anim: 'float4' }
 ];
 
+// Dummy data for events (with unique IDs)
+const eventData = [
+  { id: 1, date: "10 FEB 2011", title: "Events2" },
+  { id: 2, date: "12 JUN 2012", title: "Events3" },
+  { id: 3, date: "05 SEP 2013", title: "Events4" },
+  { id: 4, date: "11 MAR 2014", title: "Events5" },
+  { id: 5, date: "23 AUG 2015", title: "Events6" },
+  { id: 6, date: "04 DEC 2016", title: "Events7" },
+];
+
 const tabs = [
   {
     label: 'IPRC',
     content: (
       <div className="OurLegacyPage-content-inner">
         <div className="OurLegacyPage-timeline">
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
-          </div>
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <div className="OurLegacyPage-timeline-item" key={idx}>
+              <span className="date">10 FEB 2011</span>
+              <span className="event-title">Artificial Intelligence via Biotechnology - Disability-Cure</span>
+            </div>
+          ))}
         </div>
       </div>
     ),
@@ -60,30 +58,14 @@ const tabs = [
     content: (
       <div className="OurLegacyPage-content-inner">
         <div className="OurLegacyPage-timeline">
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">10 FEB 2011</span>
-            <span className="event-title">Events2</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">12 JUN 2012</span>
-            <span className="event-title">Events3</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">05 SEP 2013</span>
-            <span className="event-title">Events4</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">05 SEP 2013</span>
-            <span className="event-title">Events4</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">05 SEP 2013</span>
-            <span className="event-title">Events4</span>
-          </div>
-          <div className="OurLegacyPage-timeline-item">
-            <span className="date">05 SEP 2013</span>
-            <span className="event-title">Events4</span>
-          </div>
+          {eventData.map(event => (
+            <div className="OurLegacyPage-timeline-item" key={event.id}>
+              <span className="date">{event.date}</span>
+              <Link className="event-title event-link" to={`/our-legacy/event/${event.id}`}>
+                {event.title}
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     ),
@@ -143,7 +125,7 @@ export default function OurLegacyPage() {
           </div>
         </div>
       </section>
-      <br></br>
+      <br />
     </div>
   );
 }

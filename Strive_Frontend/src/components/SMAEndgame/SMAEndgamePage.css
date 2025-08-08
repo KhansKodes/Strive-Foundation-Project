@@ -128,6 +128,7 @@
   bottom: -45px;
   z-index: 12;
   pointer-events: none;
+  text-align: center;
 }
 .sma-fg-fiveyear-btn {
   pointer-events: auto;
@@ -157,7 +158,6 @@
   font-weight: 500;
   pointer-events: auto;
 }
-.sma-fg-fiveyear-link:hover{}
 
 /* --- CARDS BAR WITH RIBBON ARROW --- */
 .sma-fg-cards-bar {

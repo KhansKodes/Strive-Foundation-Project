@@ -22,6 +22,7 @@ import StriveBeaconInitiativePage from '../components/SMAEndgame/StriveBeaconIni
 import StriveCureLabPage from '../components/SMAEndgame/StriveCureLab/StriveCureLabPage';
 
 import OurLegacyPage  from '../components/OurLegacy/OurLegacyPage';
+import EventDetailPage from '../components/OurLegacy/LegacyEvent/EventDetailPage';
 
 import MediaCenter  from '../components/MediaCenter/MediaCenter';
 
@@ -44,6 +45,7 @@ export default function AppRoutes() {
         <Route path="sma-endgame/cure-lab" element={<StriveCureLabPage />} />
 
         <Route path="legacy"      element={<OurLegacyPage />} />
+        <Route path="/our-legacy/event/:id" element={<EventDetailPage />} />
 
         <Route path="media-center"  element={<MediaCenter />} />
 
