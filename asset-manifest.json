@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Strive-Foundation-Project/static/css/main.392c5466.css",
-    "main.js": "/Strive-Foundation-Project/static/js/main.fb14f3b0.js",
+    "main.css": "/Strive-Foundation-Project/static/css/main.57a03c1d.css",
+    "main.js": "/Strive-Foundation-Project/static/js/main.92dcbbc6.js",
     "static/media/logo.png": "/Strive-Foundation-Project/static/media/logo.ccd27ba2ecc04efe26b3.png",
     "static/media/Hands.png": "/Strive-Foundation-Project/static/media/Hands.9079b97ba5083cae4c08.png",
     "index.html": "/Strive-Foundation-Project/index.html",
-    "main.392c5466.css.map": "/Strive-Foundation-Project/static/css/main.392c5466.css.map",
-    "main.fb14f3b0.js.map": "/Strive-Foundation-Project/static/js/main.fb14f3b0.js.map"
+    "main.57a03c1d.css.map": "/Strive-Foundation-Project/static/css/main.57a03c1d.css.map",
+    "main.92dcbbc6.js.map": "/Strive-Foundation-Project/static/js/main.92dcbbc6.js.map"
   },
   "entrypoints": [
-    "static/css/main.392c5466.css",
-    "static/js/main.fb14f3b0.js"
+    "static/css/main.57a03c1d.css",
+    "static/js/main.92dcbbc6.js"
   ]
 }
