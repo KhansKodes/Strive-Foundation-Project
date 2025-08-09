@@ -4,6 +4,17 @@
 
 The Patient Registration API has been completely redesigned to support a 3-step registration process for patients and caregivers. This API allows users to register as either a patient or caregiver and complete their registration through three distinct steps.
 
+
+# Make migrations
+python manage.py makemigrations
+python manage.py migrate
+
+# Create superuser (for admin panel)
+python manage.py createsuperuser
+
+# Run server
+python manage.py runserver
+
 ## Base URL
 ```
 http://127.0.0.1:8000/api/
