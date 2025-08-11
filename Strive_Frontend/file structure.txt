@@ -1,0 +1,129 @@
+src/
+├── App.css
+├── App.js
+├── App.test.js
+├── index.css
+├── index.js
+├── logo.svg
+├── reportWebVitals.js
+├── setupTests.js
+│
+├── assets/
+│   ├── images/
+│   │   ├── Hands.png
+│   │   ├── hero.png
+│   │   └── logo.png
+│   └── styles/
+│       └── global.css
+│
+├── components/
+│   ├── Layout/
+│   │   ├── Header.js
+│   │   ├── Header.css
+│   │   ├── Footer.js
+│   │   ├── Footer.css
+│   │   ├── MainLayout.js
+│   │   └── navLinks.js
+│   │
+│   ├── Auth/
+│   │   ├── AuthLayout.js
+│   │   ├── AuthLayout.css
+│   │   ├── LoginPage.js
+│   │   ├── RegisterPage.js              # General registration (Donor & Volunteer)
+│   │   └── RegisterPatientPage.js       # New dedicated SMA Patient registration
+│   │
+│   ├── Contact/
+│   │   ├── ContactPage.js
+│   │   ├── ContactPage.css
+│   │   ├── ContactForm.js
+│   │   └── ContactForm.css
+│   │
+│   ├── MediaCenter/
+│   │   ├── MediaCenter.js
+│   │   └── MediaCenter.css
+│   │
+│   ├── OurLegacy/
+│   │   ├── OurLegacyPage.js
+│   │   ├── OurLegacyPage.css
+│   │   └── LegacyEvent/
+│   │       ├── EventDetailPage.js
+│   │       └── EventDetailPage.css
+│   │
+│   ├── Overview/
+│   │   ├── OurIdentity/
+│   │   │   ├── OurIdentityPage.js
+│   │   │   └── OurIdentityPage.css
+│   │   ├── BeyondSMA/
+│   │   │   ├── BeyondSMAPage.js
+│   │   │   └── BeyondSMAPage.css
+│   │   └── Home/
+│   │       ├── HomePage.js
+│   │       ├── HomePage.css
+│   │       ├── HeroSection.js
+│   │       ├── HeroSection.css
+│   │       ├── VisionSection.js
+│   │       ├── VisionSection.css
+│   │       ├── InitiativesSection.js
+│   │       ├── InitiativesSection.css
+│   │       ├── MediaVolunteerSection.js
+│   │       ├── MediaVolunteerSection.css
+│   │       ├── PartnersSection.js
+│   │       ├── PartnersSection.css
+│   │       ├── PatientCountSection.js
+│   │       ├── PatientCountSection.css
+│   │       ├── UrgentNeedSection.js
+│   │       ├── UrgentNeedSection.css
+│   │       ├── NewsSection.js
+│   │       └── NewsSection.css
+│   │
+│   ├── SMAEndgame/
+│   │   ├── SMAEndgamePage.js
+│   │   ├── SMAEndgamePage.css
+│   │   ├── StriveBeaconInitiative/
+│   │   │   ├── StriveBeaconInitiativePage.js
+│   │   │   └── StriveBeaconInitiativePage.css
+│   │   ├── StriveCureLab/
+│   │   │   ├── StriveCureLabPage.js
+│   │   │   └── StriveCureLabPage.css
+│   │   └── StriveLifeClub/
+│   │       ├── StriveLifeClubPage.js
+│   │       └── StriveLifeClubPage.css
+│   │
+│   ├── SmaRegistration/
+│   │   ├── SmaRegistrationPage.js       
+│   │   └── SmaRegistrationPage.css
+│   │
+│   ├── UserDashboards/
+│   │   ├── DonorPortal/
+│   │   │   ├── DonorDashboard.js
+│   │   │   ├── DonorDashboard.css
+│   │   │   └── DonationSummary.js
+│   │   ├── PatientPortal/
+│   │   │   ├── PatientDashboard.js
+│   │   │   ├── PatientDashboard.css
+│   │   │   └── AppointmentCard.js
+│   │   └── VolunteerPortal/
+│   │       ├── VolunteerDashboard.js
+│   │       ├── VolunteerDashboard.css
+│   │       └── VolunteerOverview.js
+│
+├── context/
+│   ├── AuthContext.js
+│   └── UserContext.js
+│
+├── hooks/
+│   └── useAuth.js
+│
+├── routes/
+│   ├── Routes.js
+│   └── PrivateRoute.js
+│
+├── services/
+│   ├── api.js
+│   ├── authService.js
+│   ├── donorService.js
+│   └── patientService.js
+│
+└── utils/
+    ├── constants.js
+    └── helpers.js

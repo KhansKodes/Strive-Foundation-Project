@@ -24,20 +24,22 @@ export default function RegisterPage() {
         <label>
           Username <span>*</span>
         </label>
-          <input name="username" value={f.username} onChange={handleChange} required />
+        <input name="username" value={f.username} onChange={handleChange} required />
+
         <label>
           Password <span>*</span>
         </label>
-          <input type="password" name="password" value={f.password} onChange={handleChange} required />
+        <input type="password" name="password" value={f.password} onChange={handleChange} required />
+
         <label>
           Role <span>*</span>
         </label>
-          <select name="role" value={f.role} onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value={ROLES.PATIENT}>Patient</option>
-            <option value={ROLES.DONOR}>Donor</option>
-            <option value={ROLES.VOLUNTEER}>Volunteer</option>
-          </select>
+        <select name="role" value={f.role} onChange={handleChange} required>
+          <option value="">Select</option>
+          <option value={ROLES.DONOR}>Donor</option>
+          <option value={ROLES.VOLUNTEER}>Volunteer</option>
+        </select>
+
         <button type="submit" className="auth-form-btn">Register</button>
       </form>
     </AuthLayout>

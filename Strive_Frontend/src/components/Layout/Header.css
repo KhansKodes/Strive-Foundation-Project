@@ -17,16 +17,48 @@
   background: linear-gradient(90deg, #553CDA 0%, #4E21CA 100%);
   color: #fff;
   font-size: 15px;
-  padding: 5px 0;
+  padding: 5px 100px;
 }
+
 .header .top-bar-inner {
-  justify-content: center;
+  width: 100%;
+  max-width: 1700px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 0 auto;
+}
+.header .top-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header .auth-link {
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.16s, color 0.16s;
+  padding: 3px 12px;
+  border-radius: 4px;
+}
+.header .auth-link.active,
+.header .auth-link:hover {
+  background: #fff;
+  color: #4CAF50;
+}
+.header .divider {
+  color: #fff;
+  font-size: 18px;
+  opacity: 0.5;
+  margin: 0 3px;
 }
 .header .social {
   display: flex;
-  gap: 18px;
-  justify-content: center;
-  width: 100%;
+  gap: 15px;
+  justify-content: flex-end;
+  width: auto;
 }
 .header .social a {
   color: #fff;
@@ -95,6 +127,9 @@
 .header .nav-row {
   padding: 0;
   min-height: 54px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 .header .nav-left {
   display: flex;
@@ -134,45 +169,47 @@
   margin-right: 18px;
 }
 
-.header .nav-right {
+/* --- Register SMA Patient Button --- */
+.header .register-btn-wrap {
   display: flex;
   align-items: center;
-  gap: 12px;
+  margin-left: 25px;
 }
-.header .auth-link {
+.header .register-patient-btn {
+  background: #4CAF50;
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
   text-decoration: none;
-  font-weight: 500;
-  transition: background 0.16s, color 0.16s;
-  padding: 6px 12px;
-  border-radius: 4px;
+  transition: background 0.18s, color 0.18s, box-shadow 0.17s;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
-.header .auth-link.active,
-.header .auth-link:hover {
-  background: #fff;
-  color: #4CAF50;
-}
-.header .divider {
-  color: #fff;
-  font-size: 20px;
-  opacity: 0.5;
-  margin: 0 3px;
+.header .register-patient-btn:hover {
+  background: #1ab61f;
+  color: white;
+  border: 2px solid #4CAF50;
 }
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 1350px) {
+  .header .top-bar {padding: 5px 40px;}
   .header .middle-bar {padding: 0px 40px;}
-  .header .bottom-bar {padding: 0px 40px;}
+  .header .bottom-bar {padding: 5px 40px;}
   .header .middle-content .logo img { height: 72px; }
 }
 @media (max-width: 1100px) {
   .header .middle-content { gap: 12px; }
   .header .contact-group { flex-direction: row; justify-content: space-evenly; gap: 6px; }
 }
-@media (max-width: 960px) {
+@media (max-width: 1000px) {
   .header .middle-content {  gap: 10px;  }
   .header .logo img { height: 54px; }
+  .header .register-patient-btn {margin-top: -10px;}
   .header .nav-toggle {
     display: block;
   }
@@ -207,20 +244,31 @@
     border-bottom: 1px solid #5831bc22;
   }
   .header .nav-link:last-child { border-bottom: none; }
-  .header .nav-right { font-size: 14px; gap: 5px; }
+  .header .register-btn-wrap {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+  /* .header .nav-row { flex-direction: column; align-items: stretch;} */
+}
+@media (max-width: 700px) {
+  .header .middle-bar, .header .bottom-bar { padding: 0 8px; }
+  /* .header .header-box { flex-direction: column; gap: 3px;} */
+  .header .middle-content { flex-direction: column; gap: 5px;}
+  .header .contact-group { gap: 6px;}
+  .header .logo img { height: 46px;}
+  .header .contact-label { font-size: 10px;}
+  .header .contact-info { font-size: 12px;}
+  .header .main-nav { gap: 2px;}
+  .header .register-patient-btn { padding: 7px 10px; font-size: 13px;}
 }
 @media (max-width: 600px) {
-  .header .header-box { flex-direction: column; padding: 0 2vw; gap: 4px; }
-  .header .nav-row { flex-direction: row; gap: 4px; }
-  .header .auth-link { font-size: 13px; padding: 4px 7px; }
-  .header .divider { font-size: 14px; }
-  .header .logo img { height: 46px; }
-  .header .contact-label { font-size: 10px; }
-  .header .contact-info { font-size: 12px; }
-  .header .main-nav { gap: 2px; }
+  /* .header .nav-row { flex-direction: column; align-items: stretch;} */
+  /* .header .register-btn-wrap { margin-left: 0; width: 100%; justify-content: flex-start;} */
+  /* .header .register-patient-btn { width: 100%;} */
+  .header .top-bar-inner {flex-direction: column; gap: 8px;}
 }
 
-/* DROPDOWN WRAPPER */
+/* DROPDOWN WRAPPER - (unchanged from previous for brevity) */
 .header .nav-link-wrapper {
   position: relative;
   display: flex;
@@ -235,7 +283,6 @@
   margin-left: 7px;
   font-size: 12px;
 }
-
 /* Dropdown menu base style */
 .header .dropdown-menu {
   display: none;
@@ -269,7 +316,6 @@
   background: #4CAF50;
   color: #fff;
 }
-
 /* Desktop hover: show dropdown */
 @media (min-width: 951px) {
   .header .nav-link-wrapper.has-dropdown:hover > .header .dropdown-menu,

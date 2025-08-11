@@ -40,6 +40,23 @@ export default function Header() {
             <a href="#" aria-label="Instagram"><FaInstagram /></a>
             <a href="#" aria-label="YouTube"><FaYoutube /></a>
           </div>
+          <div className="top-auth">
+            <Link
+              to="/login"
+              className={`auth-link${location.pathname === "/login" ? " active" : ""}`}
+              tabIndex={0}
+            >
+              Login
+            </Link>
+            <span className="divider">|</span>
+            <Link
+              to="/register"
+              className={`auth-link${location.pathname === "/register" ? " active" : ""}`}
+              tabIndex={0}
+            >
+              Register
+            </Link>
+          </div>
         </div>
       </div>
       {/* Middle Bar */}
@@ -152,21 +169,13 @@ export default function Header() {
               })}
             </nav>
           </div>
-          <div className="nav-right">
+          {/* Register SMA Patient Button, right-aligned */}
+          <div className="register-btn-wrap">
             <Link
-              to="/login"
-              className={`auth-link${location.pathname === "/login" ? " active" : ""}`}
-              tabIndex={0}
+              to="/patient-register"
+              className="register-patient-btn"
             >
-              Login
-            </Link>
-            <span className="divider">|</span>
-            <Link
-              to="/register"
-              className={`auth-link${location.pathname === "/register" ? " active" : ""}`}
-              tabIndex={0}
-            >
-              Register
+              Register SMA Patient
             </Link>
           </div>
         </div>
