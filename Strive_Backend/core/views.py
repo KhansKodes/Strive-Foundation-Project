@@ -36,6 +36,10 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     serializer_class = ContactMessageSerializer
 
     def get_permissions(self):
+        """
+        Public: create (submit contact form)
+        Admin: list/retrieve/update/delete
+        """
         if self.action == 'create':
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
