@@ -14,7 +14,7 @@ class MediaItemViewSet(viewsets.ModelViewSet):
         """
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()] 
+        return [permissions.IsAdminUser()] 
 
 # LEGACY ITEMS
 class LegacyItemViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,7 @@ class LegacyItemViewSet(viewsets.ModelViewSet):
         """
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()] 
+        return [permissions.IsAdminUser()] 
 
 # CONTACT FORM SUBMISSION
 class ContactMessageViewSet(viewsets.ModelViewSet):
