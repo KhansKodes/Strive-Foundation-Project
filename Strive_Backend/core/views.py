@@ -6,7 +6,15 @@ from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessa
 class MediaItemViewSet(viewsets.ModelViewSet):
     queryset = MediaItem.objects.all().order_by('-created_at')
     serializer_class = MediaItemSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_permissions(self):
+        """
+        Public: list, retrieve
+        Auth required: create, update, partial_update, destroy
+        """
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()] 
 
 # LEGACY ITEMS
 class LegacyItemViewSet(viewsets.ModelViewSet):
