@@ -20,7 +20,15 @@ class MediaItemViewSet(viewsets.ModelViewSet):
 class LegacyItemViewSet(viewsets.ModelViewSet):
     queryset = LegacyItem.objects.all().order_by('-year')
     serializer_class = LegacyItemSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_permissions(self):
+        """
+        Public: list, retrieve
+        Auth required: create, update, partial_update, destroy
+        """
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()] 
 
 # CONTACT FORM SUBMISSION
 class ContactMessageViewSet(viewsets.ModelViewSet):
