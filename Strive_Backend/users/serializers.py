@@ -68,6 +68,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PhoneTokenObtainPairSerializer(TokenObtainPairSerializer):
-    # simplejwt uses get_user_model().USERNAME_FIELD, which is 'phone'
-    # so this serializer works with an input key 'phone'
+    """
+    Uses AUTH_USER_MODEL.USERNAME_FIELD (we set to 'phone'), so
+    login payload is: {"phone": "...", "password": "..."}
+    """
     pass
