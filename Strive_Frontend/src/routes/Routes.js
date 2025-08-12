@@ -27,7 +27,7 @@ import EventDetailPage from '../components/OurLegacy/LegacyEvent/EventDetailPage
 
 import MediaCenter  from '../components/MediaCenter/MediaCenter';
 
-// import SmaRegistrationPage from '../components/SmaRegistration/SmaRegistrationPage';
+import SmaRegistrationPage from '../components/SmaRegistration/SmaRegistrationPage';
 
 
 export default function AppRoutes() {
@@ -52,7 +52,7 @@ export default function AppRoutes() {
 
         <Route path="contact" element={<ContactPage />} />
 
-        {/* <Route path="register-sma" element={<SmaRegistrationPage />} /> */}
+        <Route path="register-sma" element={<SmaRegistrationPage />} />
         
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />

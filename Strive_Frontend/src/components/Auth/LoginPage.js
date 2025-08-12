@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import AuthLayout from "./AuthLayout"; // Adjust path as needed
+import AuthLayout from "./AuthLayout";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginPage() {
-  const [f, setF] = useState({ username: "", password: "" });
+  const [f, setF] = useState({ email: "", password: "" });
   const [err, setErr] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
   const { login } = useAuth();
   const nav = useNavigate();
 
@@ -14,7 +16,8 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await login(f.username, f.password);
+      // login now expects (email, password)
+      const user = await login(f.email, f.password);
       if (user.role === "patient") nav("/patient");
       else if (user.role === "donor") nav("/donor");
       else if (user.role === "volunteer") nav("/volunteer");
@@ -28,14 +31,36 @@ export default function LoginPage() {
       <h2 className="auth-form-title">Login</h2>
       {err && <p className="auth-form-error">{err}</p>}
       <form onSubmit={handleSubmit} className="auth-form">
-        <label>
-          Username <span>*</span>
-        </label>
-          <input name="username" value={f.username} onChange={handleChange} required />
-        <label>
-          Password <span>*</span>
-        </label>
-          <input type="password" name="password" value={f.password} onChange={handleChange} required />
+        <label>Email <span>*</span></label>
+        <input
+          type="email"
+          name="email"
+          value={f.email}
+          onChange={handleChange}
+          autoComplete="email"
+          required
+        />
+
+        <label>Password <span>*</span></label>
+        <div className="auth-password-wrap">
+          <input
+            type={showPwd ? "text" : "password"}
+            name="password"
+            value={f.password}
+            onChange={handleChange}
+            autoComplete="current-password"
+            required
+          />
+          <button
+            type="button"
+            className="auth-eye"
+            onClick={() => setShowPwd(s => !s)}
+            aria-label="Toggle password"
+          >
+            {showPwd ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
+
         <button type="submit" className="auth-form-btn">Login</button>
       </form>
     </AuthLayout>

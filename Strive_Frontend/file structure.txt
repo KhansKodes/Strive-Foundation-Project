@@ -27,10 +27,10 @@ src/
 │   │
 │   ├── Auth/
 │   │   ├── AuthLayout.js
-│   │   ├── AuthLayout.css
-│   │   ├── LoginPage.js
-│   │   ├── RegisterPage.js              # General registration (Donor & Volunteer)
-│   │   └── RegisterPatientPage.js       # New dedicated SMA Patient registration
+│   │   ├── AuthLayout.css         
+│   │   ├── LoginPage.js           
+│   │   ├── RegisterPage.js        
+│   │   └── RegisterPatientPage.js 
 │   │
 │   ├── Contact/
 │   │   ├── ContactPage.js
@@ -90,22 +90,22 @@ src/
 │   │       └── StriveLifeClubPage.css
 │   │
 │   ├── SmaRegistration/
-│   │   ├── SmaRegistrationPage.js       
+│   │   ├── SmaRegistrationPage.js   
 │   │   └── SmaRegistrationPage.css
 │   │
-│   ├── UserDashboards/
-│   │   ├── DonorPortal/
-│   │   │   ├── DonorDashboard.js
-│   │   │   ├── DonorDashboard.css
-│   │   │   └── DonationSummary.js
-│   │   ├── PatientPortal/
-│   │   │   ├── PatientDashboard.js
-│   │   │   ├── PatientDashboard.css
-│   │   │   └── AppointmentCard.js
-│   │   └── VolunteerPortal/
-│   │       ├── VolunteerDashboard.js
-│   │       ├── VolunteerDashboard.css
-│   │       └── VolunteerOverview.js
+│   └── UserDashboards/
+│       ├── DonorPortal/
+│       │   ├── DonorDashboard.js
+│       │   ├── DonorDashboard.css
+│       │   └── DonationSummary.js
+│       ├── PatientPortal/
+│       │   ├── PatientDashboard.js
+│       │   ├── PatientDashboard.css
+│       │   └── AppointmentCard.js
+│       └── VolunteerPortal/
+│           ├── VolunteerDashboard.js
+│           ├── VolunteerDashboard.css
+│           └── VolunteerOverview.js
 │
 ├── context/
 │   ├── AuthContext.js

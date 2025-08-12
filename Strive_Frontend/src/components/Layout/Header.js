@@ -172,7 +172,7 @@ export default function Header() {
           {/* Register SMA Patient Button, right-aligned */}
           <div className="register-btn-wrap">
             <Link
-              to="/patient-register"
+              to="/register-sma"
               className="register-patient-btn"
             >
               Register SMA Patient
