@@ -1,43 +1,55 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+# users/models.py
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.validators import RegexValidator
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        if password:
-            user.set_password(password)
+ROLE_CHOICES = (
+    ('patient', 'Patient'),
+    ('donor', 'Donor'),
+    ('volunteer', 'Volunteer'),
+    ('admin', 'Admin'),
+)
+
+phone_validator = RegexValidator(
+    regex=r'^\+?\d{11}$',
+    message="Enter a valid phone number )."
+)
+
+class UserManager(BaseUserManager):
+    def create_user(self, phone, password=None, **extra_fields):
+        if not phone:
+            raise ValueError("Phone is required")
+        user = self.model(phone=phone, **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('role', 'admin')
-        return self.create_user(email, password, **extra_fields)
+    def create_superuser(self, phone, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("role", "admin")
+        if not extra_fields.get("is_staff"):
+            raise ValueError("Superuser must have is_staff=True.")
+        if not extra_fields.get("is_superuser"):
+            raise ValueError("Superuser must have is_superuser=True.")
+        return self.create_user(phone, password, **extra_fields)
 
-class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('patient', 'Patient'),
-        ('caregiver', 'Caregiver'),
-        ('donor', 'Donor'),
-        ('volunteer', 'Volunteer'),
-        ('admin', 'Admin'),
-    )
-    
-    # Remove username field completely
-    username = None
-    email = models.EmailField('email address', unique=True)
-    full_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
+class User(AbstractBaseUser, PermissionsMixin):
+    # Django keeps an integer id as PK automatically (recommended)
+    phone = models.CharField(max_length=20, unique=True, validators=[phone_validator])
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150, blank=True)  # optional
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name', 'phone', 'role']
+    # Django admin / auth flags
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
-    objects = CustomUserManager()
+    # Login field
+    USERNAME_FIELD = "phone"
+    REQUIRED_FIELDS = []  # we’ll collect first_name/role in serializer
+
+    objects = UserManager()
 
     def __str__(self):
-        return f"{self.full_name} ({self.role})"
+        return f"{self.phone} ({self.role})"
