@@ -11,7 +11,7 @@ ROLE_CHOICES = (
 )
 
 phone_validator = RegexValidator(
-    regex=r'^\+?\d{11}$',
+    regex=r'^\+?\d{11,15}$',
     message="Enter a valid phone number )."
 )
 
@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
         return self.create_user(phone, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    # Django keeps an integer id as PK automatically (recommended)
+    # Django keeps an integer id as PK automatically
     phone = models.CharField(max_length=20, unique=True, validators=[phone_validator])
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150, blank=True)  # optional
