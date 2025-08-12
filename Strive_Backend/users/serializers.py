@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
 
@@ -64,3 +65,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "phone", "first_name", "last_name", "role")
+
+
+class PhoneTokenObtainPairSerializer(TokenObtainPairSerializer):
+    # simplejwt uses get_user_model().USERNAME_FIELD, which is 'phone'
+    # so this serializer works with an input key 'phone'
+    pass
