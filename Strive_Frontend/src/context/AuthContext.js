@@ -12,14 +12,14 @@ export function AuthProvider({ children }) {
     if (stored) setUser(stored);
   }, []);
 
-  const login = async (u, p) => {
-    const found = await authService.login(u, p);
+  const login = async (phone, password) => {
+    const found = await authService.login(phone, password);
     setUser(found);
     return found;
   };
 
-  const register = async (u, p, role) => {
-    const created = await authService.register(u, p, role);
+  const register = async (phone, password, role, profile) => {
+    const created = await authService.register(phone, password, role, profile);
     setUser(created);
     return created;
   };

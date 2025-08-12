@@ -6,15 +6,14 @@ import AuthLayout from "./AuthLayout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-const NAME_RE  = /^[A-Za-zÀ-ÖØ-öø-ÿ'’\-.\s]{2,60}$/;          // letters, spaces, - . ’
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASS_RE  = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;      // upper, lower, number, 8+
-const PHONE_RE = /^[0-9]{7,15}$/;                              // digits only, 7–15
+const NAME_RE  = /^[A-Za-zÀ-ÖØ-öø-ÿ'’\-.\s]{2,60}$/;   // letters, spaces, - . ’
+const PASS_RE  = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // upper, lower, number, 8+
+const PHONE_RE = /^[0-9]{7,15}$/;                         // digits only, 7–15
 
 export default function RegisterPage() {
   const [f, setF] = useState({
-    fullName: "",
-    email: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     password: "",
     confirmPassword: "",
@@ -26,14 +25,14 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const nav = useNavigate();
 
-  const setField = (name, value) => setF(prev => ({ ...prev, [name]: value }));
+  const setField = (name, value) => setF((prev) => ({ ...prev, [name]: value }));
 
   const validate = () => {
     const e = {};
-    if (!NAME_RE.test(f.fullName.trim())) e.fullName = "Enter a valid full name (letters only).";
-    if (!EMAIL_RE.test(f.email))       e.email = "Enter a valid email address.";
-    if (!PHONE_RE.test(f.phone))       e.phone = "Enter digits only (7–15).";
-    if (!PASS_RE.test(f.password))     e.password = "Min 8 chars with upper, lower and a number.";
+    if (!NAME_RE.test(f.firstName.trim())) e.firstName = "Enter a valid first name (letters only).";
+    if (f.lastName && !NAME_RE.test(f.lastName.trim())) e.lastName = "Last name must be letters only.";
+    if (!PHONE_RE.test(f.phone)) e.phone = "Enter digits only (7–15).";
+    if (!PASS_RE.test(f.password)) e.password = "Min 8 chars with upper, lower and a number.";
     if (f.confirmPassword !== f.password) e.confirmPassword = "Passwords do not match.";
     if (![ROLES.DONOR, ROLES.VOLUNTEER].includes(f.role)) e.role = "Select Donor or Volunteer.";
     setErrors(e);
@@ -44,14 +43,14 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await register(f.email, f.password, f.role, {
-        fullName: f.fullName,
-        phone: f.phone,
+      await register(f.phone, f.password, f.role, {
+        firstName: f.firstName.trim(),
+        lastName: f.lastName.trim(),
       });
       await Swal.fire({
         icon: "success",
         title: "Registration successful",
-        text: "You can now login.",
+        text: "You can now login with your phone number.",
         confirmButtonColor: "#553CDA",
       });
       nav("/login");
@@ -66,27 +65,32 @@ export default function RegisterPage() {
       {errors.form && <p className="auth-form-error">{errors.form}</p>}
 
       <form onSubmit={handleSubmit} className="auth-form">
-        <label>Full Name <span>*</span></label>
-        <input
-          className={errors.fullName ? "is-invalid" : ""}
-          name="fullName"
-          value={f.fullName}
-          onChange={(e) => setField("fullName", e.target.value)}
-          required
-        />
-        {errors.fullName && <div className="auth-field-error">{errors.fullName}</div>}
+        <div className="auth-grid-2">
+          <div>
+            <label>First Name <span>*</span></label>
+            <input
+              className={errors.firstName ? "is-invalid" : ""}
+              name="firstName"
+              value={f.firstName}
+              onChange={(e) => setField("firstName", e.target.value)}
+              autoComplete="given-name"
+              required
+            />
+            {errors.firstName && <div className="auth-field-error">{errors.firstName}</div>}
+          </div>
 
-        <label>Email <span>*</span></label>
-        <input
-          className={errors.email ? "is-invalid" : ""}
-          type="email"
-          name="email"
-          value={f.email}
-          onChange={(e) => setField("email", e.target.value)}
-          autoComplete="email"
-          required
-        />
-        {errors.email && <div className="auth-field-error">{errors.email}</div>}
+          <div>
+            <label>Last Name <small>(optional)</small></label>
+            <input
+              className={errors.lastName ? "is-invalid" : ""}
+              name="lastName"
+              value={f.lastName}
+              onChange={(e) => setField("lastName", e.target.value)}
+              autoComplete="family-name"
+            />
+            {errors.lastName && <div className="auth-field-error">{errors.lastName}</div>}
+          </div>
+        </div>
 
         <label>Phone No <span>*</span></label>
         <input
@@ -96,6 +100,7 @@ export default function RegisterPage() {
           onChange={(e) => setField("phone", e.target.value.replace(/\D/g, ""))}
           placeholder="e.g. 3001234567"
           inputMode="numeric"
+          autoComplete="tel"
           required
         />
         {errors.phone && <div className="auth-field-error">{errors.phone}</div>}
@@ -114,7 +119,7 @@ export default function RegisterPage() {
           <button
             type="button"
             className="auth-eye"
-            onClick={() => setShowPwd(s => !s)}
+            onClick={() => setShowPwd((s) => !s)}
             aria-label="Toggle password"
           >
             {showPwd ? <FaEyeSlash /> : <FaEye />}
@@ -136,7 +141,7 @@ export default function RegisterPage() {
           <button
             type="button"
             className="auth-eye"
-            onClick={() => setShowPwd2(s => !s)}
+            onClick={() => setShowPwd2((s) => !s)}
             aria-label="Toggle confirm password"
           >
             {showPwd2 ? <FaEyeSlash /> : <FaEye />}

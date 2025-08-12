@@ -12,9 +12,11 @@ export default function DonorDashboard() {
     getDonations().then(setDons);
   }, []);
 
+  const fullName = user?.profile?.fullName || "Donor";
+
   return (
     <div className='DonorDashboard'>
-      <h1>{user.username}'s Portal</h1>
+      <h1>Welcome, {fullName}!</h1>
       <h2>Your Donations</h2>
       {dons.map(d => <DonationSummary key={d.id} donation={d} />)}
     </div>

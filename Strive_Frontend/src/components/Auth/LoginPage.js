@@ -5,7 +5,7 @@ import AuthLayout from "./AuthLayout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginPage() {
-  const [f, setF] = useState({ email: "", password: "" });
+  const [f, setF] = useState({ phone: "", password: "" });
   const [err, setErr] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const { login } = useAuth();
@@ -15,14 +15,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErr("");
     try {
-      // login now expects (email, password)
-      const user = await login(f.email, f.password);
+      // login now expects (phone, password)
+      const user = await login(f.phone, f.password);
       if (user.role === "patient") nav("/patient");
       else if (user.role === "donor") nav("/donor");
       else if (user.role === "volunteer") nav("/volunteer");
-    } catch (e) {
-      setErr(e.message || String(e));
+      else nav("/");
+    } catch (e2) {
+      setErr(e2?.message || String(e2));
     }
   };
 
@@ -30,14 +32,16 @@ export default function LoginPage() {
     <AuthLayout page="login">
       <h2 className="auth-form-title">Login</h2>
       {err && <p className="auth-form-error">{err}</p>}
+
       <form onSubmit={handleSubmit} className="auth-form">
-        <label>Email <span>*</span></label>
+        <label>Phone No <span>*</span></label>
         <input
-          type="email"
-          name="email"
-          value={f.email}
+          name="phone"
+          value={f.phone}
           onChange={handleChange}
-          autoComplete="email"
+          placeholder="e.g. 3001234567"
+          inputMode="numeric"
+          autoComplete="tel"
           required
         />
 
@@ -54,7 +58,7 @@ export default function LoginPage() {
           <button
             type="button"
             className="auth-eye"
-            onClick={() => setShowPwd(s => !s)}
+            onClick={() => setShowPwd((s) => !s)}
             aria-label="Toggle password"
           >
             {showPwd ? <FaEyeSlash /> : <FaEye />}
