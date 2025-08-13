@@ -63,7 +63,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "phone", "first_name", "last_name", "role")
+        fields = ("id", "phone", "full_name", "role")
 
 
 class PhoneTokenObtainPairSerializer(TokenObtainPairSerializer):
