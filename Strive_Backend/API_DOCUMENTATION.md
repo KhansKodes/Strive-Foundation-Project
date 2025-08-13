@@ -5,6 +5,13 @@
 The Patient Registration API has been completely redesigned to support a 3-step registration process for patients and caregivers. This API allows users to register as either a patient or caregiver and complete their registration through three distinct steps.
 
 
+#To run this project you need to did this first
+
+python -m venv .venv
+source .venv/bin/activate 
+pip install -r requirements.txt
+
+
 python manage.py runserver       # start server
 python manage.py migrate         # apply DB changes
 python manage.py makemigrations  # create DB migration files
