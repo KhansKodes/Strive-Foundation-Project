@@ -12,8 +12,7 @@ const PHONE_RE = /^[0-9]{7,15}$/;
 
 export default function RegisterPatientPage() {
   const [f, setF] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     phone: "",
     password: "",
     confirmPassword: "",
@@ -28,8 +27,7 @@ export default function RegisterPatientPage() {
 
   const validate = () => {
     const e = {};
-    if (!NAME_RE.test(f.firstName.trim())) e.firstName = "Enter a valid first name (letters only).";
-    if (f.lastName && !NAME_RE.test(f.lastName.trim())) e.lastName = "Last name must be letters only.";
+    if (!NAME_RE.test(f.fullName.trim())) e.fullName = "Enter a valid name (letters only).";
     if (!PHONE_RE.test(f.phone)) e.phone = "Enter digits only (7–15).";
     if (!PASS_RE.test(f.password)) e.password = "Min 8 chars with upper, lower and a number.";
     if (f.confirmPassword !== f.password) e.confirmPassword = "Passwords do not match.";
@@ -41,10 +39,7 @@ export default function RegisterPatientPage() {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await register(f.phone, f.password, ROLES.PATIENT, {
-        firstName: f.firstName.trim(),
-        lastName: f.lastName.trim(),
-      });
+      await register(f.phone, f.password, ROLES.PATIENT, { fullName: f.fullName.trim() });
       await Swal.fire({
         icon: "success",
         title: "Patient registered",
@@ -63,32 +58,16 @@ export default function RegisterPatientPage() {
       {errors.form && <p className="auth-form-error">{errors.form}</p>}
 
       <form onSubmit={handleSubmit} className="auth-form">
-        <div className="auth-grid-2">
-          <div>
-            <label>First Name <span>*</span></label>
-            <input
-              className={errors.firstName ? "is-invalid" : ""}
-              name="firstName"
-              value={f.firstName}
-              onChange={(e) => setField("firstName", e.target.value)}
-              autoComplete="given-name"
-              required
-            />
-            {errors.firstName && <div className="auth-field-error">{errors.firstName}</div>}
-          </div>
-
-          <div>
-            <label>Last Name <small>(optional)</small></label>
-            <input
-              className={errors.lastName ? "is-invalid" : ""}
-              name="lastName"
-              value={f.lastName}
-              onChange={(e) => setField("lastName", e.target.value)}
-              autoComplete="family-name"
-            />
-            {errors.lastName && <div className="auth-field-error">{errors.lastName}</div>}
-          </div>
-        </div>
+        <label>Full Name <span>*</span></label>
+        <input
+          className={errors.fullName ? "is-invalid" : ""}
+          name="fullName"
+          value={f.fullName}
+          onChange={(e) => setField("fullName", e.target.value)}
+          autoComplete="name"
+          required
+        />
+        {errors.fullName && <div className="auth-field-error">{errors.fullName}</div>}
 
         <label>Phone No <span>*</span></label>
         <input
@@ -114,12 +93,7 @@ export default function RegisterPatientPage() {
             autoComplete="new-password"
             required
           />
-          <button
-            type="button"
-            className="auth-eye"
-            onClick={() => setShowPwd((s) => !s)}
-            aria-label="Toggle password"
-          >
+          <button type="button" className="auth-eye" onClick={() => setShowPwd(s => !s)}>
             {showPwd ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
@@ -136,18 +110,12 @@ export default function RegisterPatientPage() {
             autoComplete="new-password"
             required
           />
-          <button
-            type="button"
-            className="auth-eye"
-            onClick={() => setShowPwd2((s) => !s)}
-            aria-label="Toggle confirm password"
-          >
+          <button type="button" className="auth-eye" onClick={() => setShowPwd2(s => !s)}>
             {showPwd2 ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
         {errors.confirmPassword && <div className="auth-field-error">{errors.confirmPassword}</div>}
 
-        {/* hidden role; not shown to user */}
         <input type="hidden" name="role" value={ROLES.PATIENT} />
 
         <button type="submit" className="auth-form-btn">Register</button>

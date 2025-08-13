@@ -6,14 +6,13 @@ import AuthLayout from "./AuthLayout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-const NAME_RE  = /^[A-Za-zÀ-ÖØ-öø-ÿ'’\-.\s]{2,60}$/;   // letters, spaces, - . ’
-const PASS_RE  = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // upper, lower, number, 8+
-const PHONE_RE = /^[0-9]{7,15}$/;                         // digits only, 7–15
+const NAME_RE  = /^[A-Za-zÀ-ÖØ-öø-ÿ'’\-.\s]{2,60}$/;
+const PASS_RE  = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+const PHONE_RE = /^[0-9]{7,15}$/;
 
 export default function RegisterPage() {
   const [f, setF] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     phone: "",
     password: "",
     confirmPassword: "",
@@ -29,8 +28,7 @@ export default function RegisterPage() {
 
   const validate = () => {
     const e = {};
-    if (!NAME_RE.test(f.firstName.trim())) e.firstName = "Enter a valid first name (letters only).";
-    if (f.lastName && !NAME_RE.test(f.lastName.trim())) e.lastName = "Last name must be letters only.";
+    if (!NAME_RE.test(f.fullName.trim())) e.fullName = "Enter a valid name (letters only).";
     if (!PHONE_RE.test(f.phone)) e.phone = "Enter digits only (7–15).";
     if (!PASS_RE.test(f.password)) e.password = "Min 8 chars with upper, lower and a number.";
     if (f.confirmPassword !== f.password) e.confirmPassword = "Passwords do not match.";
@@ -43,10 +41,7 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!validate()) return;
     try {
-      await register(f.phone, f.password, f.role, {
-        firstName: f.firstName.trim(),
-        lastName: f.lastName.trim(),
-      });
+      await register(f.phone, f.password, f.role, { fullName: f.fullName.trim() });
       await Swal.fire({
         icon: "success",
         title: "Registration successful",
@@ -65,32 +60,16 @@ export default function RegisterPage() {
       {errors.form && <p className="auth-form-error">{errors.form}</p>}
 
       <form onSubmit={handleSubmit} className="auth-form">
-        <div className="auth-grid-2">
-          <div>
-            <label>First Name <span>*</span></label>
-            <input
-              className={errors.firstName ? "is-invalid" : ""}
-              name="firstName"
-              value={f.firstName}
-              onChange={(e) => setField("firstName", e.target.value)}
-              autoComplete="given-name"
-              required
-            />
-            {errors.firstName && <div className="auth-field-error">{errors.firstName}</div>}
-          </div>
-
-          <div>
-            <label>Last Name <small>(optional)</small></label>
-            <input
-              className={errors.lastName ? "is-invalid" : ""}
-              name="lastName"
-              value={f.lastName}
-              onChange={(e) => setField("lastName", e.target.value)}
-              autoComplete="family-name"
-            />
-            {errors.lastName && <div className="auth-field-error">{errors.lastName}</div>}
-          </div>
-        </div>
+        <label>Full Name <span>*</span></label>
+        <input
+          className={errors.fullName ? "is-invalid" : ""}
+          name="fullName"
+          value={f.fullName}
+          onChange={(e) => setField("fullName", e.target.value)}
+          autoComplete="name"
+          required
+        />
+        {errors.fullName && <div className="auth-field-error">{errors.fullName}</div>}
 
         <label>Phone No <span>*</span></label>
         <input
@@ -116,12 +95,7 @@ export default function RegisterPage() {
             autoComplete="new-password"
             required
           />
-          <button
-            type="button"
-            className="auth-eye"
-            onClick={() => setShowPwd((s) => !s)}
-            aria-label="Toggle password"
-          >
+          <button type="button" className="auth-eye" onClick={() => setShowPwd(s => !s)}>
             {showPwd ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
@@ -138,12 +112,7 @@ export default function RegisterPage() {
             autoComplete="new-password"
             required
           />
-          <button
-            type="button"
-            className="auth-eye"
-            onClick={() => setShowPwd2((s) => !s)}
-            aria-label="Toggle confirm password"
-          >
+          <button type="button" className="auth-eye" onClick={() => setShowPwd2(s => !s)}>
             {showPwd2 ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>

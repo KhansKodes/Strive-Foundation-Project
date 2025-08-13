@@ -90,14 +90,6 @@
   gap: 16px;
 }
 
-/* two-column for first/last */
-.auth-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  width: 100%;
-}
-.auth-grid-2 > div { min-width: 0; } /* prevent overflow */
 .auth-form label {
   font-size: 0.99rem;
   color: #252664;
@@ -228,7 +220,6 @@
   }
   .auth-layout-right { padding-top: 0; }
   .auth-layout-form { margin: 10px auto; max-width: 92vw; }
-  .auth-grid-2 { grid-template-columns: 1fr; gap: 12px; } /* stack names */
 }
 
 @media (max-width: 500px) {
