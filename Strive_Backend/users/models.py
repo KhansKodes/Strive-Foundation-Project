@@ -37,8 +37,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     # Django keeps an integer id as PK automatically
     phone = models.CharField(max_length=20, unique=True, validators=[phone_validator])
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150, blank=True)  # optional
+    full_name = models.CharField(max_length=150)
+    #last_name = models.CharField(max_length=150, blank=True)  # optional
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     # Django admin / auth flags

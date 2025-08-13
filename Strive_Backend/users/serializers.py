@@ -16,8 +16,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "phone",
-            "first_name",
-            "last_name",
+            "full_name",
+            #"last_name",
             "role",
             "password",
             "password2",
@@ -28,8 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         """
         Map incoming spaced keys to model fields so your frontend can send:
         {
-          "First name": "...",
-          "Last name": "...",
+          "Full name": "...",
           "conform password": "..."
         }
         """
@@ -37,10 +36,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         d = dict(data)
 
         # normalize spaced keys
-        if "First name" in d:
-            d["first_name"] = d.pop("First name")
-        if "Last name" in d:
-            d["last_name"] = d.pop("Last name")
+        if "Full name" in d:
+            d["full_name"] = d.pop("Full name")
+        #if "Last name" in d:
+        #    d["last_name"] = d.pop("Last name")
         # handle misspelling/variant
         if "conform password" in d and "confirm_password" not in d:
             d["confirm_password"] = d.pop("conform password")
