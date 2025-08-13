@@ -7,6 +7,9 @@ The Patient Registration API has been completely redesigned to support a 3-step 
 
 #To run this project you need to did this first
 
+#Used to show all the requirements
+pip freeze > requirements.txt
+
 python -m venv .venv
 source .venv/bin/activate 
 pip install -r requirements.txt
