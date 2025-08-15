@@ -10,14 +10,22 @@ The Patient Registration API has been completely redesigned to support a 3-step 
 #Used to show all the requirements
 pip freeze > requirements.txt
 
+#Step 1
 python -m venv .venv
 source .venv/bin/activate 
+
+#Step 2
 pip install -r requirements.txt
 
-
-python manage.py runserver       # start server
-python manage.py migrate         # apply DB changes
+#Step 3
 python manage.py makemigrations  # create DB migration files
+
+#Step 4
+
+#Step 5
+python manage.py runserver       # start server
+
+
 python manage.py startapp users  # create a new app
 python manage.py createsuperuser # admin account
 
