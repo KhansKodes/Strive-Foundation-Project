@@ -10,6 +10,7 @@ The Patient Registration API has been completely redesigned to support a 3-step 
 #Used to show all the requirements
 pip freeze > requirements.txt
 
+'''
 #Step 1
 python -m venv .venv
 source .venv/bin/activate 
@@ -29,7 +30,7 @@ python manage.py runserver       # start server
 python manage.py startapp users  # create a new app
 python manage.py createsuperuser # admin account
 
-
+'''
 ## Base URL
 ```
 http://127.0.0.1:8000/api/
