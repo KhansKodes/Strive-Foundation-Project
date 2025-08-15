@@ -1,0 +1,35 @@
+.env 
+
+# Django Migration Files
+# Ignore all migration files except __init__.py
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Migration cache files
+*/migrations/__pycache__/
+
+# Database files
+db.sqlite3
+*.sqlite3
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
