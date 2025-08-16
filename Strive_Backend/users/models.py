@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import RegexValidator
 
+# Role choices for the user
 ROLE_CHOICES = (
     ('patient', 'Patient'),
     ('donor', 'Donor'),
@@ -18,7 +19,7 @@ phone_validator = RegexValidator(
 class UserManager(BaseUserManager):
     def create_user(self, phone, password=None, **extra_fields):
         if not phone:
-            raise ValueError("Phone is required")
+            raise ValueError("Phone number is required")
         user = self.model(phone=phone, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
