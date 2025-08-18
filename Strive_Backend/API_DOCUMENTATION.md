@@ -11,6 +11,8 @@ python manage.py makemigrations  # create DB migration files
 python manage.py startapp users  # create a new app
 python manage.py createsuperuser # admin account
 
+# To install requirements
+    pip3 install -r requirements.txt
 
 ## Base URL
 ```
