@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import './ContactForm.css';
+import api from '../../services/api';
 
 export default function ContactForm() {
-  const [f, setF] = useState({ name: '', email: '', message: '' });
+  const [f, setF] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = e =>
     setF({ ...f, [e.target.name]: e.target.value });
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 2500);
-    setF({ name: '', email: '', message: '' });
+    setError('');
+    try {
+      await api.post('/contact/', f);
+      setSent(true);
+      setF({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setSent(false), 2500);
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -43,6 +51,17 @@ export default function ContactForm() {
         </div>
       </div>
       <div className="form-group">
+        <input
+          name="subject"
+          id="subject"
+          value={f.subject}
+          onChange={handleChange}
+          required
+          placeholder=" "
+        />
+        <label htmlFor="subject">Subject</label>
+      </div>
+      <div className="form-group">
         <textarea
           name="message"
           id="message"
@@ -54,6 +73,7 @@ export default function ContactForm() {
         />
         <label htmlFor="message">Message</label>
       </div>
+      {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
       <button type="submit" className={sent ? "sent" : ""} disabled={sent}>
         {sent ? "Message Sent!" : "Send Message"}
       </button>
