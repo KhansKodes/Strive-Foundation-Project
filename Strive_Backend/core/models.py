@@ -74,3 +74,57 @@ class UrgentNeed(models.Model):
 
     def __str__(self):
         return self.title
+
+class ImpactMetric(models.Model):
+    """
+    A numeric counter displayed in the top row of the impact strip.
+    Examples:
+      value_number=120, suffix='+', label_line1='PATIENTS', label_line2='TREATED'
+      value_number=65,  suffix='+', label_line1='TREATMENT', label_line2='CYCLES'
+      prefix='PKR', value_number=70, unit='Million +', label_line1='SPONSORED', label_line2=''
+    """
+    key = models.SlugField(max_length=64, unique=True, help_text="Stable identifier, e.g., 'patients-treated'")
+    prefix = models.CharField(max_length=16, blank=True, help_text="Optional left text e.g., 'PKR'")
+    value_number = models.DecimalField(
+        max_digits=12, decimal_places=2, validators=[MinValueValidator(0)],
+        help_text="The numeric value (e.g., 120, 65, 70)"
+    )
+    unit = models.CharField(max_length=32, blank=True, help_text="Unit text after number, e.g., 'Million'")
+    suffix = models.CharField(max_length=16, blank=True, help_text="Suffix after number, e.g., '+'")
+    label_line1 = models.CharField(max_length=64, help_text="Top label, e.g., 'PATIENTS'")
+    label_line2 = models.CharField(max_length=64, blank=True, help_text="Bottom label, e.g., 'TREATED'")
+    display_order = models.PositiveIntegerField(default=0)
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["display_order", "id"]
+
+    def __str__(self):
+        return self.key
+
+
+class ImpactCard(models.Model):
+    """
+    The text boxes under the counters.
+    Examples:
+      body="Every child received life-saving treatment..."
+      emphasis_label="Annual Cost", emphasis_value="PKR 2.5M–7M per patient"
+    """
+    title = models.CharField(max_length=128, blank=True)
+    body = models.TextField()
+    emphasis_label = models.CharField(max_length=64, blank=True)
+    emphasis_value = models.CharField(max_length=128, blank=True)
+    display_order = models.PositiveIntegerField(default=0)
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["display_order", "id"]
+
+    def __str__(self):
+        return self.title or f"Card #{self.pk}"
