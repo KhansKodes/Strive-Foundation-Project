@@ -4,7 +4,7 @@ from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed
 admin.site.register(MediaItem)
 admin.site.register(LegacyItem)
 admin.site.register(ContactMessage)
-admin.site.register(UrgentNeed)
+#admin.site.register(UrgentNeed)
 
 @admin.register(UrgentNeed)
 class UrgentNeedAdmin(admin.ModelAdmin):

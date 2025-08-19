@@ -43,3 +43,17 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
+
+
+class UrgentNeedViewSet(viewsets.ModelViewSet):
+    queryset = UrgentNeed.objects.filter(is_active=True)
+    serializer_class = UrgentNeedSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title", "description"]
+    ordering_fields = ["priority", "created_at", "updated_at"]
+
+    def get_permissions(self):
+        # Public list/retrieve; Admin create/update/delete
+        if self.action in ["list", "retrieve"]:
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValue, MaxValue
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # MEDIA CENTER (News, Partners, etc.)
@@ -54,7 +54,7 @@ class UrgentNeed(models.Model):
     description = models.TextField()          # short paragraph
     donation_percentage = models.DecimalField(
         max_digits=5, decimal_places=2,
-        validators=[MinValue(0), MaxValue(100)],
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
         help_text="0–100 (%) shown as the progress bar"
     )
     image = models.ImageField(
