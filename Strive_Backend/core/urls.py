@@ -10,16 +10,10 @@ router.register(r'urgent-need', UrgentNeedViewSet, basename='urgent-need')
 router.register(r'impact/stats', ImpactStatsViewSet, basename='impact-stats')
 router.register(r'impact/texts', ImpactTextBoxViewSet, basename='impact-texts')
 
-router = DefaultRouter()
-router.register(r'impact/stats', ImpactStatsViewSet, basename='impact-stats')
-
 impact_texts_list = ImpactTextBoxViewSet.as_view({'get': 'list'})
-
 
 urlpatterns = [
     *router.urls,
     path('impact/stats/latest/', ImpactStatsLatestView.as_view(), name='impact-stats-latest'),
     path('impact/texts-debug/', impact_texts_list),
 ]
-
-#urlpatterns = router.urls
