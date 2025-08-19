@@ -1,18 +1,25 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import MediaItemViewSet, LegacyItemViewSet, ContactMessageViewSet, UrgentNeedViewSet, ImpactMetricViewSet, ImpactCardViewSet, ImpactOverviewView
+from .views import MediaItemViewSet, LegacyItemViewSet, ContactMessageViewSet, UrgentNeedViewSet, ImpactStatsViewSet, ImpactTextBoxViewSet, ImpactStatsLatestView
 
 router = DefaultRouter()
 router.register(r'media', MediaItemViewSet, basename='media')
 router.register(r'legacy', LegacyItemViewSet, basename='legacy')
 router.register(r'contact', ContactMessageViewSet, basename='contact')
 router.register(r'urgent-need', UrgentNeedViewSet, basename='urgent-need')
-router.register(r'impact-metric', ImpactMetricViewSet, basename='impact-metric')
-router.register(r'impact-card', ImpactCardViewSet, basename='impact-card')
+router.register(r'impact/stats', ImpactStatsViewSet, basename='impact-stats')
+router.register(r'impact/texts', ImpactTextBoxViewSet, basename='impact-texts')
+
+router = DefaultRouter()
+router.register(r'impact/stats', ImpactStatsViewSet, basename='impact-stats')
+
+impact_texts_list = ImpactTextBoxViewSet.as_view({'get': 'list'})
+
 
 urlpatterns = [
     *router.urls,
-    path('impact-overview/', ImpactOverviewView.as_view(), name='impact-overview'),
+    path('impact/stats/latest/', ImpactStatsLatestView.as_view(), name='impact-stats-latest'),
+    path('impact/texts-debug/', impact_texts_list),
 ]
 
-urlpatterns = router.urls
+#urlpatterns = router.urls

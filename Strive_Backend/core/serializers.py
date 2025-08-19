@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactMetric, ImpactCard
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox
 
 class MediaItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,12 +21,13 @@ class UrgentNeedSerializer(serializers.ModelSerializer):
         model = UrgentNeed
         fields = "__all__"
 
-class ImpactMetricSerializer(serializers.ModelSerializer):
+
+class ImpactStatsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ImpactMetric
+        model = ImpactStats
         fields = "__all__"
 
-class ImpactCardSerializer(serializers.ModelSerializer):
+class ImpactTextBoxSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ImpactCard
+        model = ImpactTextBox
         fields = "__all__"

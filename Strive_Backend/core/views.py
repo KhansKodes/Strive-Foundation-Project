@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactMetric, ImpactCard
-from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactMetricSerializer, ImpactCardSerializer
+from rest_framework.permissions import AllowAny, IsAdminUser
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox
+from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactStatsSerializer, ImpactTextBoxSerializer
 
 # MEDIA CENTER
 class MediaItemViewSet(viewsets.ModelViewSet):
@@ -61,41 +62,47 @@ class UrgentNeedViewSet(viewsets.ModelViewSet):
         return [permissions.IsAdminUser()]
 
 
-class ImpactMetricViewSet(viewsets.ModelViewSet):
-    queryset = ImpactMetric.objects.filter(is_active=True)
-    serializer_class = ImpactMetricSerializer
-
-    def get_permissions(self):
-        # Public list/retrieve; Admin create/update/delete
-        if self.action in ["list", "retrieve"]:
-            return [permissions.AllowAny()]
-        return [permissions.IsAdminUser()]
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Public GET/HEAD/OPTIONS; admin for POST/PUT/PATCH/DELETE
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)
 
 
-class ImpactCardViewSet(viewsets.ModelViewSet):
-    queryset = ImpactCard.objects.filter(is_active=True)
-    serializer_class = ImpactCardSerializer
-
-    def get_permissions(self):
-        if self.action in ["list", "retrieve"]:
-            return [permissions.AllowAny()]
-        return [permissions.IsAdminUser()]
-
-
-class ImpactOverviewView(APIView):
+# ---- API 1: Impact Stats ----
+class ImpactStatsViewSet(viewsets.ModelViewSet):
     """
-    Public endpoint returning both metrics + cards in one response:
-    {
-      "metrics": [...],
-      "cards": [...]
-    }
+    /api/impact/stats/   -> list (public)
+    /api/impact/stats/{id}/  -> retrieve (public)
+    Admins can POST/PUT/PATCH/DELETE.
+    """
+    queryset = ImpactStats.objects.all()
+    serializer_class = ImpactStatsSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+
+class ImpactStatsLatestView(APIView):
+    """
+    /api/impact/stats/latest/  -> returns the most recently updated stats (public)
+    Handy if you want exactly one object without IDs on the frontend.
     """
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        metrics = ImpactMetric.objects.filter(is_active=True).order_by("display_order", "id")
-        cards = ImpactCard.objects.filter(is_active=True).order_by("display_order", "id")
-        return Response({
-            "metrics": ImpactMetricSerializer(metrics, many=True).data,
-            "cards": ImpactCardSerializer(cards, many=True).data
-        })
+        obj = ImpactStats.objects.order_by("-updated_at", "-created_at").first()
+        if not obj:
+            return Response({"detail": "No stats found."}, status=200)
+        return Response(ImpactStatsSerializer(obj).data)
+
+
+# ---- API 2: Impact Text Boxes (3 boxes by position: 1,2,3) ----
+class ImpactTextBoxViewSet(viewsets.ModelViewSet):
+    """
+    /api/impact/texts/        -> list all boxes (public)
+    /api/impact/texts/{id}/   -> detail (public)
+    Admins can POST/PUT/PATCH/DELETE (unique 'position' ensures exactly one per box).
+    """
+    queryset = ImpactTextBox.objects.filter(is_active=True)
+    serializer_class = ImpactTextBoxSerializer
+    permission_classes = [IsAdminOrReadOnly]
