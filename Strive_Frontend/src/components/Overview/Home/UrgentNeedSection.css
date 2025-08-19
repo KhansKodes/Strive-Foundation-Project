@@ -50,40 +50,72 @@
 .UrgentNeedSection .urgent-slider {
   display: flex;
   transition: transform 0.6s ease-in-out;
+  will-change: transform;
 }
 
 /* — Each slide = 100% of wrapper — */
 .UrgentNeedSection .slide {
+  /* dynamic width driven by --slides set inline in JS */
+  min-width: calc(100% / var(--slides));
   flex: 0 0 calc(100% / var(--slides));
   display: flex;
   gap: 1rem;
-  justify-content: space-evenly;
-}
-
-/* we’ll set --slides via inline style */
-.UrgentNeedSection .urgent-slider {
-  --slides: 3; /* overridden by inline style width=300% */
+  align-items: stretch;
+  flex-wrap: nowrap;           /* prevent wrapping that shows half cards */
 }
 
 /* — Two cards per slide — */
 .UrgentNeedSection .urgent-card {
-  flex: 0 0 calc((100% - 1rem) / 2);
+  box-sizing: border-box;
+  flex: 0 0 calc((100% - 1rem) / 2); /* two per slide with 1rem gap */
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
+  overflow: hidden;            /* clip rounded corners */
 }
-.UrgentNeedSection .card-image img {
+
+/* ✅ FIX: constant image area (crop inside) */
+.UrgentNeedSection .urgent-card .card-image {
+  position: relative;
   width: 100%;
-  height: 160px;
-  object-fit: cover;
+  aspect-ratio: 16 / 9;        /* keeps a 16:9 slot regardless of photo size */
+  overflow: hidden;
 }
+.UrgentNeedSection .urgent-card .card-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* fill & crop */
+  object-position: center;
+  display: block;
+}
+
 .UrgentNeedSection .card-content {
   padding: 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+/* Keep titles/descriptions tidy */
+.UrgentNeedSection .card-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;       /* one line */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.UrgentNeedSection .card-desc {
+  margin: 0 0 0.5rem;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;       /* three lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* — Donation bar — */
@@ -107,7 +139,28 @@
   font-weight: 600; flex: 0 0 35px; text-align: right;
 }
 
-/* — Get Involved card — */
+/* Invisible placeholder for odd counts (keeps two-per-slide grid) */
+.UrgentNeedSection .urgent-card.placeholder {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+
+/* Simple skeleton while loading (optional) */
+.UrgentNeedSection .skeleton .skeleton-box {
+  background: #eee;
+  width: 100%;
+  height: 100%;
+}
+.UrgentNeedSection .skeleton .skeleton-line {
+  height: 12px;
+  background: #eee;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+.UrgentNeedSection .skeleton .skeleton-line.long { width: 80%; }
+
+/* — Get Involved card — (unchanged) */
 .UrgentNeedSection .involved-card {
   flex: 1; /* stretch */
   background: #fff;
@@ -146,17 +199,25 @@
   background: #b00119;
 }
 
+/* Divider line */
+.UrgentNeedSection .line{
+  width: 7px;
+  background-color: #333;
+  border: none;
+}
+
 /* — Responsive — */
 @media (max-width: 768px) {
   .UrgentNeedSection .split-container {
     flex-direction: column;
+    padding: 20px 24px;
   }
   .UrgentNeedSection .urgent-need-panel,
   .UrgentNeedSection .get-involved-panel {
     width: 100%;
   }
   .UrgentNeedSection .urgent-card {
-    flex: 0 0 100%;
+    flex: 0 0 100%;           /* one per row on small screens */
   }
   .UrgentNeedSection .urgent-header h2 {
     font-size: 1.6rem;
@@ -164,15 +225,8 @@
   }
 }
 
-
-.UrgentNeedSection .line{
-  width: 7px;
-  background-color: #333;
-  border: none;
-}
-
 @media (max-width: 1350px) {
   .UrgentNeedSection .split-container {
     padding: 20px 40px;
-}
+  }
 }
