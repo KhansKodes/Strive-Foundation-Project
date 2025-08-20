@@ -2,8 +2,8 @@ from rest_framework import viewsets, permissions, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox
-from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactStatsSerializer, ImpactTextBoxSerializer
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
+from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer
 
 # MEDIA CENTER
 class MediaItemViewSet(viewsets.ModelViewSet):
@@ -106,3 +106,15 @@ class ImpactTextBoxViewSet(viewsets.ModelViewSet):
     queryset = ImpactTextBox.objects.filter(is_active=True)
     serializer_class = ImpactTextBoxSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+class GetInvolvedViewSet(viewsets.ModelViewSet):
+    """
+    /api/get-involved/ (GET public, POST admin)
+    /api/get-involved/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    """
+    queryset = GetInvolved.objects.filter(is_active=True)
+    serializer_class = GetInvolvedSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title", "description"]
+    ordering_fields = ["priority", "created_at", "updated_at"]    
