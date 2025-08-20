@@ -22,6 +22,7 @@ pip install -r requirements.txt
 python manage.py makemigrations  # create DB migration files
 
 #Step 4
+python manage.py migrate
 
 #Step 5
 python manage.py runserver       # start server
