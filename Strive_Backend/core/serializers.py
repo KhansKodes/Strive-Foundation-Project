@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
 
 class MediaItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,3 +31,8 @@ class ImpactTextBoxSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImpactTextBox
         fields = "__all__"
+
+class GetInvolvedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GetInvolved
+        fields = "__all__"        
