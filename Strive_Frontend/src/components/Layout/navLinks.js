@@ -27,10 +27,10 @@ const NAV_LINKS = [
   {
     name: "Media Center",
     to: "/media-center",
-    // dropdown: [
-    //   { name: "Exemple 1", to: "/media/ex1" },
-    //   { name: "Exemple 2", to: "/media/ex2" }
-    // ]
+    dropdown: [
+      { name: "Exemple 1", to: "/media/ex1" },
+      { name: "Exemple 2", to: "/media/ex2" }
+    ]
   },
   {
     name: "Contact Us",
