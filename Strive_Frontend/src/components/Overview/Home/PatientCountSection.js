@@ -2,11 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './PatientCountSection.css';
 import api from '../../../services/api';
 
-// --- Backend endpoints (adjust if your paths differ) ---
-const STATS_ENDPOINT = '/impact/stats/';   // -> { patients_treated, treatment_cycles, sponsored_amount, sponsored_currency }
-const CARDS_ENDPOINT = '/impact/cards/';   // -> [ { id, title, body, emphasis_label, emphasis_value, display_order, is_active } ]
+// Backend endpoints
+const STATS_ENDPOINT = '/impact/stats/';   // returns an ARRAY with 1 object (latest stats)
+const TEXTS_ENDPOINT = '/impact/texts/';   // returns an ARRAY of info cards
 
-// small helper: animated count up when visible
+// Optional: adjust how you want to display the sponsored unit (matches your mock)
+const SPONSORED_UNIT_LABEL = 'Million';
+const SPONSORED_SUFFIX = '+';
+
+// animate 0 -> target when section becomes visible
 function useCountWhenVisible(target = 0, inView = false, duration = 1200) {
   const [val, setVal] = useState(0);
   useEffect(() => {
@@ -26,52 +30,56 @@ function useCountWhenVisible(target = 0, inView = false, duration = 1200) {
 }
 
 export default function PatientCountSection() {
-  const ref = useRef(null);
+  const sectionRef = useRef(null);
   const [inView, setInView] = useState(false);
 
-  // state from backend
+  // stats from /impact/stats/
   const [stats, setStats] = useState({
     patients_treated: 0,
     treatment_cycles: 0,
     sponsored_amount: 0,
     sponsored_currency: 'PKR',
   });
+
+  // texts/cards from /impact/texts/
   const [cards, setCards] = useState([]);
 
   // fetch both endpoints
   useEffect(() => {
     (async () => {
       try {
-        const [statsRes, cardsRes] = await Promise.all([
+        const [statsRes, textsRes] = await Promise.all([
           api.get(STATS_ENDPOINT),
-          api.get(CARDS_ENDPOINT),
+          api.get(TEXTS_ENDPOINT),
         ]);
 
-        // stats: single object
-        const s = statsRes?.data || {};
+        // /impact/stats/ -> array with one object OR a single object; handle both
+        const rawStats = statsRes?.data;
+        const s = Array.isArray(rawStats) ? rawStats[0] : rawStats || {};
         setStats({
-          patients_treated: Number(s.patients_treated) || 0,
-          treatment_cycles: Number(s.treatment_cycles) || 0,
-          sponsored_amount: Number(s.sponsored_amount) || 0,
-          sponsored_currency: s.sponsored_currency || 'PKR',
+          patients_treated: Number(s?.patients_treated) || 0,
+          treatment_cycles: Number(s?.treatment_cycles) || 0,
+          sponsored_amount: Number(s?.sponsored_amount) || 0,
+          sponsored_currency: s?.sponsored_currency || 'PKR',
         });
 
-        // cards: array
-        const arr = Array.isArray(cardsRes?.data) ? cardsRes.data : [];
+        // /impact/texts/ -> array
+        const arr = Array.isArray(textsRes?.data) ? textsRes.data : [];
         const cleaned = arr
           .filter((c) => c.is_active)
-          .sort((a, b) => (a?.display_order ?? 0) - (b?.display_order ?? 0));
+          .sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0))
+          .slice(0, 3); // show first 3
         setCards(cleaned);
       } catch (e) {
-        console.error('Impact fetch failed:', e);
+        console.error('Failed to load impact data:', e);
         setCards([]);
       }
     })();
   }, []);
 
-  // start counters once section is on screen
+  // observe section visibility to trigger counters
   useEffect(() => {
-    const el = ref.current;
+    const el = sectionRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       (entries) => entries.some((e) => e.isIntersecting) && setInView(true),
@@ -86,14 +94,24 @@ export default function PatientCountSection() {
   const cycles = useCountWhenVisible(stats.treatment_cycles, inView);
   const sponsored = useCountWhenVisible(stats.sponsored_amount, inView);
 
-  // stat tiles (keeps your existing CSS classes)
-  const Stat = ({ prefix, value, unit, suffix, l1, l2 }) => (
+  // labels stay fixed to match your screenshot
+  const labels = useMemo(
+    () => ({
+      patients: { top: '', l1: 'PATIENTS', l2: 'TREATED', suffix: '+' },
+      cycles:   { top: '', l1: 'TREATMENT', l2: 'CYCLES', suffix: '+' },
+      sponsor:  { top: stats.sponsored_currency || 'PKR', l1: 'SPONSORED', l2: '' },
+    }),
+    [stats.sponsored_currency]
+  );
+
+  // stat tile component (uses your existing CSS classes)
+  const Stat = ({ top, value, unit, suffix, l1, l2 }) => (
     <div className="stat-item">
       <span className="stat-number">
-        {prefix ? <span className="small">{prefix}&nbsp;</span> : null}
+        {top ? <span className="small">{top}</span> : null}
         {value}
         {(unit || suffix) ? (
-          <span className="small">&nbsp;{[unit, suffix].filter(Boolean).join(' ')}</span>
+          <span className="small"> {`${unit || ''}${suffix ? ` ${suffix}` : ''}`.trim()}</span>
         ) : null}
       </span>
       <span className="stat-title">
@@ -102,47 +120,37 @@ export default function PatientCountSection() {
     </div>
   );
 
-  // memo labels so UI text remains exactly like your mock
-  const metricLabels = useMemo(
-    () => ({
-      patients: { l1: 'PATIENTS', l2: 'TREATED', suffix: '+' },
-      cycles:   { l1: 'TREATMENT', l2: 'CYCLES',  suffix: '+' },
-      sponsor:  { l1: 'SPONSORED', l2: '' },
-    }),
-    []
-  );
-
   return (
-    <section className="PatientCountSection" ref={ref}>
+    <section className="PatientCountSection" ref={sectionRef}>
       {/* Top metrics row */}
       <div className="stats-top">
         <Stat
-          prefix=""
-          value={`${patients}${metricLabels.patients.suffix}`}
+          top={labels.patients.top}
+          value={`${patients}${labels.patients.suffix}`}
           unit=""
           suffix=""
-          l1={metricLabels.patients.l1}
-          l2={metricLabels.patients.l2}
+          l1={labels.patients.l1}
+          l2={labels.patients.l2}
         />
         <Stat
-          prefix=""
-          value={`${cycles}${metricLabels.cycles.suffix}`}
+          top={labels.cycles.top}
+          value={`${cycles}${labels.cycles.suffix}`}
           unit=""
           suffix=""
-          l1={metricLabels.cycles.l1}
-          l2={metricLabels.cycles.l2}
+          l1={labels.cycles.l1}
+          l2={labels.cycles.l2}
         />
         <Stat
-          prefix={stats.sponsored_currency}
+          top={labels.sponsor.top}
           value={sponsored}
-          unit="Million"
-          suffix="+"
-          l1={metricLabels.sponsor.l1}
-          l2={metricLabels.sponsor.l2}
+          unit={SPONSORED_UNIT_LABEL}
+          suffix={SPONSORED_SUFFIX}
+          l1={labels.sponsor.l1}
+          l2={labels.sponsor.l2}
         />
       </div>
 
-      {/* Mid line with little arrows (CSS already styles this) */}
+      {/* timeline line + small triangles */}
       <div className="timeline">
         <div className="line" />
         <div className="arrow" style={{ left: '33.333%' }} />
@@ -151,9 +159,9 @@ export default function PatientCountSection() {
 
       {/* Bottom info cards */}
       <div className="stats-bottom">
-        {(cards.length ? cards : Array.from({ length: 3 })).slice(0, 3).map((c, i) => (
+        {(cards.length ? cards : Array.from({ length: 3 })).map((c, i) => (
           <div key={c?.id ?? i} className="info-card">
-            {/* Title is optional in your API; omit if empty */}
+            {/* optional title */}
             {c?.title ? <h4 className="card-title">{c.title}</h4> : null}
             <p>{c?.body || '\u00A0'}</p>
             {(c?.emphasis_label || c?.emphasis_value) ? (
