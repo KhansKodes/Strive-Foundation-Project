@@ -124,3 +124,25 @@ class ImpactTextBox(models.Model):
 
     def __str__(self):
         return f"Box {self.position} - {self.title or 'Untitled'}"
+
+class GetInvolved(models.Model):
+    """
+    A public card for the landing page (Get Involved section).
+    Admin-managed; public read.
+    """
+    title = models.CharField(max_length=150)                      # e.g., "Community Champion"
+    description = models.TextField()                              # short paragraph
+    image = models.ImageField(upload_to="get_involved/", blank=True, null=True)
+    cta_label = models.CharField(max_length=50, default="Get Started")  # optional button label
+    cta_url = models.URLField(help_text="External or internal link for the CTA")
+
+    is_active = models.BooleanField(default=True)
+    priority = models.PositiveIntegerField(default=0, help_text="Lower shows first")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["priority", "-created_at"]
+
+    def __str__(self):
+        return self.title        
