@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
 
 admin.site.register(MediaItem)
 admin.site.register(LegacyItem)
@@ -27,3 +27,10 @@ class ImpactTextBoxAdmin(admin.ModelAdmin):
     list_filter  = ("is_active",)
     search_fields = ("title", "body", "emphasis_label", "emphasis_value")
     ordering = ("position",)
+
+@admin.register(GetInvolved)
+class GetInvolvedAdmin(admin.ModelAdmin):
+    list_display = ("title", "cta_label", "cta_url", "is_active", "priority", "updated_at")
+    list_filter = ("is_active",)
+    search_fields = ("title", "description", "cta_label", "cta_url")
+    ordering = ("priority", "-updated_at")    
