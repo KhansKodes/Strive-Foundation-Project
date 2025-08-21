@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
+from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
+ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, EventImage)
 
 admin.site.register(MediaItem)
 admin.site.register(LegacyItem)
@@ -34,3 +35,44 @@ class GetInvolvedAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("title", "description", "cta_label", "cta_url")
     ordering = ("priority", "-updated_at")    
+
+@admin.register(IprcItem)
+class IprcItemAdmin(admin.ModelAdmin):
+    list_display = ("date", "title", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("title",)
+    ordering = ("-date", "id")
+
+
+class EventDetailInline(admin.StackedInline):
+    model = EventDetail
+    extra = 0
+
+
+class EventImageInline(admin.TabularInline):
+    model = EventImage
+    extra = 1
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ("date", "title", "slug", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("title", "slug")
+    prepopulated_fields = {"slug": ("title",)}
+    inlines = [EventDetailInline, EventImageInline]
+    ordering = ("-date", "id")
+
+
+@admin.register(EventDetail)
+class EventDetailAdmin(admin.ModelAdmin):
+    list_display = ("event",)
+    search_fields = ("event__title",)
+
+
+@admin.register(EventImage)
+class EventImageAdmin(admin.ModelAdmin):
+    list_display = ("event", "order", "caption")
+    list_filter = ("event",)
+    search_fields = ("event__title", "caption")
+    ordering = ("event", "order")    
