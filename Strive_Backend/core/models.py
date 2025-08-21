@@ -22,7 +22,7 @@ class MediaItem(models.Model):
 
 
 # OUR LEGACY (Historical Programs, Stories)
-'''class LegacyItem(models.Model):
+class LegacyItem(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     year = models.PositiveIntegerField()
@@ -31,7 +31,7 @@ class MediaItem(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.year})"
-'''
+    
 # CONTACT MESSAGES
 class ContactMessage(models.Model):
     name = models.CharField(max_length=255)

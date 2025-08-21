@@ -1,10 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './PatientCountSection.css';
-import api from '../../../services/api';
-
-// Backend endpoints
-const STATS_ENDPOINT = '/impact/stats/';   // returns an ARRAY with 1 object (latest stats)
-const TEXTS_ENDPOINT = '/impact/texts/';   // returns an ARRAY of info cards
+import { fetchImpactStats, fetchImpactTexts } from '../../../services/impactService';
 
 // Optional: adjust how you want to display the sponsored unit (matches your mock)
 const SPONSORED_UNIT_LABEL = 'Million';
@@ -48,14 +44,13 @@ export default function PatientCountSection() {
   useEffect(() => {
     (async () => {
       try {
-        const [statsRes, textsRes] = await Promise.all([
-          api.get(STATS_ENDPOINT),
-          api.get(TEXTS_ENDPOINT),
+        const [statsData, textsData] = await Promise.all([
+          fetchImpactStats(),
+          fetchImpactTexts(),
         ]);
 
         // /impact/stats/ -> array with one object OR a single object; handle both
-        const rawStats = statsRes?.data;
-        const s = Array.isArray(rawStats) ? rawStats[0] : rawStats || {};
+        const s = Array.isArray(statsData) ? statsData[0] : statsData || {};
         setStats({
           patients_treated: Number(s?.patients_treated) || 0,
           treatment_cycles: Number(s?.treatment_cycles) || 0,
@@ -64,8 +59,7 @@ export default function PatientCountSection() {
         });
 
         // /impact/texts/ -> array
-        const arr = Array.isArray(textsRes?.data) ? textsRes.data : [];
-        const cleaned = arr
+        const cleaned = textsData
           .filter((c) => c.is_active)
           .sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0))
           .slice(0, 3); // show first 3

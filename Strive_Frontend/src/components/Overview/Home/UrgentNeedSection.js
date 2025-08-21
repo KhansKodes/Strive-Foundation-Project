@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './UrgentNeedSection.css';
-import api from '../../../services/api';
-
-const ENDPOINT = '/urgent-need/';
-const GET_INVOLVED_ENDPOINT = '/get-involved/';
+import { fetchUrgentNeeds, fetchGetInvolved } from '../../../services/urgentNeedService';
 
 // Static fallback for Get Involved (used if API empty/down)
 const getInvolveItem = {
@@ -32,8 +29,8 @@ export default function UrgentNeedSection() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(ENDPOINT);
-        const mapped = (Array.isArray(data) ? data : [])
+        const data = await fetchUrgentNeeds();
+        const mapped = data
           .filter((x) => x.is_active)
           .sort((a, b) => (a?.priority ?? 0) - (b?.priority ?? 0))
           .map((x) => ({
@@ -56,10 +53,9 @@ export default function UrgentNeedSection() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get(GET_INVOLVED_ENDPOINT);
-        const arr = Array.isArray(data) ? data : [];
+        const data = await fetchGetInvolved();
         const picked =
-          arr
+          data
             .filter((x) => x.is_active)
             .sort((a, b) => (a?.priority ?? 0) - (b?.priority ?? 0))[0] || null;
         setInvolved(picked);
