@@ -182,7 +182,7 @@ class EventDetailAdminViewSet(viewsets.ModelViewSet):
     """
     queryset = EventDetail.objects.select_related("event")
     serializer_class = EventDetailSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]
 
 
 class EventImageViewSet(viewsets.ModelViewSet):
@@ -192,7 +192,7 @@ class EventImageViewSet(viewsets.ModelViewSet):
     """
     queryset = EventImage.objects.select_related("event")
     serializer_class = EventImageSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]
 
 
 # Debug view to check data

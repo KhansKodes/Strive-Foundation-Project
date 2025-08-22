@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './EventDetailPage.css';
 import api from '../../../services/api';
-import { fetchEventDetail } from '../../../services/legacyService';
+import { fetchEventDetail, fetchEventImages } from '../../../services/legacyService';
 
-/* --- utilities that match your UI text format --- */
+/* date look that matches your UI */
 function FmtDate({ d }) {
   if (!d) return null;
   const date = new Date(d);
@@ -14,25 +14,27 @@ function FmtDate({ d }) {
   return <>{`${day} ${mon} ${yr}`}</>;
 }
 
-// Plain-text snippet for the hero subtitle
+// subtitle snippet for hero
 function htmlSnippet(html, n = 120) {
   if (!html) return '';
   const txt = String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   return txt.length > n ? `${txt.slice(0, n - 1)}…` : txt;
 }
 
-// Normalize backend to the shape this component renders
+// normalize backend → component shape
 function normalizeDetail(raw) {
   if (!raw) return null;
 
-  // If service already normalized, use as-is
-  if ('title' in raw || 'hero_image_url' in raw || 'description_html' in raw) return raw;
+  // already normalized by a service? keep as-is
+  if ('title' in raw || 'hero_image_url' in raw || 'description_html' in raw) {
+    return raw;
+  }
 
   const gallery = Array.isArray(raw.gallery)
     ? raw.gallery
         .slice()
         .sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0))
-        .map(g => g.image)
+        .map((g) => g.image)
     : [];
 
   return {
@@ -42,15 +44,17 @@ function normalizeDetail(raw) {
     description_html: raw.description ?? raw.description_html ?? '',
     gallery,
     external_url: raw.external_url ?? null,
+    event_id: raw.event_id ?? raw.id ?? null, // keep id so we can fetch images by event
   };
 }
 
 export default function EventDetailPage() {
-  const { id, slug } = useParams(); // supports /our-legacy/event/:id and /our-legacy/event/slug/:slug
+  const { id, slug } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
+  // fetch detail (slug first, then id)
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -67,6 +71,10 @@ export default function EventDetailPage() {
           if (mounted) { setData(null); setNotFound(true); }
         } else {
           const normalized = normalizeDetail(res);
+          // if route is /our-legacy/event/:id, ensure we keep that numeric id as fallback
+          if (!normalized.event_id && id && !Number.isNaN(Number(id))) {
+            normalized.event_id = Number(id);
+          }
           if (mounted) { setData(normalized); setNotFound(false); }
         }
       } catch (e) {
@@ -76,18 +84,35 @@ export default function EventDetailPage() {
         if (mounted) setLoading(false);
       }
     })();
-
     return () => { mounted = false; };
   }, [id, slug]);
 
-  // Values used by the hero area; match your CSS exactly
+  // fetch gallery if detail has none (public API first, admin fallback)
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      if (!data || notFound || loading) return;
+
+      const hasGallery = Array.isArray(data.gallery) && data.gallery.length > 0;
+      if (!hasGallery && data.event_id) {
+        const imgs = await fetchEventImages(data.event_id);
+        if (mounted && imgs.length) {
+          setData((prev) => (prev ? { ...prev, gallery: imgs } : prev));
+        }
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, [data, notFound, loading]);
+
   const heroImage = data?.hero_image_url || 'https://placehold.co/1600x420?text=Event';
   const shortDesc = useMemo(() => htmlSnippet(data?.description_html, 120), [data]);
-  const heroOverlayOpacity = 0.53; // matches --event-hero-opacity default in your CSS
+  const heroOverlayOpacity = 0.53;
 
   return (
     <div className="EventDetailPage">
-      {/* ===== HERO (matches your CSS structure & classes) ===== */}
+      {/* HERO (exactly your CSS structure) */}
       <section
         className="EventDetailPage-hero"
         style={{ backgroundImage: `url(${loading || notFound ? 'https://placehold.co/1600x420?text=Loading' : heroImage})` }}
@@ -109,20 +134,15 @@ export default function EventDetailPage() {
         </div>
       </section>
 
-      {/* ===== WHITE CARD CONTENT (uses your classes exactly) ===== */}
+      {/* CARD content (uses your classes exactly) */}
       <div className="EventDetailPage-inner">
         <Link to="/legacy" className="back-link">← Back to Our Legacy</Link>
 
-        {/* Content states */}
         {loading && <div className="event-description">Loading…</div>}
-
-        {!loading && notFound && (
-          <div className="event-description">Event not found.</div>
-        )}
+        {!loading && notFound && <div className="event-description">Event not found.</div>}
 
         {!loading && !notFound && data && (
           <>
-            {/* Gallery row (flex wrap per your CSS) */}
             {Array.isArray(data.gallery) && data.gallery.length > 0 && (
               <div className="event-images">
                 {data.gallery.map((src, i) => (
@@ -131,7 +151,6 @@ export default function EventDetailPage() {
               </div>
             )}
 
-            {/* Rich description */}
             {data.description_html && (
               <div
                 className="event-description"
