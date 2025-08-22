@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.utils.text import slugify
 
 # MEDIA CENTER (News, Partners, etc.)
 class MediaItem(models.Model):
@@ -31,8 +31,7 @@ class LegacyItem(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.year})"
-
-
+    
 # CONTACT MESSAGES
 class ContactMessage(models.Model):
     name = models.CharField(max_length=255)
@@ -146,3 +145,73 @@ class GetInvolved(models.Model):
 
     def __str__(self):
         return self.title        
+
+
+
+
+class IprcItem(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date", "id"]
+
+    def __str__(self):
+        return f"{self.date} – {self.title}"
+
+
+class Event(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)   # used for detail route
+    external_url = models.URLField(blank=True, null=True, help_text="Optional external page for this event")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date", "id"]
+
+    def __str__(self):
+        return f"{self.date} – {self.title}"
+
+    def save(self, *args, **kwargs):
+        # Auto-generate unique slug from title (once)
+        if not self.slug:
+            base = slugify(self.title) or "event"
+            slug = base
+            i = 1
+            while Event.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{i}"
+                i += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+
+class EventDetail(models.Model):
+    """
+    One detail record per Event.
+    """
+    event = models.OneToOneField(Event, on_delete=models.CASCADE, related_name="detail")
+    description = models.TextField()
+    hero_image = models.ImageField(upload_to="events/hero/", blank=True, null=True)
+
+    def __str__(self):
+        return f"Detail for {self.event.title}"
+
+
+class EventImage(models.Model):
+    """
+    2–4 gallery images per event (not enforced; keep via content policy).
+    """
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="gallery")
+    image = models.ImageField(upload_to="events/gallery/")
+    caption = models.CharField(max_length=255, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"Image for {self.event.title}"        

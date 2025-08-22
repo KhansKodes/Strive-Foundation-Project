@@ -1,117 +1,164 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
-import "./EventDetailPage.css";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import './EventDetailPage.css';
+import api from '../../../services/api';
+import { fetchEventDetail, fetchEventImages } from '../../../services/legacyService';
 
-// Dummy event data (add/adjust as needed)
-const EVENTS = [
-  {
-    id: 1,
-    title: "Events2",
-    shortDesc: "A landmark event that empowered 300+ participants to take part in the disability inclusion movement.",
-    date: "10 FEB 2011",
-    heroImage: "https://picsum.photos/id/1018/1200/420", // background for hero
-    images: [
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-    ],
-    description: `This is the detailed description for Events2. 
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-      Vivamus scelerisque pharetra massa, eu efficitur lectus. 
-      Duis pharetra, ex a dictum placerat, quam lacus posuere eros, a placerat purus eros eget elit.`,
-    highlights: [
-      "Over 300 participants",
-      "Keynote by Dr. John Doe",
-      "Major media coverage",
-    ]
-  },
-  {
-    id: 2,
-    title: "Events3",
-    shortDesc: "Launching a new wave of awareness across the country, this event brought together key leaders.",
-    date: "12 JUN 2012",
-    heroImage: "https://picsum.photos/id/1024/1200/420",
-    images: [
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-      "https://picsum.photos/id/1018/600/340",
-    ],
-    description: `Details for Events3 with some amazing outcomes. 
-      Pellentesque euismod, nisi vel tincidunt porta, sapien quam egestas enim, nec cursus felis.`,
-    highlights: [
-      "Launched new disability awareness campaign",
-      "Government officials attended",
-    ]
-  },
-  {
-    id: 3,
-    title: "Events4",
-    shortDesc: "A milestone collaboration event that helped scale the Strive vision.",
-    date: "05 SEP 2013",
-    heroImage: "https://picsum.photos/id/1025/1200/420",
-    images: [
-      "https://picsum.photos/id/1025/600/340",
-      "https://picsum.photos/id/1032/550/330",
-    ],
-    description: `This is the story of Events4. 
-      A wonderful experience with the Strive team and partners.`,
-    highlights: [
-      "Partnered with 4 local NGOs",
-      "Featured in Dawn News",
-    ]
-  },
-];
+/* date look that matches your UI */
+function FmtDate({ d }) {
+  if (!d) return null;
+  const date = new Date(d);
+  const day = String(date.getDate()).padStart(2, '0');
+  const mon = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  const yr = date.getFullYear();
+  return <>{`${day} ${mon} ${yr}`}</>;
+}
+
+// subtitle snippet for hero
+function htmlSnippet(html, n = 120) {
+  if (!html) return '';
+  const txt = String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return txt.length > n ? `${txt.slice(0, n - 1)}…` : txt;
+}
+
+// normalize backend → component shape
+function normalizeDetail(raw) {
+  if (!raw) return null;
+
+  // already normalized by a service? keep as-is
+  if ('title' in raw || 'hero_image_url' in raw || 'description_html' in raw) {
+    return raw;
+  }
+
+  const gallery = Array.isArray(raw.gallery)
+    ? raw.gallery
+        .slice()
+        .sort((a, b) => (a?.order ?? 0) - (b?.order ?? 0))
+        .map((g) => g.image)
+    : [];
+
+  return {
+    title: raw.event_title ?? raw.title ?? '',
+    date: raw.event_date ?? raw.date ?? '',
+    hero_image_url: raw.hero_image ?? raw.hero_image_url ?? null,
+    description_html: raw.description ?? raw.description_html ?? '',
+    gallery,
+    external_url: raw.external_url ?? null,
+    event_id: raw.event_id ?? raw.id ?? null, // keep id so we can fetch images by event
+  };
+}
 
 export default function EventDetailPage() {
-  const { id } = useParams();
-  const event = EVENTS.find(ev => ev.id === Number(id));
-  const bgOpacity = 0.53; // <-- adjust this value for black filter opacity
+  const { id, slug } = useParams();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!event) return (
-    <div className="EventDetailPage">
-      <div className="EventDetailPage-inner">
-        <h2>Event not found</h2>
-        <Link to="/our-legacy" className="back-link">Back to Our Legacy</Link>
-      </div>
-    </div>
-  );
+  // fetch detail (slug first, then id)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        let res;
+        if (slug) {
+          const { data } = await api.get(`/legacy/events/slug/${slug}/detail/`);
+          res = data;
+        } else {
+          res = await fetchEventDetail(id);
+        }
+
+        if (res && res.detail === 'No detail found for this event.') {
+          if (mounted) { setData(null); setNotFound(true); }
+        } else {
+          const normalized = normalizeDetail(res);
+          // if route is /our-legacy/event/:id, ensure we keep that numeric id as fallback
+          if (!normalized.event_id && id && !Number.isNaN(Number(id))) {
+            normalized.event_id = Number(id);
+          }
+          if (mounted) { setData(normalized); setNotFound(false); }
+        }
+      } catch (e) {
+        console.error('Event detail error:', e);
+        if (mounted) { setData(null); setNotFound(true); }
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, [id, slug]);
+
+  // fetch gallery if detail has none (public API first, admin fallback)
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      if (!data || notFound || loading) return;
+
+      const hasGallery = Array.isArray(data.gallery) && data.gallery.length > 0;
+      if (!hasGallery && data.event_id) {
+        const imgs = await fetchEventImages(data.event_id);
+        if (mounted && imgs.length) {
+          setData((prev) => (prev ? { ...prev, gallery: imgs } : prev));
+        }
+      }
+    })();
+
+    return () => { mounted = false; };
+  }, [data, notFound, loading]);
+
+  const heroImage = data?.hero_image_url || 'https://placehold.co/1600x420?text=Event';
+  const shortDesc = useMemo(() => htmlSnippet(data?.description_html, 120), [data]);
+  const heroOverlayOpacity = 0.53;
 
   return (
     <div className="EventDetailPage">
-      {/* HERO SECTION */}
+      {/* HERO (exactly your CSS structure) */}
       <section
         className="EventDetailPage-hero"
-        style={{
-          backgroundImage: `url(${event.heroImage})`,
-          "--event-hero-opacity": bgOpacity
-        }}
+        style={{ backgroundImage: `url(${loading || notFound ? 'https://placehold.co/1600x420?text=Loading' : heroImage})` }}
       >
-        <div className="EventDetailPage-hero-filter" />
+        <div
+          className="EventDetailPage-hero-filter"
+          style={{ '--event-hero-opacity': heroOverlayOpacity }}
+        />
         <div className="EventDetailPage-hero-content">
-          <div className="event-title-main">{event.title}</div>
-          <div className="event-short-desc">{event.shortDesc}</div>
-          <div className="event-date-main">{event.date}</div>
+          <h1 className="event-title-main">
+            {loading ? 'Loading…' : (notFound ? 'Event' : data?.title)}
+          </h1>
+          <div className="event-short-desc">
+            {loading ? 'Please wait' : (notFound ? 'No detail found' : shortDesc)}
+          </div>
+          <div className="event-date-main">
+            {loading || notFound ? '—' : <FmtDate d={data?.date} />}
+          </div>
         </div>
       </section>
-      
-      {/* MAIN CONTENT */}
+
+      {/* CARD content (uses your classes exactly) */}
       <div className="EventDetailPage-inner">
-        <Link to="/our-legacy" className="back-link">← Back to Our Legacy</Link>
-        <div className="event-images">
-          {event.images.map((img, i) => (
-            <img key={i} src={img} alt={`event ${event.title}`} className="event-image" />
-          ))}
-        </div>
-        <div className="event-description">
-          <p>{event.description}</p>
-          <ul>
-            {event.highlights.map((hl, idx) => (
-              <li key={idx}>{hl}</li>
-            ))}
-          </ul>
-        </div>
+        <Link to="/legacy" className="back-link">← Back to Our Legacy</Link>
+
+        {loading && <div className="event-description">Loading…</div>}
+        {!loading && notFound && <div className="event-description">Event not found.</div>}
+
+        {!loading && !notFound && data && (
+          <>
+            {Array.isArray(data.gallery) && data.gallery.length > 0 && (
+              <div className="event-images">
+                {data.gallery.map((src, i) => (
+                  <img key={i} src={src} alt="" className="event-image" />
+                ))}
+              </div>
+            )}
+
+            {data.description_html && (
+              <div
+                className="event-description"
+                dangerouslySetInnerHTML={{ __html: data.description_html }}
+              />
+            )}
+          </>
+        )}
       </div>
     </div>
   );

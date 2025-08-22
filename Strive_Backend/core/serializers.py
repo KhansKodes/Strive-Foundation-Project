@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage
+
 
 class MediaItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,3 +37,42 @@ class GetInvolvedSerializer(serializers.ModelSerializer):
     class Meta:
         model = GetInvolved
         fields = "__all__"        
+
+class IprcItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IprcItem
+        fields = "__all__"
+
+
+class EventSerializer(serializers.ModelSerializer):
+    detail_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = ["id", "date", "title", "slug", "external_url", "is_active", "detail_url", "created_at"]
+
+    def get_detail_url(self, obj):
+        # relative path your frontend can append to API base
+        return f"/api/legacy/events/{obj.pk}/detail/"
+
+
+class EventImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventImage
+        fields = "__all__"
+
+
+class EventDetailSerializer(serializers.ModelSerializer):
+    # read-only projection for public detail (includes event fields + gallery)
+    event_id = serializers.IntegerField(source="event.id", read_only=True)
+    event_title = serializers.CharField(source="event.title", read_only=True)
+    event_date = serializers.DateField(source="event.date", read_only=True)
+    event_slug = serializers.CharField(source="event.slug", read_only=True)
+    gallery = EventImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = EventDetail
+        fields = [
+            "event_id", "event_title", "event_date", "event_slug",
+            "description", "hero_image", "gallery"
+        ]        

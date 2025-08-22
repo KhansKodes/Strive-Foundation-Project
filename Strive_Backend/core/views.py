@@ -2,8 +2,15 @@ from rest_framework import viewsets, permissions, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
-from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer
+from .models import( MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats,
+                      ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage)
+from .serializers import (
+    MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, 
+    ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer,
+    IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer
+)
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
 
 # MEDIA CENTER
 class MediaItemViewSet(viewsets.ModelViewSet):
@@ -118,3 +125,94 @@ class GetInvolvedViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ["title", "description"]
     ordering_fields = ["priority", "created_at", "updated_at"]    
+
+# -------- IPRC --------
+class IprcItemViewSet(viewsets.ModelViewSet):
+    """
+    /api/legacy/iprc/ (GET public, POST admin)
+    /api/legacy/iprc/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    """
+    queryset = IprcItem.objects.all()  # Temporarily show all records for debugging
+    serializer_class = IprcItemSerializer
+    authentication_classes = []  # No authentication required for public endpoints
+    permission_classes = [permissions.AllowAny]  # Allow all access for now
+
+
+# -------- Events --------
+class EventViewSet(viewsets.ModelViewSet):
+    """
+    /api/legacy/events/ (GET public, POST admin)
+    /api/legacy/events/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    /api/legacy/events/{id}/detail/ (GET public)  -> returns EventDetail + gallery
+    """
+    queryset = Event.objects.all()  # Temporarily show all records for debugging
+    serializer_class = EventSerializer
+    authentication_classes = []  # No authentication required for public endpoints
+    permission_classes = [permissions.AllowAny]  # Allow all access for now
+
+    @action(detail=True, methods=["get"], url_path="detail", permission_classes=[permissions.AllowAny])
+    def detail(self, request, pk=None):
+        event = self.get_object()
+        detail = getattr(event, "detail", None)
+        if not detail:
+            return Response({"detail": "No detail found for this event."}, status=200)
+        data = EventDetailSerializer(detail, context={"request": request}).data
+        return Response(data)
+
+
+class EventDetailBySlugView(APIView):
+    """
+    /api/legacy/events/slug/<slug>/detail/ (GET public)
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, slug):
+        event = get_object_or_404(Event, slug=slug, is_active=True)
+        detail = getattr(event, "detail", None)
+        if not detail:
+            return Response({"detail": "No detail found for this event."}, status=200)
+        data = EventDetailSerializer(detail, context={"request": request}).data
+        return Response(data)
+
+
+# Admin endpoints to manage the detail & gallery (public reads not needed here)
+class EventDetailAdminViewSet(viewsets.ModelViewSet):
+    """
+    Admin CRUD for the detail record.
+    """
+    queryset = EventDetail.objects.select_related("event")
+    serializer_class = EventDetailSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class EventImageViewSet(viewsets.ModelViewSet):
+    """
+    Admin CRUD for gallery images (upload 2–4 images for each event).
+    Use multipart/form-data to upload 'image'.
+    """
+    queryset = EventImage.objects.select_related("event")
+    serializer_class = EventImageSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+# Debug view to check data
+class DebugDataView(APIView):
+    """
+    Debug endpoint to check if data exists in the database
+    """
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        iprc_count = IprcItem.objects.count()
+        iprc_active_count = IprcItem.objects.filter(is_active=True).count()
+        events_count = Event.objects.count()
+        events_active_count = Event.objects.filter(is_active=True).count()
+        
+        return Response({
+            'iprc_total': iprc_count,
+            'iprc_active': iprc_active_count,
+            'events_total': events_count,
+            'events_active': events_active_count,
+            'iprc_items': list(IprcItem.objects.values('id', 'title', 'date', 'is_active')),
+            'events': list(Event.objects.values('id', 'title', 'date', 'slug', 'is_active')),
+        })    
