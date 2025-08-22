@@ -3,8 +3,9 @@ import './UrgentNeedSection.css';
 import api from '../../../services/api';
 
 const ENDPOINT = '/urgent-need/';
+const GET_INVOLVED_ENDPOINT = '/get-involved/';
 
-// STATIC right-side content (unchanged)
+// Static fallback for Get Involved (used if API empty/down)
 const getInvolveItem = {
   title: 'Community Champion',
   description:
@@ -24,7 +25,10 @@ export default function UrgentNeedSection() {
   const [current, setCurrent] = useState(0);
   const [items, setItems] = useState([]);
 
-  // Fetch Urgent Need items from backend
+  // NEW: state for Get Involved (right panel)
+  const [involved, setInvolved] = useState(null);
+
+  // Fetch Urgent Need items (LEFT) — unchanged
   useEffect(() => {
     (async () => {
       try {
@@ -48,6 +52,24 @@ export default function UrgentNeedSection() {
     })();
   }, []);
 
+  // NEW: fetch Get Involved item (RIGHT) — only this panel is affected
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get(GET_INVOLVED_ENDPOINT);
+        const arr = Array.isArray(data) ? data : [];
+        const picked =
+          arr
+            .filter((x) => x.is_active)
+            .sort((a, b) => (a?.priority ?? 0) - (b?.priority ?? 0))[0] || null;
+        setInvolved(picked);
+      } catch (e) {
+        console.error('Get Involved fetch failed:', e);
+        setInvolved(null);
+      }
+    })();
+  }, []);
+
   const slides = useMemo(() => groupInPairs(items), [items]);
   const slidesCount = Math.max(slides.length, 1);
 
@@ -66,7 +88,7 @@ export default function UrgentNeedSection() {
   return (
     <section className="UrgentNeedSection">
       <div className="split-container">
-        {/* LEFT — URGENT NEED */}
+        {/* LEFT — URGENT NEED (unchanged) */}
         <div className="urgent-need-panel">
           <div className="urgent-header">
             <div className="urgent-header-bg" />
@@ -137,7 +159,9 @@ export default function UrgentNeedSection() {
                       <div className="skeleton-line long" />
                       <div className="donation-bar">
                         <span className="donation-label">Donation</span>
-                        <div className="progress"><div className="progress-filled" style={{ width: '0%' }} /></div>
+                        <div className="progress">
+                          <div className="progress-filled" style={{ width: '0%' }} />
+                        </div>
                         <span className="donation-pct">0%</span>
                       </div>
                       <button className="donate-button" disabled>
@@ -153,7 +177,9 @@ export default function UrgentNeedSection() {
                       <div className="skeleton-line long" />
                       <div className="donation-bar">
                         <span className="donation-label">Donation</span>
-                        <div className="progress"><div className="progress-filled" style={{ width: '0%' }} /></div>
+                        <div className="progress">
+                          <div className="progress-filled" style={{ width: '0%' }} />
+                        </div>
                         <span className="donation-pct">0%</span>
                       </div>
                       <button className="donate-button" disabled>
@@ -169,7 +195,7 @@ export default function UrgentNeedSection() {
 
         <hr className="line" />
 
-        {/* RIGHT — GET INVOLVED (restored) */}
+        {/* RIGHT — GET INVOLVED (now connected to backend) */}
         <div className="get-involved-panel">
           <div className="urgent-header">
             <div className="urgent-header-bg" />
@@ -178,12 +204,23 @@ export default function UrgentNeedSection() {
 
           <div className="involved-card">
             <div className="card-image">
-              <img src={getInvolveItem.imageUrl} alt={getInvolveItem.title} />
+              <img
+                src={involved?.image || getInvolveItem.imageUrl}
+                alt={involved?.title || getInvolveItem.title}
+                loading="lazy"
+              />
             </div>
             <div className="card-content">
-              <h3 className="card-title">{getInvolveItem.title}</h3>
-              <p className="card-desc">{getInvolveItem.description}</p>
-              <button className="donate-button">{getInvolveItem.actionText}</button>
+              <h3 className="card-title">{involved?.title || getInvolveItem.title}</h3>
+              <p className="card-desc">{involved?.description || getInvolveItem.description}</p>
+              <button
+                className="donate-button"
+                onClick={() => involved?.cta_url && window.open(involved.cta_url, '_blank')}
+                disabled={!involved?.cta_url}
+                title={involved?.cta_url ? 'Open details' : 'Link not available'}
+              >
+                {involved?.cta_label || getInvolveItem.actionText}
+              </button>
             </div>
           </div>
         </div>

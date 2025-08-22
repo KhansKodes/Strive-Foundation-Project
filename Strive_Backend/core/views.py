@@ -1,6 +1,9 @@
 from rest_framework import viewsets, permissions, filters
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed
-from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAdminUser
+from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved
+from .serializers import MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer
 
 # MEDIA CENTER
 class MediaItemViewSet(viewsets.ModelViewSet):
@@ -57,3 +60,61 @@ class UrgentNeedViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Public GET/HEAD/OPTIONS; admin for POST/PUT/PATCH/DELETE
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)
+
+
+# ---- API 1: Impact Stats ----
+class ImpactStatsViewSet(viewsets.ModelViewSet):
+    """
+    /api/impact/stats/   -> list (public)
+    /api/impact/stats/{id}/  -> retrieve (public)
+    Admins can POST/PUT/PATCH/DELETE.
+    """
+    queryset = ImpactStats.objects.all()
+    serializer_class = ImpactStatsSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+
+class ImpactStatsLatestView(APIView):
+    """
+    /api/impact/stats/latest/  -> returns the most recently updated stats (public)
+    Handy if you want exactly one object without IDs on the frontend.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        obj = ImpactStats.objects.order_by("-updated_at", "-created_at").first()
+        if not obj:
+            return Response({"detail": "No stats found."}, status=200)
+        return Response(ImpactStatsSerializer(obj).data)
+
+
+# ---- API 2: Impact Text Boxes (3 boxes by position: 1,2,3) ----
+class ImpactTextBoxViewSet(viewsets.ModelViewSet):
+    """
+    /api/impact/texts/        -> list all boxes (public)
+    /api/impact/texts/{id}/   -> detail (public)
+    Admins can POST/PUT/PATCH/DELETE (unique 'position' ensures exactly one per box).
+    """
+    queryset = ImpactTextBox.objects.filter(is_active=True)
+    serializer_class = ImpactTextBoxSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+class GetInvolvedViewSet(viewsets.ModelViewSet):
+    """
+    /api/get-involved/ (GET public, POST admin)
+    /api/get-involved/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    """
+    queryset = GetInvolved.objects.filter(is_active=True)
+    serializer_class = GetInvolvedSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title", "description"]
+    ordering_fields = ["priority", "created_at", "updated_at"]    

@@ -74,3 +74,75 @@ class UrgentNeed(models.Model):
 
     def __str__(self):
         return self.title
+
+class ImpactStats(models.Model):
+    """
+    Admin-managed counters for the landing page.
+    You can keep a single row (recommended); API returns the latest row.
+    """
+    patients_treated   = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
+    treatment_cycles   = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
+    sponsored_amount   = models.FloatField(default=0, validators=[MinValueValidator(0.0)])  # e.g., 70000000.0
+    sponsored_currency = models.CharField(max_length=10, default="PKR")
+
+    label      = models.CharField(max_length=64, blank=True, help_text="Optional tag, e.g., 'default'")
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-updated_at", "-created_at"]
+
+    def __str__(self):
+        return self.label or f"ImpactStats #{self.pk}"
+
+
+class ImpactTextBox(models.Model):
+    """
+    Three content blocks shown under the counters.
+    Enforced to have unique positions: 1, 2, 3.
+    """
+    POSITION_CHOICES = (
+        (1, "Left"),
+        (2, "Center"),
+        (3, "Right"),
+    )
+
+    position = models.PositiveSmallIntegerField(choices=POSITION_CHOICES, unique=True,
+                                                help_text="1=left, 2=center, 3=right")
+    title = models.CharField(max_length=128, blank=True)
+    body  = models.TextField()
+    # Optional bold/emphasis pair (for e.g., 'Annual Cost: PKR 2.5M–7M per patient')
+    emphasis_label = models.CharField(max_length=64, blank=True)
+    emphasis_value = models.CharField(max_length=128, blank=True)
+
+    is_active  = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["position", "id"]
+
+    def __str__(self):
+        return f"Box {self.position} - {self.title or 'Untitled'}"
+
+class GetInvolved(models.Model):
+    """
+    A public card for the landing page (Get Involved section).
+    Admin-managed; public read.
+    """
+    title = models.CharField(max_length=150)                      # e.g., "Community Champion"
+    description = models.TextField()                              # short paragraph
+    image = models.ImageField(upload_to="get_involved/", blank=True, null=True)
+    cta_label = models.CharField(max_length=50, default="Get Started")  # optional button label
+    cta_url = models.URLField(help_text="External or internal link for the CTA")
+
+    is_active = models.BooleanField(default=True)
+    priority = models.PositiveIntegerField(default=0, help_text="Lower shows first")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["priority", "-created_at"]
+
+    def __str__(self):
+        return self.title        
