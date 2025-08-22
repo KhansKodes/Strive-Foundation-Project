@@ -91,7 +91,7 @@ export default function OurLegacyPage() {
             {(loading ? [] : events).map(event => (
               <div className="OurLegacyPage-timeline-item" key={event.id}>
                 <span className="date">{fmt(event.date)}</span>
-                <Link className="event-title event-link" to={`/our-legacy/event/${event.id}`}>
+                <Link className="event-title event-link" to={event.slug ? `/our-legacy/event/slug/${event.slug}` : `/our-legacy/event/${event.id}`}>
                   {event.title}
                 </Link>
               </div>

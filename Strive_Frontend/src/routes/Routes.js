@@ -29,7 +29,6 @@ import MediaCenter  from '../components/MediaCenter/MediaCenter';
 
 import SmaRegistrationPage from '../components/SmaRegistration/SmaRegistrationPage';
 
-
 export default function AppRoutes() {
   return (
     <Routes>
@@ -45,10 +44,12 @@ export default function AppRoutes() {
         <Route path="sma-endgame/beacon-initiative" element={<StriveBeaconInitiativePage />} />
         <Route path="sma-endgame/cure-lab" element={<StriveCureLabPage />} />
 
-        <Route path="legacy"      element={<OurLegacyPage />} />
-        <Route path="/our-legacy/event/:id" element={<EventDetailPage />} />
+        <Route path="legacy" element={<OurLegacyPage />} />
+        {/* detail routes — both id and slug */}
+        <Route path="our-legacy/event/:id" element={<EventDetailPage />} />
+        <Route path="our-legacy/event/slug/:slug" element={<EventDetailPage />} />
 
-        <Route path="media-center"  element={<MediaCenter />} />
+        <Route path="media-center" element={<MediaCenter />} />
 
         <Route path="contact" element={<ContactPage />} />
 

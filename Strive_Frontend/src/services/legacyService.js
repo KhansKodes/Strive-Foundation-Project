@@ -17,3 +17,4 @@ export async function fetchEventDetail(id) {
   const { data } = await api.get(`legacy/events/${id}/detail/`);
   return data; // detail is an object, keep as-is
 }
+
