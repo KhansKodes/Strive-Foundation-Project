@@ -49,7 +49,7 @@ class UrgentNeed(models.Model):
     A public card shown on the landing page.
     Managed by admins; readable by everyone.
     """
-    title = models.CharField(max_length=120)  # e.g., "SMA stage 3"
+    title = models.CharField(max_length=120)  # e.g., "SMA stages 1,2,3,4"
     description = models.TextField()          # short paragraph
     donation_percentage = models.DecimalField(
         max_digits=5, decimal_places=2,
