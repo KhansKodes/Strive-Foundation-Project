@@ -21,7 +21,7 @@ class MediaItem(models.Model):
         return f"{self.type.upper()}: {self.title}"
 
 
-# OUR LEGACY (Historical Programs, Stories)
+# OUR LEGACY (Historical Programs)
 class LegacyItem(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
