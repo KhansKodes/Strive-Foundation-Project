@@ -85,7 +85,7 @@ class UrgentNeed(models.Model):
       if self.required_amount <= 0:
          return 0
       percentage = (self.donated_amount / self.required_amount) * 100
-      return round(min(percentage, 100), 2)  # Round to 2 decimal places
+      return round(min(percentage, 100), 2)  # Round to 2 decimal places e.g 40.32
     
     def __str__(self):
         return self.title
