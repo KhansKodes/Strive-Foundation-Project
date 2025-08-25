@@ -10,10 +10,27 @@ admin.site.register(ContactMessage)
 
 @admin.register(UrgentNeed)
 class UrgentNeedAdmin(admin.ModelAdmin):
-    list_display = ("title", "donation_percentage", "is_active", "priority", "created_at")
+    list_display = ("title", "required_amount", "donated_amount", "donation_percentage", "is_active", "priority", "created_at")
     list_filter = ("is_active",)
     search_fields = ("title", "description")
     ordering = ("priority", "-created_at")
+    readonly_fields = ("donation_percentage", "created_at", "updated_at")
+    
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'description', 'image', 'donate_url')
+        }),
+        ('Funding', {
+            'fields': ('required_amount', 'donated_amount', 'donation_percentage')
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'priority')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
 
 @admin.register(ImpactStats)
 class ImpactStatsAdmin(admin.ModelAdmin):

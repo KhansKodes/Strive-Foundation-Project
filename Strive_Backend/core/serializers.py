@@ -18,9 +18,13 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UrgentNeedSerializer(serializers.ModelSerializer):
+    donation_percentage = serializers.ReadOnlyField()
+    
     class Meta:
         model = UrgentNeed
-        fields = "__all__"
+        fields = ["id", "title", "description", "required_amount", "donated_amount", 
+                 "donation_percentage", "image", "donate_url", "is_active", 
+                 "priority", "created_at", "updated_at"]
 
 
 class ImpactStatsSerializer(serializers.ModelSerializer):
