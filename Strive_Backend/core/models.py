@@ -21,7 +21,7 @@ class MediaItem(models.Model):
         return f"{self.type.upper()}: {self.title}"
 
 
-# OUR LEGACY (Historical Programs, Stories)
+# OUR LEGACY (Historical Programs)
 class LegacyItem(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -49,12 +49,18 @@ class UrgentNeed(models.Model):
     A public card shown on the landing page.
     Managed by admins; readable by everyone.
     """
-    title = models.CharField(max_length=120)  # e.g., "SMA stage 3"
+    title = models.CharField(max_length=120)  # e.g., "SMA stages 1,2,3,4"
     description = models.TextField()          # short paragraph
-    donation_percentage = models.DecimalField(
-        max_digits=5, decimal_places=2,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
-        help_text="0–100 (%) shown as the progress bar"
+    required_amount = models.DecimalField(
+        max_digits=12, decimal_places=2,
+        validators=[MinValueValidator(0)],
+        help_text="Total amount needed for this urgent need"
+    )
+    donated_amount = models.DecimalField(
+        max_digits=12, decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        help_text="Amount already donated for this urgent need"
     )
     image = models.ImageField(
         upload_to="urgent_need/", blank=True, null=True,
@@ -71,6 +77,16 @@ class UrgentNeed(models.Model):
     class Meta:
         ordering = ["priority", "-created_at"]
 
+    @property
+    def donation_percentage(self):
+      """Calculate donation percentage automatically"""
+      if self.required_amount is None or self.donated_amount is None:
+         return 0
+      if self.required_amount <= 0:
+         return 0
+      percentage = (self.donated_amount / self.required_amount) * 100
+      return round(min(percentage, 100), 2)  # Round to 2 decimal places e.g 40.32
+    
     def __str__(self):
         return self.title
 
@@ -215,3 +231,21 @@ class EventImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.event.title}"        
+
+
+class Strapline(models.Model):
+    """
+    A short headline shown in the landing page hero/stripe.
+    Admin-managed; readable by everyone.
+    """
+    text = models.CharField(max_length=255)  # e.g., "Re-discovering a world where every ailment is curable"
+    is_active = models.BooleanField(default=True)
+    priority = models.PositiveIntegerField(default=0, help_text="Lower number shows first")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["priority", "-created_at"]
+
+    def __str__(self):
+        return self.text[:80]        

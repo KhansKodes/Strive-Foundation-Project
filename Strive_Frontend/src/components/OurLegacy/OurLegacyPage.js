@@ -41,8 +41,7 @@ export default function OurLegacyPage() {
 
   // Live data
   const [events, setEvents] = useState([]);
-  const [iprc, setIprc] = useState([]);
- 
+  const [iprc, setIprc] = useState([]); 
   const [loading, setLoading] = useState(true);
 
   // Fetch once
@@ -133,10 +132,10 @@ export default function OurLegacyPage() {
       {/* CONTENT SECTION (unchanged layout/classes) */}
       <section className="OurLegacyPage-content-section">
         <div className="OurLegacyPage-tabs">
-          {tabs.map((tab, idx) => (
+         /* {tabs.map((tab, idx) => (
             <button
               key={idx}
-              className={`OurLegacyPage-tab-btn${activeTab === idx ? ' active' : ''}`}
+              className={`OurLegacyPage-tab-btn\${activeTab === idx ? ' active' : ''}`}
               onClick={() => setActiveTab(idx)}
             >
               {tab.label}

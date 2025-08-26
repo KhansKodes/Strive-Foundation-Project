@@ -343,7 +343,3 @@ fetch('/api/patient-registration/step2/', {
   body: formData
 });
 ```
-
-## Legacy Compatibility
-
-The old `/api/patients/` endpoint is still available for backward compatibility but is deprecated. New applications should use the new registration flow.

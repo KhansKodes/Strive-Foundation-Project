@@ -3,14 +3,25 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import( MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats,
-                      ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage)
+                      ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage, Strapline)
 from .serializers import (
     MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, 
     ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer,
-    IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer
+    IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer,
+    StraplineSerializer
 )
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Public GET/HEAD/OPTIONS; admin for POST/PUT/PATCH/DELETE
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)
+
 
 # MEDIA CENTER
 class MediaItemViewSet(viewsets.ModelViewSet):
@@ -67,15 +78,6 @@ class UrgentNeedViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
-
-
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Public GET/HEAD/OPTIONS; admin for POST/PUT/PATCH/DELETE
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return bool(request.user and request.user.is_staff)
-
 
 # ---- API 1: Impact Stats ----
 class ImpactStatsViewSet(viewsets.ModelViewSet):
@@ -216,3 +218,26 @@ class DebugDataView(APIView):
             'iprc_items': list(IprcItem.objects.values('id', 'title', 'date', 'is_active')),
             'events': list(Event.objects.values('id', 'title', 'date', 'slug', 'is_active')),
         })    
+
+
+class StraplineViewSet(viewsets.ModelViewSet):
+    """
+    /api/straplines/ (GET public, POST admin)
+    /api/straplines/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    """
+    queryset = Strapline.objects.filter(is_active=True)
+    serializer_class = StraplineSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+class StraplineLatestView(APIView):
+    """
+    /api/straplines/latest/ (GET public)
+    Returns the first active strapline by (priority asc, created desc).
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        obj = Strapline.objects.filter(is_active=True).order_by("priority", "-created_at").first()
+        if not obj:
+            return Response({"text": ""}, status=200)  # empty but OK for frontend
+        return Response(StraplineSerializer(obj).data, status=200)        
