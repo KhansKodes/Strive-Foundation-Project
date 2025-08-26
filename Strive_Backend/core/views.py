@@ -5,12 +5,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import( MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats,
                       ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage, 
-                      Strapline, Carousel, CarouselSlide)
+                      Strapline, Slide)
 from .serializers import (
     MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, 
     ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer,
     IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer,
-    StraplineSerializer, CarouselSlideSerializer, CarouselReadSerializer
+    StraplineSerializer, SlideSerializer
 )
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -245,38 +245,21 @@ class StraplineLatestView(APIView):
         return Response(StraplineSerializer(obj).data, status=200)        
 
 
-class CarouselSlideViewSet(viewsets.ModelViewSet):
+class SlideViewSet(viewsets.ModelViewSet):
     """
-    Admin CRUD for slides; public GET.
-    Optional filter: ?carousel=<slug>
+    /api/slides/      (GET public list)
+    /api/slides/{id}/ (GET public detail)
+    Admin can POST/PUT/PATCH/DELETE (multipart for image).
     """
-    queryset = CarouselSlide.objects.select_related("carousel").all()
-    serializer_class = CarouselSlideSerializer
+    queryset = Slide.objects.all()
+    serializer_class = SlideSerializer
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ["order", "created_at"]
 
     def get_queryset(self):
         qs = super().get_queryset()
-        # Public reads should only see active carousel & slides
+        # Public reads: only active slides
         if self.request.method in permissions.SAFE_METHODS:
-            qs = qs.filter(is_active=True, carousel__is_active=True)
-        slug = self.request.query_params.get("carousel")
-        if slug:
-            qs = qs.filter(carousel__slug=slug)
+            qs = qs.filter(is_active=True)
         return qs
-
-
-class CarouselBySlugView(APIView):
-    """
-    Public endpoint to fetch a whole carousel with slides:
-    GET /api/carousel/home/
-    """
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request, slug):
-        carousel = get_object_or_404(Carousel, slug=slug, is_active=True)
-        # only return active slides
-        data = CarouselReadSerializer(carousel, context={"request": request}).data
-        data["slides"] = [s for s in data["slides"] if s.get("is_active", False)]
-        return Response(data)        
