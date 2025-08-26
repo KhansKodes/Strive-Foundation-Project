@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
 ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, 
-EventImage, Strapline)
+EventImage, Strapline, Carousel, CarouselSlide)
 
 admin.site.register(MediaItem)
 admin.site.register(LegacyItem)
@@ -101,3 +101,25 @@ class StraplineAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("text",)
     ordering = ("priority", "-updated_at")    
+
+
+class CarouselSlideInline(admin.TabularInline):
+    model = CarouselSlide
+    extra = 1
+    fields = ("image", "title", "caption", "cta_url", "is_active", "order")
+    ordering = ("order",)
+
+@admin.register(Carousel)
+class CarouselAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "is_active", "updated_at")
+    list_filter = ("is_active",)
+    search_fields = ("name", "slug")
+    ordering = ("slug",)
+    inlines = [CarouselSlideInline]
+
+@admin.register(CarouselSlide)
+class CarouselSlideAdmin(admin.ModelAdmin):
+    list_display = ("carousel", "title", "is_active", "order", "updated_at")
+    list_filter = ("carousel", "is_active")
+    search_fields = ("title", "caption", "carousel__slug")
+    ordering = ("carousel", "order")    
