@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
                      ImpactStats, ImpactTextBox, GetInvolved,IprcItem, Event,
-                      EventDetail, EventImage, Strapline, Carousel, CarouselSlide)
+                      EventDetail, EventImage, Strapline, Slide)
 
 
 class MediaItemSerializer(serializers.ModelSerializer):
@@ -88,14 +88,8 @@ class StraplineSerializer(serializers.ModelSerializer):
         model = Strapline
         fields = "__all__"        
 
-class CarouselSlideSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarouselSlide
-        fields = "__all__"
 
-class CarouselReadSerializer(serializers.ModelSerializer):
-    slides = CarouselSlideSerializer(many=True, read_only=True)
-
+class SlideSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Carousel
-        fields = ["id", "name", "slug", "is_active", "slides"]        
+        model = Slide
+        fields = "__all__"     
