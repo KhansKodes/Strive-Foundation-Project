@@ -5,7 +5,7 @@ UrgentNeedViewSet, ImpactStatsViewSet, ImpactTextBoxViewSet,
  ImpactStatsLatestView, GetInvolvedViewSet, IprcItemViewSet,
  EventViewSet, EventDetailBySlugView, EventDetailAdminViewSet,
   EventImageViewSet, DebugDataView, StraplineViewSet, StraplineLatestView,
-  CarouselSlideViewSet, CarouselBySlugView)
+  SlideViewSet, SlideBySlugView)
 
 router = DefaultRouter()
 router.register(r'media', MediaItemViewSet, basename='media')
@@ -20,7 +20,7 @@ router.register(r'legacy/events', EventViewSet, basename='legacy-events')
 router.register(r'legacy/event-details', EventDetailAdminViewSet, basename='legacy-event-details')  # admin write
 router.register(r'legacy/event-images', EventImageViewSet, basename='legacy-event-images')          # admin write
 router.register(r'straplines', StraplineViewSet, basename='straplines')
-router.register(r'carousel-slides', CarouselSlideViewSet, basename='carousel-slides')
+router.register(r'slides', SlideViewSet, basename='slides')
 # Register general legacy route last
 router.register(r'legacy', LegacyItemViewSet, basename='legacy')
 
@@ -35,5 +35,4 @@ urlpatterns = [
     path('legacy/events/slug/<slug:slug>/detail/', EventDetailBySlugView.as_view(), name='legacy-event-detail-by-slug'),
     path('debug/data/', DebugDataView.as_view(), name='debug-data'),
     path('straplines/latest/', StraplineLatestView.as_view(), name='strapline-latest'),
-    path('carousel/<slug:slug>/', CarouselBySlugView.as_view(), name='carousel-by-slug'),
 ]
