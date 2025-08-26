@@ -10,11 +10,11 @@ export default function HeroSection() {
   const [sliderImages, setSliderImages] = useState([]);
   const [current, setCurrent] = useState(0);
 
-  // fetch slides once from backend
+  // fetch slides once from backend (/api/slides/)
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const urls = await getHomeCarouselImages('home'); // change slug if yours isn't "home"
+      const urls = await getHomeCarouselImages(); // slug no longer needed
       if (mounted) setSliderImages(urls);
     })();
     return () => { mounted = false; };

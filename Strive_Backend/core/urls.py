@@ -5,7 +5,7 @@ UrgentNeedViewSet, ImpactStatsViewSet, ImpactTextBoxViewSet,
  ImpactStatsLatestView, GetInvolvedViewSet, IprcItemViewSet,
  EventViewSet, EventDetailBySlugView, EventDetailAdminViewSet,
   EventImageViewSet, DebugDataView, StraplineViewSet, StraplineLatestView,
-  SlideViewSet, SlideBySlugView)
+  SlideViewSet)
 
 router = DefaultRouter()
 router.register(r'media', MediaItemViewSet, basename='media')

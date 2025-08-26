@@ -102,14 +102,6 @@ class StraplineAdmin(admin.ModelAdmin):
     search_fields = ("text",)
     ordering = ("priority", "-updated_at")    
 
-
-class CarouselSlideInline(admin.TabularInline):
-    model = CarouselSlide
-    extra = 1
-    fields = ("image", "title", "caption", "cta_url", "is_active", "order")
-    ordering = ("order",)
-
-
 @admin.register(Slide)
 class SlideAdmin(admin.ModelAdmin):
     list_display = ("title", "is_active", "order", "updated_at")
