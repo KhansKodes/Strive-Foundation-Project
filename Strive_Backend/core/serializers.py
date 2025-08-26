@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats, ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage
+from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
+                     ImpactStats, ImpactTextBox, GetInvolved,IprcItem, Event,
+                      EventDetail, EventImage, Strapline)
 
 
 class MediaItemSerializer(serializers.ModelSerializer):
@@ -80,3 +82,8 @@ class EventDetailSerializer(serializers.ModelSerializer):
             "event_id", "event_title", "event_date", "event_slug",
             "description", "hero_image", "gallery"
         ]        
+
+class StraplineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Strapline
+        fields = "__all__"        
