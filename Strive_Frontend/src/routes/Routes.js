@@ -26,6 +26,8 @@ import OurLegacyPage  from '../components/OurLegacy/OurLegacyPage';
 import EventDetailPage from '../components/OurLegacy/LegacyEvent/EventDetailPage';
 
 import MediaCenter  from '../components/MediaCenter/MediaCenter';
+import Newsroom from '../components/MediaCenter/Newsroom/Newsroom';
+import Gallery from '../components/MediaCenter/Gallery/Gallery';
 
 import SmaRegistrationPage from '../components/SmaRegistration/SmaRegistrationPage';
 
@@ -50,6 +52,9 @@ export default function AppRoutes() {
         <Route path="our-legacy/event/slug/:slug" element={<EventDetailPage />} />
 
         <Route path="media-center" element={<MediaCenter />} />
+        <Route path="media-center/newsroom" element={<Newsroom />} />
+        <Route path="media-center/gallery" element={<Gallery />} />
+
 
         <Route path="contact" element={<ContactPage />} />
 

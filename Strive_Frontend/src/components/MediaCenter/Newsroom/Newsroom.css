@@ -1,0 +1,143 @@
+/* ===== Newsroom (scoped) ===== */
+.nr {
+  --brand: #6f7cff;            /* tweak as needed */
+  --pill: #d9ff5a;
+  --text: #1b1e28;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --line: #e5e7eb;
+  --radius: 16px;
+  color: var(--text);
+  background: #f7f8fb;
+}
+
+/* Container */
+.nr .container {  margin: 0 auto; padding: 30px 100px; }
+
+/* ----- HERO ----- */
+.nr-hero {
+  position: relative;
+  height: clamp(260px, 38vw, 420px);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.nr-hero__bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  transform: scale(1.02);
+}
+.nr-hero__shade {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,calc(var(--overlay, .55)));
+  background-image: linear-gradient(180deg, rgba(0,0,0,calc(var(--overlay, .55))) 0%, rgba(0,0,0,.15) 60%, rgba(0,0,0,.0) 100%);
+}
+.nr-hero__content { position: relative; text-align: center; padding: 0 16px; }
+.nr-hero__title {
+  color: #fff; font-weight: 800;
+  font-size: clamp(28px, 4vw, 44px); letter-spacing: .02em; margin: 0;
+}
+.nr-hero__subtitle {
+  color: #e9eef7; max-width: 840px; margin: 10px auto 0;
+  font-size: clamp(14px, 1.4vw, 18px);
+}
+
+/* ===== Two-column list layout (below hero) ===== */
+.nr-lists {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 28px;
+  padding: 28px 0 64px;
+  align-items: start; /* keep columns aligned to top */
+}
+
+.nr-col { min-width: 0; }
+
+.nr-col-left{
+background-image: linear-gradient(45deg, #ee9ca7 0%, #ffdde1 100%);  padding: 20px;
+}
+.nr-col-right{
+background-image: linear-gradient(45deg, #ee9ca7 0%, #ffdde1 100%);  padding: 20px;
+}
+
+.nr-divider {
+  background: var(--line);
+  width: 1px;
+  border-radius: 2px;
+}
+
+/* Section pills (mockup style) */
+.nr-pill {
+  background-image: linear-gradient(to left, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
+  color: #1b1e28;
+  font-weight: 800;
+  padding: 12px 22px;
+  border-radius: 20px;
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  transform: translateY(-8px);
+  text-align: center;
+}
+
+/* List rows */
+.nr-list {
+  list-style: none;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 20px;
+  border-radius: 20px;
+}
+
+.nr-row {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 16px;
+  align-items: start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(17,24,39,.04);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.nr-row:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(17,24,39,.08); }
+
+.nr-row__thumb {
+  width: 112px; height: 112px;
+  border-radius: 12px; overflow: hidden;
+  background: #f1f5f9;
+}
+.nr-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.nr-row__copy { display: grid; gap: 6px; min-width: 0; }
+.nr-row__date {
+  color: var(--muted); font-size: 12px; letter-spacing: .04em; text-transform: uppercase;
+}
+.nr-row__title {
+  font-size: 16.5px; line-height: 1.25; margin: 0; font-weight: 800;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nr-row__excerpt {
+  color: #374151; margin: 0; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.nr-row__link {
+  margin-top: 4px; display: inline-flex; gap: 6px; align-items: center;
+  color: var(--brand); font-weight: 700; text-decoration: none;
+}
+.nr-row__link:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .nr-lists { grid-template-columns: 1fr; }
+  .nr-divider { display: none; }
+  .nr-col + .nr-col { margin-top: 12px; }
+}
+
+@media (max-width: 520px) {
+  .nr-row {
+    grid-template-columns: 88px 1fr;
+    padding: 10px;
+  }
+  .nr-row__thumb { width: 88px; height: 88px; border-radius: 10px; }
+  .nr-row__title { font-size: 15px; }
+}

@@ -28,8 +28,9 @@ const NAV_LINKS = [
     name: "Media Center",
     to: "/media-center",
     dropdown: [
-      { name: "Exemple 1", to: "/media/ex1" },
-      { name: "Exemple 2", to: "/media/ex2" }
+      { name: "Newsroom", to: "media-center/newsroom" },
+      { name: "Gallery", to: "media-center/gallery" },
+      { name: "Downloads", to: "/media/#" },
     ]
   },
   {
