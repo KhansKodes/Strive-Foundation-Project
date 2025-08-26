@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
+from django.db import models
 
 # MEDIA CENTER (News, Partners, etc.)
 class MediaItem(models.Model):
@@ -249,3 +250,42 @@ class Strapline(models.Model):
 
     def __str__(self):
         return self.text[:80]        
+
+class Carousel(models.Model):
+    """
+    A named carousel (e.g., 'home', 'about'). Use slug 'home' for the landing page.
+    """
+    name = models.CharField(max_length=80)
+    slug = models.SlugField(max_length=80, unique=True)  # e.g., 'home'
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["slug"]
+
+    def __str__(self):
+        return f"{self.name} ({self.slug})"
+
+
+class CarouselSlide(models.Model):
+    """
+    An image slide inside a carousel. Admin can add as many as they like.
+    """
+    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name="slides")
+    image = models.ImageField(upload_to="carousel/")
+    title = models.CharField(max_length=150, blank=True)
+    caption = models.TextField(blank=True)
+    cta_url = models.URLField(blank=True)  # optional link on click
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)  # smaller shows first
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.carousel.slug} — {self.title or self.image.name}"        
