@@ -251,35 +251,19 @@ class Strapline(models.Model):
     def __str__(self):
         return self.text[:80]        
 
-class Carousel(models.Model):
+class Slide(models.Model):
     """
-    A named carousel (e.g., 'home', 'about'). Use slug 'home' for the landing page.
+    A single slide for the homepage carousel.
+    Admin can upload any number of slides.
+    Public GET returns only active slides ordered by 'order'.
     """
-    name = models.CharField(max_length=80)
-    slug = models.SlugField(max_length=80, unique=True)  # e.g., 'home'
-    is_active = models.BooleanField(default=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["slug"]
-
-    def __str__(self):
-        return f"{self.name} ({self.slug})"
-
-
-class CarouselSlide(models.Model):
-    """
-    An image slide inside a carousel. Admin can add as many as they like.
-    """
-    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name="slides")
-    image = models.ImageField(upload_to="carousel/")
+    image = models.ImageField(upload_to="slides/")
     title = models.CharField(max_length=150, blank=True)
     caption = models.TextField(blank=True)
-    cta_url = models.URLField(blank=True)  # optional link on click
+    cta_url = models.URLField(blank=True)
+
+    order = models.PositiveIntegerField(default=0)      # lower shows first
     is_active = models.BooleanField(default=True)
-    order = models.PositiveIntegerField(default=0)  # smaller shows first
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -288,4 +272,4 @@ class CarouselSlide(models.Model):
         ordering = ["order", "id"]
 
     def __str__(self):
-        return f"{self.carousel.slug} — {self.title or self.image.name}"        
+        return self.title or self.image.name
