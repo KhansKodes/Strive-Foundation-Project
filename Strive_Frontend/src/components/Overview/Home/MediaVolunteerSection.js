@@ -27,45 +27,57 @@ export default function MediaVolunteerSection() {
   return (
     <section className="MVS">
       <div className="MVS__panel MVS__media">
-        <h2 className="MVS__title">Media Coverage</h2>
-
-        {/* top row: two images */}
-        <div className="MVS__row MVS__row--images">
-          {mediaItems.map(m => (
-            <div key={m.id} className="MVS__card MVS__imgCard">
-              <img src={m.img} alt="" />
-            </div>
-          ))}
+        <div className="MVS__title">
+          <h3 className="">In the Spotlight</h3>
+          <p className="qoute">Where Strive’s journey meets the world’s attention.</p>
         </div>
 
-        {/* bottom row: two text cards */}
-        <div className="MVS__row MVS__row--texts">
-          {mediaItems.map(m => (
-            <div key={m.id} className="MVS__card MVS__textCard">
-              <p>{m.text}</p>
-            </div>
-          ))}
+        <div className="MVS__content">
+          {/* top row: two images */}
+          <div className="MVS__row MVS__row--images">
+            {mediaItems.map(m => (
+              <div key={m.id} className="MVS__card MVS__imgCard">
+                <img src={m.img} alt="" />
+              </div>
+            ))}
+          </div>
+
+          {/* bottom row: two text cards */}
+          <div className="MVS__row MVS__row--texts">
+            {mediaItems.map(m => (
+              <div key={m.id} className="MVS__card MVS__textCard">
+                <p>{m.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="MVS__divider" />
+      {/* <div className="MVS__divider" /> */}
 
       <div className="MVS__panel MVS__volunteer">
-        <h2 className="MVS__title">Volunteers</h2>
-
-        {/* top row: two images */}
-        <div className="MVS__row MVS__row--images">
-          {volImgs.map((src,i) => (
-            <div key={i} className="MVS__card MVS__imgCard">
-              <img src={src} alt="" />
-            </div>
-          ))}
+        <div className="MVS__title">
+          <h3 className="">Impact Makers</h3>
+          <p className="qoute">Every act of kindness leaves a mark.</p>
         </div>
 
-        {/* bottom row: one text card, pushed to bottom */}
-        <div className="MVS__row MVS__row--texts MVS__row--volText">
-          <div className="MVS__card MVS__textCard">
-            <p>{volText}</p>
+        <div className="MVS__content">
+          {/* top row: two images */}
+          <div className="MVS__row MVS__row--images">
+            {volImgs.map((src,i) => (
+              <div key={i} className="MVS__card MVS__imgCard">
+                <img src={src} alt="" />
+              </div>
+            ))}
+          </div>
+
+          {/* bottom row: two text cards */}
+          <div className="MVS__row MVS__row--texts">
+            {mediaItems.map(m => (
+              <div key={m.id} className="MVS__card MVS__textCard">
+                <p>{m.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

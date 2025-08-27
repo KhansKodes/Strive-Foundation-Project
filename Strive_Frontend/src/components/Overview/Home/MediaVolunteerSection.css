@@ -5,8 +5,8 @@
   display: flex;
   gap: 1rem;
   padding: 20px 100px;
-  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
 
 }
 
@@ -32,22 +32,43 @@
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  padding: 1rem;
+  padding: 0;
   box-sizing: border-box;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+
+
+
 /* — Panel backgrounds — */
-.MVS__media     { background: #fffacd; }
-.MVS__volunteer { background: #e0f7ff; }
+.MVS__media     { background: white; }
+.MVS__volunteer { background: white; }
+
+.MVS__content{
+  padding: 10px;
+}
 
 /* — Section titles — */
 .MVS__title {
-  margin: 0 0 1rem;
   text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+  background-image: linear-gradient(45deg, #93a5cfad 0%, #e4efe9 100%);
+  /* border-bottom  : 1px solid #000; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.qoute{
+  background-color: #e4efe9;
+  width: 70%;
+  /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  /* font-weight: lighter; */
+  font-style: italic;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid black;
+}
+
 
 /* — Rows share this flex wrapper — */
 .MVS__row {

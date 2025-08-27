@@ -86,7 +86,7 @@ export default function UrgentNeedSection() {
       <div className="split-container">
         {/* LEFT — URGENT NEED (unchanged) */}
         <div className="urgent-need-panel">
-          <div className="urgent-header">
+          <div className="urgent-header header-left">
             <div className="urgent-header-bg" />
             <h2>U R G E N T&nbsp;&nbsp;N E E D</h2>
           </div>
@@ -189,11 +189,11 @@ export default function UrgentNeedSection() {
           </div>
         </div>
 
-        <hr className="line" />
+        {/* <hr className="line" /> */}
 
         {/* RIGHT — GET INVOLVED (now connected to backend) */}
         <div className="get-involved-panel">
-          <div className="urgent-header">
+          <div className="urgent-header header-right">
             <div className="urgent-header-bg" />
             <h1>G E T&nbsp;&nbsp;I N V O L V E D</h1>
           </div>

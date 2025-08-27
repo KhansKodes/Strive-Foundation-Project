@@ -160,8 +160,10 @@
 }
 .header .nav-link.active,
 .header .nav-link:hover {
-  background: #4CAF50;
-  color: #fff;
+  /* background: #4CAF50; */
+  background-image: linear-gradient(45deg, #ffffffad 0%, #e8f6ee 100%);
+
+  color: black;
 }
 .header .nav-toggle {
   display: none;

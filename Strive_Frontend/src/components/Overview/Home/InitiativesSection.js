@@ -28,8 +28,6 @@ export default function InitiativesSection() {
       <h2>Our Initiatives</h2>
 
       <div className="initiatives-wrapper">
-        {/* grey pill‑shape background */}
-        <div className="initiatives-bg" />
 
         <ul className="initiatives-list">
           {initiatives.map((item) => (

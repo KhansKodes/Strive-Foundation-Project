@@ -4,7 +4,7 @@
 .InitiativesSection {
   position: relative;
   padding: 30px 100px;
-  background-image: linear-gradient(to right, #43e97a57 0%, #38f9d64e 100%);
+  background-image: linear-gradient(to right, hsla(140, 79%, 59%, 0.08) 0%, rgba(56, 249, 214, 0.162) 100%);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -52,7 +52,7 @@
 
 /* Individual card */
 .InitiativesSection .initiative-card {
-  background: #ffe345;
+background-image: linear-gradient(to right, #92fe9d46 0%, #00c8ff3f 100%);
   padding: 1.5rem 1rem;
   border-radius: 3px;
   box-shadow:

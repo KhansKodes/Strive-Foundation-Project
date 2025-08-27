@@ -12,8 +12,7 @@
   overflow: hidden;
   padding: 10px 100px;
   transform: translateY(var(--vision-offset));
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-  background-image: linear-gradient(120deg, #84faaf32 0%, #8fd2f470 100%);
+
   
 }
 
@@ -23,8 +22,9 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-image: linear-gradient(120deg, #79bafc 0%, #af96e6 100%);
   border-radius: 40px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  background-image: linear-gradient(120deg, #84faaf32 0%, #8fd2f470 100%);
 }
 
 /* the moving text */
@@ -64,10 +64,6 @@
   height: 100%;
   background-color: #5029CF;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-}
-
-.vision-main{
-  background-image: linear-gradient(to left, #fbc2eb79 0%, #a6c0ee83 100%);
 }
 
 @media (max-width: 1350px) {

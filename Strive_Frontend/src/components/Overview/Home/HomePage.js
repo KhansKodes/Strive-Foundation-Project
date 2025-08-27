@@ -21,6 +21,7 @@ export default function HomePage() {
       <NewsSection />
       <MediaVolunteerSection />
       <PartnersSection />
+      <br></br>
     </div>
   );
 }
