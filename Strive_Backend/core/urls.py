@@ -5,7 +5,7 @@ UrgentNeedViewSet, ImpactStatsViewSet, ImpactTextBoxViewSet,
  ImpactStatsLatestView, GetInvolvedViewSet, IprcItemViewSet,
  EventViewSet, EventDetailBySlugView, EventDetailAdminViewSet,
   EventImageViewSet, DebugDataView, StraplineViewSet, StraplineLatestView,
-  SlideViewSet)
+  SlideViewSet, SpotlightPublicView, ImpactPublicView)
 
 router = DefaultRouter()
 router.register(r'media', MediaItemViewSet, basename='media')
@@ -35,4 +35,7 @@ urlpatterns = [
     path('legacy/events/slug/<slug:slug>/detail/', EventDetailBySlugView.as_view(), name='legacy-event-detail-by-slug'),
     path('debug/data/', DebugDataView.as_view(), name='debug-data'),
     path('straplines/latest/', StraplineLatestView.as_view(), name='strapline-latest'),
+    path("landing/spotlight/", SpotlightPublicView.as_view(), name="landing-spotlight"),
+    path("landing/impact-makers/", ImpactPublicView.as_view(), name="landing-impact"),
+
 ]
