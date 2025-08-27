@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
                      ImpactStats, ImpactTextBox, GetInvolved,IprcItem, Event,
-                      EventDetail, EventImage, Strapline, Slide)
+                      EventDetail, EventImage, Strapline, Slide, 
+                      Spotlight, SpotlightItem, ImpactMakers, ImpactItem)
 
 
 class MediaItemSerializer(serializers.ModelSerializer):
@@ -93,3 +94,31 @@ class SlideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Slide
         fields = "__all__"     
+
+
+class SpotlightItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpotlightItem
+        fields = ("id", "image", "description", "url", "order")
+
+
+class SpotlightSerializer(serializers.ModelSerializer):
+    items = SpotlightItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Spotlight
+        fields = ("id", "title", "subtitle", "items", "priority", "is_active")
+
+
+class ImpactItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImpactItem
+        fields = ("id", "image", "description", "url", "order")
+
+
+class ImpactMakersSerializer(serializers.ModelSerializer):
+    items = ImpactItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ImpactMakers
+        fields = ("id", "title", "subtitle", "items", "priority", "is_active")        
