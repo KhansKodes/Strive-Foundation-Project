@@ -132,7 +132,7 @@ export default function OurLegacyPage() {
       {/* CONTENT SECTION (unchanged layout/classes) */}
       <section className="OurLegacyPage-content-section">
         <div className="OurLegacyPage-tabs">
-         /* {tabs.map((tab, idx) => (
+         {tabs.map((tab, idx) => (
             <button
               key={idx}
               className={`OurLegacyPage-tab-btn\${activeTab === idx ? ' active' : ''}`}

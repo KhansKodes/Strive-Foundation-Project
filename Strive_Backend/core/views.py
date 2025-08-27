@@ -1,14 +1,16 @@
 from rest_framework import viewsets, permissions, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import( MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats,
-                      ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage, Strapline)
+                      ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage, 
+                      Strapline, Slide)
 from .serializers import (
     MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, 
     ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer,
     IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer,
-    StraplineSerializer
+    StraplineSerializer, SlideSerializer
 )
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -241,3 +243,23 @@ class StraplineLatestView(APIView):
         if not obj:
             return Response({"text": ""}, status=200)  # empty but OK for frontend
         return Response(StraplineSerializer(obj).data, status=200)        
+
+
+class SlideViewSet(viewsets.ModelViewSet):
+    """
+    /api/slides/      (GET public list)
+    /api/slides/{id}/ (GET public detail)
+    Admin can POST/PUT/PATCH/DELETE (multipart for image).
+    """
+    queryset = Slide.objects.all()
+    serializer_class = SlideSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ["order", "created_at"]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # Public reads: only active slides
+        if self.request.method in permissions.SAFE_METHODS:
+            qs = qs.filter(is_active=True)
+        return qs

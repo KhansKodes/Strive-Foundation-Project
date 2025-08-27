@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
 ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, 
-EventImage, Strapline)
+EventImage, Strapline, Slide)
 
 admin.site.register(MediaItem)
 admin.site.register(LegacyItem)
@@ -101,3 +101,10 @@ class StraplineAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("text",)
     ordering = ("priority", "-updated_at")    
+
+@admin.register(Slide)
+class SlideAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_active", "order", "updated_at")
+    list_filter = ("is_active",)
+    search_fields = ("title", "caption", "cta_url")
+    ordering = ("order", "id")

@@ -4,7 +4,8 @@ from .views import (MediaItemViewSet, LegacyItemViewSet, ContactMessageViewSet,
 UrgentNeedViewSet, ImpactStatsViewSet, ImpactTextBoxViewSet,
  ImpactStatsLatestView, GetInvolvedViewSet, IprcItemViewSet,
  EventViewSet, EventDetailBySlugView, EventDetailAdminViewSet,
-  EventImageViewSet, DebugDataView, StraplineViewSet, StraplineLatestView)
+  EventImageViewSet, DebugDataView, StraplineViewSet, StraplineLatestView,
+  SlideViewSet)
 
 router = DefaultRouter()
 router.register(r'media', MediaItemViewSet, basename='media')
@@ -19,6 +20,7 @@ router.register(r'legacy/events', EventViewSet, basename='legacy-events')
 router.register(r'legacy/event-details', EventDetailAdminViewSet, basename='legacy-event-details')  # admin write
 router.register(r'legacy/event-images', EventImageViewSet, basename='legacy-event-images')          # admin write
 router.register(r'straplines', StraplineViewSet, basename='straplines')
+router.register(r'slides', SlideViewSet, basename='slides')
 # Register general legacy route last
 router.register(r'legacy', LegacyItemViewSet, basename='legacy')
 

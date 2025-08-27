@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
+from django.db import models
 
 # MEDIA CENTER (News, Partners, etc.)
 class MediaItem(models.Model):
@@ -249,3 +250,26 @@ class Strapline(models.Model):
 
     def __str__(self):
         return self.text[:80]        
+
+class Slide(models.Model):
+    """
+    A single slide for the homepage carousel.
+    Admin can upload any number of slides.
+    Public GET returns only active slides ordered by 'order'.
+    """
+    image = models.ImageField(upload_to="slides/")
+    title = models.CharField(max_length=150, blank=True)
+    caption = models.TextField(blank=True)
+    cta_url = models.URLField(blank=True)
+
+    order = models.PositiveIntegerField(default=0)      # lower shows first
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title or self.image.name
