@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import EndgamePage, Objective
+from .models import EndgamePage, Objective, InfoSection
 
 class ObjectiveInline(admin.TabularInline):
     model = Objective
@@ -19,3 +19,8 @@ class EndgamePageAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
         if obj.is_active:
             EndgamePage.objects.exclude(pk=obj.pk).update(is_active=False)
+
+@admin.register(InfoSection)
+class InfoSectionAdmin(admin.ModelAdmin):
+    list_display = ("slug", "title")
+    search_fields = ("slug", "title")            
