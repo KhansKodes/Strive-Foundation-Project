@@ -25,7 +25,7 @@ const initiatives = [
 export default function InitiativesSection() {
   return (
     <section className="InitiativesSection">
-      <h2>Our Initiatives</h2>
+      <h2>Flagship Initiatives</h2>
 
       <div className="initiatives-wrapper">
 

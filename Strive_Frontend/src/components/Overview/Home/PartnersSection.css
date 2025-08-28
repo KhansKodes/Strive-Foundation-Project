@@ -2,6 +2,7 @@
   padding: 0px 100px 10px 100px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c370 100%);
+  border-radius: 50px;
 }
 
 @media (max-width: 1350px) {

@@ -127,7 +127,7 @@ export default function Gallery() {
     <main className="gl" style={{ "--overlay": 0.55 }}>
       {/* HERO (same styling as newsroom) */}
       <section className="gl-hero" aria-label="Gallery hero">
-        <img src={heroImg} className="gl-hero__bg" alt="" />
+        <img src={'https://png.pngtree.com/thumb_back/fh260/background/20230607/pngtree-an-art-gallery-with-lots-of-framed-walls-image_2933000.jpg'} className="gl-hero__bg" alt="" />
         <div className="gl-hero__shade" />
         <div className="gl-hero__content">
           <h1 className="gl-hero__title">Gallery</h1>

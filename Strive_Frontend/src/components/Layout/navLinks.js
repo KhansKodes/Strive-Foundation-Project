@@ -30,7 +30,7 @@ const NAV_LINKS = [
     dropdown: [
       { name: "Newsroom", to: "media-center/newsroom" },
       { name: "Gallery", to: "media-center/gallery" },
-      { name: "Downloads", to: "/media/#" },
+      { name: "Downloads", to: "media-center/downloads" },
     ]
   },
   {

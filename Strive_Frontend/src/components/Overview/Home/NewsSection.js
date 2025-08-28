@@ -33,7 +33,7 @@ export default function NewsSection() {
                   allowFullScreen
                 />
               </div>
-              <p>
+              <p className='para1'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Numquam, odio omnis. Temporibus id
                 aliquam officia voluptas consequatur reiciendis maxime facilis, at vero repudiandae accusantium.
               </p>
@@ -81,10 +81,32 @@ export default function NewsSection() {
       <div className="NewsSection__right-col">
         <article className="NewsSection__card NewsSection__latest-news">
           <div className="NewsSection__header">Latest News</div>
-          <div className="NewsSection__content">
-            {latestNewsParagraphs.map((p, i) => (
+          <div className="NewsSection__content NewsSection__content-News">
+            {/* {latestNewsParagraphs.map((p, i) => (
               <p key={i}>{p}</p>
-            ))}
+            ))} */}
+            <div className='content1'>
+              <img src="https://picsum.photos/seed/news/100/100" alt="News" />
+              <div className='content1-1'>
+              <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam, odio omnis. Temporibus id
+                aliquam officia voluptas consequatur reiciendis maxime facilis,</p>
+              </div>
+            </div>
+            <div className='content2'>
+              <img src="https://picsum.photos/seed/news/100/100" alt="News" />
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam, odio omnis. Temporibus id
+                aliquam officia voluptas consequatur reiciendis maxime facilis,</p>
+            </div>
+            <div className='content3'>
+              <img src="https://picsum.photos/seed/news/100/100" alt="News" />
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam, odio omnis. Temporibus id
+                aliquam officia voluptas consequatur reiciendis maxime facilis,</p>
+            </div>
+            <div className='content3'>
+              <img src="https://picsum.photos/seed/news/100/100" alt="News" />
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam, odio omnis. Temporibus id
+                aliquam officia voluptas consequatur reiciendis maxime facilis,</p>
+            </div>
           </div>
         </article>
       </div>

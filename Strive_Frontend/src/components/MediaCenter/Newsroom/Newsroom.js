@@ -6,12 +6,12 @@ import heroImg from "../../../assets/images/hero.png";
  * Newsroom page
  * - Hero with adjustable black overlay
  * - Centered tabs below hero: Featured Stories | Press Release
- * - Shows only the active tab's 6 items (list rows)
+ * - Two-column row-style cards (thumb left, text right)
  */
 export default function Newsroom() {
   const [tab, setTab] = useState("stories"); // 'stories' | 'press'
 
-  // ---- Dummy data (swap with API results later) -----------------------------
+  // ---- Dummy data -----------------------------------------------------------
   const stories = useMemo(
     () => [
       { id: 1, title: "Child Starts Treatment Cycle 1", date: "12 Aug 2025",
@@ -72,7 +72,7 @@ export default function Newsroom() {
     <main className="nr" style={{ "--overlay": 0.55 }}>
       {/* HERO */}
       <section className="nr-hero" aria-label="Newsroom hero">
-        <img src={heroImg} className="nr-hero__bg" alt="" />
+        <img src={'https://media.istockphoto.com/id/1490920883/photo/news-room-with-stage-for-breaking-news.jpg?s=612x612&w=0&k=20&c=MC-zWfWh4uev2ELmPSeqAHjg8hrgmNVzIsJNEvZXuyE='} className="nr-hero__bg" alt="" />
         <div className="nr-hero__shade" />
         <div className="nr-hero__content">
           <h1 className="nr-hero__title">Newsroom</h1>
@@ -102,16 +102,16 @@ export default function Newsroom() {
         </button>
       </nav>
 
-      {/* ACTIVE LIST (single column beneath tabs) */}
+      {/* ACTIVE LIST (two-column rows) */}
       <section
         className="nr-list-wrap container"
         role="tabpanel"
         aria-labelledby={tab === "stories" ? "Featured Stories" : "Press Release"}
       >
-        <h4 className="nr-pill">{tab === "stories" ? "Featured Stories" : "Press Release"}</h4>
+        {/* <h4 className="nr-pill">{tab === "stories" ? "Featured Stories" : "Press Release"}</h4> */}
 
         <ul className="nr-list">
-          {data.slice(0, 6).map((item) => (
+          {data.map((item) => (
             <li key={item.id} className="nr-row">
               <div className="nr-row__thumb">
                 <img loading="lazy" src={item.img} alt={item.title} />

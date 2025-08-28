@@ -44,7 +44,7 @@ export default function Footer() {
 
       {/* bottom bar */}
       <div className="footer-bottom">
-        <p>© Strive-Foundation-{new Date().getFullYear()}. All rights reserved</p>
+        <p>© <b>Strive-Foundation</b> {new Date().getFullYear()}. All rights reserved</p>
         <p>
           Design and develop by <a href="https://waqarhussain92670@gmail.com" target="_blank" rel="noopener noreferrer">
             Waqar Hussain

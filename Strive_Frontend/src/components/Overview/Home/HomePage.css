@@ -1,7 +1,7 @@
 .HomePage {
   display: flex;
   flex-direction: column;
-  gap: 1px;   
+  gap: 50px;   
 background-image: linear-gradient(135deg, #f5f7faa2 0%, #c3cfe2b5 100%);
 
 }
