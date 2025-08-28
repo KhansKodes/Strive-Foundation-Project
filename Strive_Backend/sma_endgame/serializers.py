@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EndgamePage, Objective
+from .models import EndgamePage, Objective, InfoSection
 
 class ObjectiveSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +16,8 @@ class EndgamePageSerializer(serializers.ModelSerializer):
             "objectives",
             "plan_heading", "plan_subheading", "plan_url",
         )
+
+class InfoSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InfoSection
+        fields = ("slug", "title", "description")
