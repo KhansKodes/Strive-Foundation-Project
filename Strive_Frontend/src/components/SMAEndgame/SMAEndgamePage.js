@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./SMAEndgamePage.css";
 import { FaHeart, FaHandHoldingUsd, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { fetchSmaEndgame } from "../../services/smaEndgameService";
 
 export default function SMAEndgamePage() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchSmaEndgame()
+      .then(setData)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div className="sma-endgame-fg-root">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="sma-endgame-fg-root">Error loading content: {error.message}</div>;
+  }
+
+  if (!data) {
+    return <div className="sma-endgame-fg-root">No content available</div>;
+  }
+
+  // Split objectives into two columns for display
+  const objectives = data.objectives || [];
+  const midpoint = Math.ceil(objectives.length / 2);
+  const leftColumnObjectives = objectives.slice(0, midpoint);
+  const rightColumnObjectives = objectives.slice(midpoint);
+
   return (
     <div className="sma-endgame-fg-root">
 
@@ -15,10 +45,10 @@ export default function SMAEndgamePage() {
         <div className="sma-fg-hero-content">
           <div className="sma-fg-hero-titles">
             <h2 className="sma-fg-hero-heading">
-              STRIVE TOWARDS SMA ENDGAME
+              {data.title || "STRIVE TOWARDS SMA ENDGAME"}
             </h2>
             <div className="sma-fg-hero-subheading">
-              five year flagship program
+              {data.subtitle || "five year flagship program"}
             </div>
           </div>
           <div className="sma-fg-objectives-banner">
@@ -28,35 +58,21 @@ export default function SMAEndgamePage() {
             <div className="sma-fg-objectives-list">
               <div className="sma-fg-objectives-col">
                 <ol>
-                  <li>
-                    Make all globally approved SMA treatments available in Pakistan within 6–12 months of international approval.
-                  </li>
-                  <li>
-                    Secure government adoption of SMA treatment coverage under national health programs for all patient groups.
-                  </li>
-                  <li>
-                    Establish a sustainable National SMA Treatment Fund through public, private, and philanthropic partnerships.
-                  </li>
-                  <li>
-                    Ensure treatment access for at least 75% of diagnosed SMA patients through coordinated national efforts.
-                  </li>
+                  {leftColumnObjectives.map((objective) => (
+                    <li key={objective.order}>
+                      {objective.title}
+                    </li>
+                  ))}
                 </ol>
               </div>
               <div className="sma-fg-objectives-divider"></div>
               <div className="sma-fg-objectives-col">
-                <ol start="5">
-                  <li>
-                    Include SMA in national newborn screening and rare disease policies.
-                  </li>
-                  <li>
-                    Build a centralized SMA patient registry to support data-driven planning and care.
-                  </li>
-                  <li>
-                    Advance early detection and local research through screening, pilots and academic partnerships.
-                  </li>
-                  <li>
-                    Prevent new SMA cases through genetic counseling, carrier screening, and prenatal testing integration.
-                  </li>
+                <ol start={midpoint + 1}>
+                  {rightColumnObjectives.map((objective) => (
+                    <li key={objective.order}>
+                      {objective.title}
+                    </li>
+                  ))}
                 </ol>
               </div>
             </div>
@@ -65,14 +81,14 @@ export default function SMAEndgamePage() {
         <div className="sma-fg-fiveyear-section">
           <a
             className="sma-fg-fiveyear-btn"
-            href="/dummy-sma-roadmap.pdf"
+            href={data.plan_url || "/dummy-sma-roadmap.pdf"}
             target="_blank"
             rel="noopener noreferrer"
             download={false}  // let browser open PDF, remove if you want forced download
           >
-            Five Year plan
+            {data.plan_heading || "Five Year plan"}
             <div className="sma-fg-fiveyear-link">
-              View &amp; download the full roadmap
+              {data.plan_subheading || "View & download the full roadmap"}
             </div>
           </a>
         </div>
