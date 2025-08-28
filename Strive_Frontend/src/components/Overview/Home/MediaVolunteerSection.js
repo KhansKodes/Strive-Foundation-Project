@@ -33,13 +33,13 @@ export default function MediaVolunteerSection() {
 
       // Fallbacks to keep layout stable
       setSpot({
-        title: 'In the Spotlight',
+        title: s.title || 'In the Spotlight',
         subtitle: s.subtitle || 'Where Strive’s journey meets the world’s attention.',
         items: s.items?.length ? s.items : spot.items,
       });
 
       setImpact({
-        title: 'Impact Makers',
+        title: i.title ||  'Impact Makers',
         subtitle: i.subtitle || 'Every act of kindness leaves a mark.',
         items: i.items?.length ? i.items : impact.items,
       });
