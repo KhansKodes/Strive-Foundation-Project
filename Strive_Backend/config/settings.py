@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'volunteers',
     'core',
     'corsheaders',
+    'sma_endgame'
 ]
 
 MIDDLEWARE = [

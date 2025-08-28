@@ -273,3 +273,67 @@ class Slide(models.Model):
 
     def __str__(self):
         return self.title or self.image.name
+
+
+class Timestamped(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+# -------- In the Spotlight --------
+class Spotlight(Timestamped):
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=300, blank=True)
+    priority = models.PositiveIntegerField(default=0)       # lower = higher priority
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"[Spotlight] {self.title}"
+
+
+class SpotlightItem(Timestamped):
+    section = models.ForeignKey(
+        Spotlight, related_name="items", on_delete=models.CASCADE
+    )
+    image = models.ImageField(upload_to="spotlight/")
+    description = models.TextField(blank=True)
+    url = models.URLField(blank=True, null=True)            # optional
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ("order", "id")
+
+    def __str__(self):
+        return f"SpotlightItem #{self.pk} for {self.section_id}"
+
+
+# -------- Impact Makers --------
+class ImpactMakers(Timestamped):
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=300, blank=True)
+    priority = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"[Impact] {self.title}"
+
+
+class ImpactItem(Timestamped):
+    section = models.ForeignKey(
+        ImpactMakers, related_name="items", on_delete=models.CASCADE
+    )
+    image = models.ImageField(upload_to="impact_makers/")
+    description = models.TextField(blank=True)
+    url = models.URLField(blank=True, null=True)            # optional
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ("order", "id")
+
+    def __str__(self):
+        return f"ImpactItem #{self.pk} for {self.section_id}"

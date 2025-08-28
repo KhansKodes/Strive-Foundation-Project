@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
+from .models import (  UrgentNeed, 
 ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, 
-EventImage, Strapline, Slide)
+EventImage, Strapline, Slide, Spotlight, SpotlightItem, ImpactMakers, ImpactItem)
 
-admin.site.register(MediaItem)
-admin.site.register(LegacyItem)
-admin.site.register(ContactMessage)
+#admin.site.register(MediaItem)
+#admin.site.register(LegacyItem)
+#admin.site.register(ContactMessage)
 #admin.site.register(ImpactMetric)
 #admin.site.register(ImpactCard)
 
@@ -108,3 +108,35 @@ class SlideAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("title", "caption", "cta_url")
     ordering = ("order", "id")
+
+
+class SpotlightItemInline(admin.StackedInline):
+    model = SpotlightItem
+    extra = 0
+    fields = ("image", "description", "url", "order", "is_active")
+    ordering = ("order",)
+
+
+@admin.register(Spotlight)
+class SpotlightAdmin(admin.ModelAdmin):
+    list_display = ("title", "priority", "is_active", "updated_at")
+    list_filter = ("is_active",)
+    search_fields = ("title", "subtitle")
+    ordering = ("priority", "-updated_at")
+    inlines = [SpotlightItemInline]
+
+
+class ImpactItemInline(admin.StackedInline):
+    model = ImpactItem
+    extra = 0
+    fields = ("image", "description", "url", "order", "is_active")
+    ordering = ("order",)
+
+
+@admin.register(ImpactMakers)
+class ImpactMakersAdmin(admin.ModelAdmin):
+    list_display = ("title", "priority", "is_active", "updated_at")
+    list_filter = ("is_active",)
+    search_fields = ("title", "subtitle")
+    ordering = ("priority", "-updated_at")
+    inlines = [ImpactItemInline]    

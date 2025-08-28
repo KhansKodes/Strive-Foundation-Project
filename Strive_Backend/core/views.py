@@ -5,12 +5,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import( MediaItem, LegacyItem, ContactMessage, UrgentNeed, ImpactStats,
                       ImpactTextBox, GetInvolved,IprcItem, Event, EventDetail, EventImage, 
-                      Strapline, Slide)
+                      Strapline, Slide, Spotlight, ImpactMakers)
 from .serializers import (
     MediaItemSerializer, LegacyItemSerializer, ContactMessageSerializer, UrgentNeedSerializer, 
     ImpactStatsSerializer, ImpactTextBoxSerializer, GetInvolvedSerializer,
     IprcItemSerializer, EventSerializer, EventDetailSerializer, EventImageSerializer,
-    StraplineSerializer, SlideSerializer
+    StraplineSerializer, SlideSerializer,SpotlightSerializer, ImpactMakersSerializer
 )
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -263,3 +263,38 @@ class SlideViewSet(viewsets.ModelViewSet):
         if self.request.method in permissions.SAFE_METHODS:
             qs = qs.filter(is_active=True)
         return qs
+
+
+class SpotlightPublicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        section = (
+            Spotlight.objects.filter(is_active=True)
+            .order_by("priority", "-updated_at")
+            .prefetch_related("items")
+            .first()
+        )
+        if not section:
+            return Response({"detail": "No spotlight configured."}, status=200)
+        data = SpotlightSerializer(section).data
+        # Only send active items
+        data["items"] = [i for i in data.get("items", []) if i.get("order") is not None]
+        return Response(data, status=200)
+
+
+class ImpactPublicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        section = (
+            ImpactMakers.objects.filter(is_active=True)
+            .order_by("priority", "-updated_at")
+            .prefetch_related("items")
+            .first()
+        )
+        if not section:
+            return Response({"detail": "No impact makers configured."}, status=200)
+        data = ImpactMakersSerializer(section).data
+        data["items"] = [i for i in data.get("items", []) if i.get("order") is not None]
+        return Response(data, status=200)        

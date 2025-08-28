@@ -1,81 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './MediaVolunteerSection.css';
+import { getSpotlightPanel, getImpactMakersPanel } from '../../../services/spotlightService';
+
+const PH_IMG = 'https://placehold.co/600x300?text=Image';
+const PH_TEXT = ' ';
 
 export default function MediaVolunteerSection() {
-  const mediaItems = [
-    {
-      id: 1,
-      img: 'https://picsum.photos/id/1015/600/300',
-      text: `Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…`
+  const [spot, setSpot] = useState({
+    title: 'In the Spotlight',
+    subtitle: 'Where Strive’s journey meets the world’s attention.',
+    items: [
+      { image: PH_IMG, description: PH_TEXT, url: '' },
+      { image: PH_IMG, description: PH_TEXT, url: '' },
+    ],
+  });
 
-    },
-    {
-      id: 2,
-      img: 'https://picsum.photos/id/1011/600/300',
-      text: `Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…`
-    }
-  ];
+  const [impact, setImpact] = useState({
+    title: 'Impact Makers',
+    subtitle: 'Every act of kindness leaves a mark.',
+    items: [
+      { image: PH_IMG, description: PH_TEXT, url: '' },
+      { image: PH_IMG, description: PH_TEXT, url: '' },
+    ],
+  });
 
-  const volImgs = [
-    'https://picsum.photos/id/1050/800/400',
-    'https://picsum.photos/id/1024/800/400'
-  ];
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const s = await getSpotlightPanel();
+      const i = await getImpactMakersPanel();
+      if (!mounted) return;
 
-  const volText = `Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…Lorem ipsum dolor sit amet…
-  Lorem ipsum dolor sit amet… Lorem ipsum dolor sit amet…Lorem ipsum dolor si`;
+      // Fallbacks to keep layout stable
+      setSpot({
+        title: s.title || 'In the Spotlight',
+        subtitle: s.subtitle || 'Where Strive’s journey meets the world’s attention.',
+        items: s.items?.length ? s.items : spot.items,
+      });
+
+      setImpact({
+        title: i.title ||  'Impact Makers',
+        subtitle: i.subtitle || 'Every act of kindness leaves a mark.',
+        items: i.items?.length ? i.items : impact.items,
+      });
+    })();
+    return () => { mounted = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section className="MVS">
+      {/* LEFT: Spotlight */}
       <div className="MVS__panel MVS__media">
         <div className="MVS__title">
-          <h3 className="">In the Spotlight</h3>
-          <p className="qoute">Where Strive’s journey meets the world’s attention.</p>
+          <h3>In the Spotlight</h3>
+          <p className="qoute">{spot.subtitle}</p>
         </div>
 
         <div className="MVS__content">
-          {/* top row: two images */}
+          {/* top row — IMAGES */}
           <div className="MVS__row MVS__row--images">
-            {mediaItems.map(m => (
-              <div key={m.id} className="MVS__card MVS__imgCard">
-                <img src={m.img} alt="" />
+            {spot.items.map((m, idx) => (
+              <div key={`spot-img-${idx}`} className="MVS__card MVS__imgCard">
+                {m.url ? (
+                  <a href={m.url} target="_blank" rel="noreferrer">
+                    <img src={m.image || PH_IMG} alt="" />
+                  </a>
+                ) : (
+                  <img src={m.image || PH_IMG} alt="" />
+                )}
               </div>
             ))}
           </div>
 
-          {/* bottom row: two text cards */}
+          {/* bottom row — matching descriptions */}
           <div className="MVS__row MVS__row--texts">
-            {mediaItems.map(m => (
-              <div key={m.id} className="MVS__card MVS__textCard">
-                <p>{m.text}</p>
+            {spot.items.map((m, idx) => (
+              <div key={`spot-txt-${idx}`} className="MVS__card MVS__textCard">
+                <p>{m.description || PH_TEXT}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* <div className="MVS__divider" /> */}
-
+      {/* RIGHT: Impact Makers */}
       <div className="MVS__panel MVS__volunteer">
         <div className="MVS__title">
-          <h3 className="">Impact Makers</h3>
-          <p className="qoute">Every act of kindness leaves a mark.</p>
+          <h3>Impact Makers</h3>
+          <p className="qoute">{impact.subtitle}</p>
         </div>
 
         <div className="MVS__content">
-          {/* top row: two images */}
           <div className="MVS__row MVS__row--images">
-            {volImgs.map((src,i) => (
-              <div key={i} className="MVS__card MVS__imgCard">
-                <img src={src} alt="" />
+            {impact.items.map((m, idx) => (
+              <div key={`imp-img-${idx}`} className="MVS__card MVS__imgCard">
+                {m.url ? (
+                  <a href={m.url} target="_blank" rel="noreferrer">
+                    <img src={m.image || PH_IMG} alt="" />
+                  </a>
+                ) : (
+                  <img src={m.image || PH_IMG} alt="" />
+                )}
               </div>
             ))}
           </div>
 
-          {/* bottom row: two text cards */}
           <div className="MVS__row MVS__row--texts">
-            {mediaItems.map(m => (
-              <div key={m.id} className="MVS__card MVS__textCard">
-                <p>{m.text}</p>
+            {impact.items.map((m, idx) => (
+              <div key={`imp-txt-${idx}`} className="MVS__card MVS__textCard">
+                <p>{m.description || PH_TEXT}</p>
               </div>
             ))}
           </div>
