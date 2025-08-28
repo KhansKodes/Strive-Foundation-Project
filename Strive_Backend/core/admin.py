@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import (MediaItem, LegacyItem, ContactMessage, UrgentNeed, 
+from .models import (  UrgentNeed, 
 ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, 
 EventImage, Strapline, Slide, Spotlight, SpotlightItem, ImpactMakers, ImpactItem)
 
-admin.site.register(MediaItem)
-admin.site.register(LegacyItem)
-admin.site.register(ContactMessage)
+#admin.site.register(MediaItem)
+#admin.site.register(LegacyItem)
+#admin.site.register(ContactMessage)
 #admin.site.register(ImpactMetric)
 #admin.site.register(ImpactCard)
 
