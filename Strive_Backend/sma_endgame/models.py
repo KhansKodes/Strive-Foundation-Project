@@ -39,3 +39,22 @@ class Objective(models.Model):
 
     def __str__(self):
         return f"{self.order}. {self.title}"
+
+
+class InfoSection(models.Model):
+    """
+    Stores generic content blocks like 'About The SMA Endgame' and 'What is SMA?'
+    """
+    slug = models.SlugField(
+        unique=True,
+        help_text="Unique key (e.g., 'about-endgame', 'what-is-sma')"
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    class Meta:
+        verbose_name = "Info Section"
+        verbose_name_plural = "Info Sections"
+
+    def __str__(self):
+        return self.title        
