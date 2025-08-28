@@ -182,8 +182,11 @@
   margin-left: 25px;
 }
 .header .register-patient-btn {
-  background: #4CAF50;
-  color: #fff;
+  /* background: #4CAF50; */
+  background-image: linear-gradient(to left, lightgrey 0%,  #ffffff 30%, #ffffff 70%,  #bcbcbc 100%) !important ; 
+  /* background-image: linear-gradient(-225deg, #0f6dfb3c 0%,  #FFFEFF 50%, #09f9f53d 100%); */
+
+  color: black;
   font-size: 15px;
   font-weight: 600;
   padding: 10px 25px;
