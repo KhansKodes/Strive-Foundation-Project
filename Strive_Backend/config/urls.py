@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/', include('donors.urls')),
     path('api/', include('volunteers.urls')),
     path('api/', include('core.urls')),
+     path("api/", include("sma_endgame.urls")),
 ]
 
 # Serve media files during development
