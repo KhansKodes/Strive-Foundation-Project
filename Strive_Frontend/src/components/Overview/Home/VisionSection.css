@@ -41,8 +41,8 @@
 
 /* move from left to right */
 @keyframes marquee {
-  0%   { left: -100%; }
-  100% { left: 100%; }
+  0%   { left: 100%; }
+  100% { left: -100%; }
 }
 
 /* optional: pause on hover */
