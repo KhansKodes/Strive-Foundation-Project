@@ -1,3 +1,4 @@
+from functools import partial
 import os
 from pathlib import Path
 from decouple import config
@@ -35,7 +36,8 @@ INSTALLED_APPS = [
     'volunteers',
     'core',
     'corsheaders',
-    'sma_endgame'
+    'sma_endgame',
+    'partners',
 ]
 
 MIDDLEWARE = [
