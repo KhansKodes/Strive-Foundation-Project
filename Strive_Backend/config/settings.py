@@ -191,7 +191,7 @@ JAZZMIN_SETTINGS = {
         {"label": "Core Content", "models": [
             "core.mediaitem", "core.legacyitem", "core.contactmessage",
             "core.urgentneed", "core.impactstats", "core.impacttextbox",
-            "core.strapline", "core.slide", "core.getinvolved",
+            "core.strapline", "core.slide", "core.getinvolved", "core.contactmessage",
         ]},
         {"label": "Legacy & Events", "models": [
             "core.iprcitem", "core.event", "core.eventdetail", "core.eventimage",
@@ -215,5 +215,6 @@ JAZZMIN_SETTINGS = {
         "core.event": "fas fa-bullhorn",
         "core.eventimage": "fas fa-image",
         "core.getinvolved": "fas fa-bullseye",
+        "core.contactmessage": "fas fa-envelope",
     },
 }
