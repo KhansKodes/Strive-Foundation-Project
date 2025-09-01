@@ -16,7 +16,9 @@
 .header .top-bar {
   /* background: linear-gradient(90deg, #553CDA 0%, #4E21CA 100%); */
   /* background-image: linear-gradient(-225deg, #0f6dfb 0%,  #FFFEFF 50%, #09f9f5 100%); */
-  background-image: linear-gradient(-225deg, #0f6dfb 0%,  #e1f4fc 50%, #09f9f5 100%);
+  /* background-image: linear-gradient(-225deg, #0f6dfb 0%,  #e1f4fc 50%, #09f9f5 100%); */
+  background-image: linear-gradient(-225deg, #0f6dfb 0%,  #e1f4fc 50%, #09f9f575 100%);
+  
 
   font-size: 15px;
   padding: 5px 100px;
@@ -124,7 +126,7 @@
 .header .bottom-bar {
   padding:0px 100px;
   /* background: linear-gradient(90deg, #553CDA 0%, #4E21CA 100%); */
-  background-image: linear-gradient(-225deg, #0f6dfb 0%,  #e1f4fc 50%, #09f9f5 100%);
+  background-image: linear-gradient(-225deg, #0f6dfb 0%,  #e1f4fc 50%, #09f9f575 100%);
   box-shadow: 0 4px 20px -10px rgba(0,0,0,0.13);
 }
 .header .nav-row {

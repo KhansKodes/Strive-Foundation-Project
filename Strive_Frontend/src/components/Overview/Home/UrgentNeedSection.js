@@ -195,7 +195,7 @@ export default function UrgentNeedSection() {
         <div className="get-involved-panel">
           <div className="urgent-header header-right">
             <div className="urgent-header-bg" />
-            <h1>G E T&nbsp;&nbsp;I N V O L V E D</h1>
+            <h3>G E T&nbsp;&nbsp;I N V O L V E D</h3>
           </div>
 
           <div className="involved-card">

@@ -1,46 +1,61 @@
-import React from 'react';
-import './InitiativesSection.css';
+import React from "react";
+import "./InitiativesSection.css";
+import { FiGlobe, FiAward, FiZap } from "react-icons/fi"; // valid icons
 
-const initiatives = [
+const CARDS = [
   {
-    title: 'Medical Support',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo ligula eget',
-    iconUrl: 'https://picsum.photos/80/80?random=10',
+    id: 1,
+    title: "Card One",
+    desc:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque mattis dui non felis efficitur.",
+    icon: FiGlobe,
+    theme: "theme-purple",
   },
   {
-    title: 'Research',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo ligula eget',
-    iconUrl: 'https://picsum.photos/80/80?random=20',
+    id: 2,
+    title: "Card Two",
+    desc:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque mattis dui non felis efficitur.",
+    icon: FiAward,
+    theme: "theme-sunset",
   },
   {
-    title: 'Advocacy',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo ligula eget',
-    iconUrl: 'https://picsum.photos/80/80?random=30',
+    id: 3,
+    title: "Card Three",
+    desc:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque mattis dui non felis efficitur.",
+    icon: FiZap,
+    theme: "theme-mint",
   },
 ];
 
 export default function InitiativesSection() {
   return (
-    <section className="InitiativesSection">
-      <h2>Flagship Initiatives</h2>
+    <section className="init-sec">
+      <div className="init-row">
+        {CARDS.map(({ id, title, desc, icon: Icon, theme }) => (
+          <article key={id} className={`init-card ${theme}`}>
 
-      <div className="initiatives-wrapper">
+            {/* Left “bite” cutout */}
+            <span className="init-notch" aria-hidden="true" />
 
-        <ul className="initiatives-list">
-          {initiatives.map((item) => (
-            <li className="initiative-card" key={item.title}>
-              <div className="initiative-icon">
-                <img src={item.iconUrl} alt={item.title} />
-              </div>
-              <h3 className="initiative-title">{item.title}</h3>
-              <p className="initiative-desc">{item.description}</p>
-            </li>
-          ))}
-        </ul>
+            {/* Icon bubble inside the notch */}
+            <span className="init-icon">
+              <Icon className="icon" aria-hidden="true" />
+            </span>
+
+            {/* Right glossy circle with white ring */}
+            <span className="init-ring" aria-hidden="true" />
+
+            {/* Text */}
+            <div className="init-text">
+              <h3 className="init-title">{title}</h3>
+              <p className="init-desc">{desc}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
+  
