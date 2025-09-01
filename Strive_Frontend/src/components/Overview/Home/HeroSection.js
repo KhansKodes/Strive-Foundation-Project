@@ -3,7 +3,7 @@ import './HeroSection.css';
 import { getHomeCarouselImages } from '../../../services/carouselService';
 
 const heroBgUrl =
-  'https://unblast.com/wp-content/uploads/2021/01/Space-Background-Images.jpg';
+  'https://t4.ftcdn.net/jpg/07/54/80/09/360_F_754800974_CXB9YRXM2ItqqUoEYouZnzctO9BTQhSv.jpg';
 
 export default function HeroSection() {
   // only backend data (no dummy fallback)

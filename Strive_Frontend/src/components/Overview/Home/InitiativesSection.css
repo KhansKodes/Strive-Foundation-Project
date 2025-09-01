@@ -1,134 +1,135 @@
-/* InitiativesSection.css */
+/* ===== Section background to match the reference ===== */
+.init-sec {
+  --canvas: #2b2140;            /* deep purple board */
+  background: var(--canvas);
+  padding: 56px 20px;
+}
 
-/* Base section */
-.InitiativesSection {
+/* Row: three cards side by side (wrap on small screens) */
+.init-row {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+/* ===== Card base ===== */
+.init-card {
   position: relative;
-  padding: 20px 100px;
-  background-image: linear-gradient(to right, hsla(140, 79%, 59%, 0.08) 0%, rgba(56, 249, 214, 0.162) 100%);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 360px;                 /* matches reference proportions */
+  min-height: 220px;
+  padding: 28px 28px 28px 110px;/* room for notch + icon on left */
+  border-radius: 28px;          /* smooth corners */
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;             /* keeps internal shapes tidy */
+  isolation: isolate;           /* z-index control */
 }
 
-/* Section title */
-.InitiativesSection h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  background-image: linear-gradient(45deg, #93a5cfad 0%, #e4efe9 100%);
-  padding: 5px 0px;
-  /* background-size: 50% 100%;
-  background-repeat: no-repeat;
-  background-position: center; */
-}
-
-/* Wrapper that holds both the pill and the grid */
-.InitiativesSection .initiatives-wrapper {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Grey “pill” background */
-.InitiativesSection .initiatives-bg {
+/* ----- Left cutout notch (same color as section to look “carved”) ----- */
+.init-notch {
   position: absolute;
-  bottom: 10px;          /* sits just under the cards */
-  left: 1rem;
-  right: 1rem;
-  height: 45px;
-  background: #757575;
-  border-radius: 22.5px; /* half of the height for a perfect pill */
+  left: 0;
+  top: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  background: var(--canvas);
+  border-radius: 50%;
+  box-shadow: inset -10px 0 16px rgba(0, 0, 0, 0.18);
   z-index: 1;
-  box-shadow:
-    rgba(0, 0, 0, 0.09) 0px 2px 1px,
-    rgba(0, 0, 0, 0.09) 0px 4px 2px,
-    rgba(0, 0, 0, 0.09) 0px 8px 4px,
-    rgba(0, 0, 0, 0.09) 0px 16px 8px,
-    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  pointer-events: none;
+  content: "";
 }
 
-/* Grid of cards */
-.InitiativesSection .initiatives-list {
+/* ----- Icon bubble sitting in the notch ----- */
+.init-icon {
+  position: absolute;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.25);
+  z-index: 2;
+}
+.init-icon .icon {
+  font-size: 34px;
+  color: #fff;
+  stroke-width: 2.5;
+}
+
+/* ----- Right glossy circle with white ring ----- */
+.init-ring {
+  position: absolute;
+  right: -36px;
+  bottom: -34px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--circle, linear-gradient(135deg,#a173ff,#6ab0ff));
+  border: 10px solid #fff;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  z-index: 0;
+  content: "";
+}
+
+/* ----- Text layout (horizontal content) ----- */
+.init-text {
   position: relative;
-  z-index: 2;            /* above the pill */
-  display: flex;
-  gap: 2rem;             /* balanced spacing */
-  list-style: none;
-  justify-content: space-evenly; /* center each card in its cell */
+  z-index: 3;                  /* above shapes */
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-height: 164px;
 }
-
-/* Individual card */
-.InitiativesSection .initiative-card {
-background-image: linear-gradient(to right, #92fe9d46 0%, #00c8ff3f 100%);
-  padding: 1.5rem 1rem;
-  border-radius: 3px;
-  box-shadow:
-    rgba(0, 0, 0, 0.25) 0px 14px 28px,
-    rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;           /* fill its grid cell */
-  box-sizing: border-box;
-}
-
-/* Icon */
-.InitiativesSection .initiative-icon img {
-  width: 150px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-/* Title */
-.InitiativesSection .initiative-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
-}
-
-/* Description */
-.InitiativesSection .initiative-desc {
-  font-size: 0.9rem;
-  color: #333;
-  line-height: 1.3;
+.init-title {
   margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.init-desc {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  opacity: 0.95;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .InitiativesSection .initiatives-list {
-    gap: 1rem;
-    flex-direction: column;
-  }
-  .InitiativesSection .initiative-icon {
-    width: 100%;
-  }
-  .InitiativesSection .initiative-icon img {
-      width: 100%;
-      height: 200px;
-  }
-  .InitiativesSection .initiatives-bg {
-    left: 0.5rem;
-    right: 0.5rem;
-  }
+/* ===== Theming (gradients similar to your reference) ===== */
+.theme-purple {
+  background: linear-gradient(135deg, #b94dff 0%, #7b65ff 55%, #6acaff 100%);
+  --circle: linear-gradient(135deg, #b27cff 0%, #82a0ff 70%);
+}
+.theme-sunset {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 40%, #ff6fb1 100%);
+  --circle: linear-gradient(135deg, #ffb57a 0%, #ff82c2 80%);
+}
+.theme-mint {
+  background: linear-gradient(135deg, #42e97b 0%, #38f9d7 45%, #7f78ff 100%);
+  --circle: linear-gradient(135deg, #71f1c9 0%, #a397ff 80%);
 }
 
-@media (max-width: 480px) {
-  .InitiativesSection h2 {
-    font-size: 1.6rem;
-  }
-  .InitiativesSection .initiatives-list {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  .InitiativesSection .initiatives-bg {
-    bottom: 5px;
-    height: 35px;
-    border-radius: 17.5px;
-  }
+/* ===== Responsiveness ===== */
+@media (max-width: 1180px) {
+  .init-card { width: 340px; }
 }
-
-@media (max-width: 1350px) {
-  .InitiativesSection {
-    padding: 30px 40px;
+@media (max-width: 1080px) {
+  .init-card { width: 320px; }
 }
+@media (max-width: 1020px) {
+  .init-row { gap: 22px; }
+}
+@media (max-width: 980px) {
+  .init-card { width: 100%; max-width: 700px; }
 }
