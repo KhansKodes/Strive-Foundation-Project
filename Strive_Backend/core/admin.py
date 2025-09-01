@@ -1,7 +1,10 @@
 from django.contrib import admin
 from .models import (  UrgentNeed, 
 ImpactStats, ImpactTextBox, GetInvolved, IprcItem, Event, EventDetail, 
-EventImage, Strapline, Slide, Spotlight, SpotlightItem, ImpactMakers, ImpactItem)
+EventImage, Strapline, Slide, Spotlight, SpotlightItem, ImpactMakers, ImpactItem, ContactMessage)
+from django.utils import timezone
+from django.http import HttpResponse
+import csv
 
 #admin.site.register(MediaItem)
 #admin.site.register(LegacyItem)
@@ -9,6 +12,42 @@ EventImage, Strapline, Slide, Spotlight, SpotlightItem, ImpactMakers, ImpactItem
 #admin.site.register(ImpactMetric)
 #admin.site.register(ImpactCard)
 
+def export_as_csv(modeladmin, request, queryset):
+    """
+    Admin action: export selected messages to CSV
+    """
+    fields = ["id", "name", "email", "subject", "message", "submitted_at"]
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = "attachment; filename=contact_messages.csv"
+    writer = csv.writer(response)
+    writer.writerow(fields)
+    for obj in queryset:
+        writer.writerow([getattr(obj, f) for f in fields])
+    return response
+export_as_csv.short_description = "Export selected messages to CSV"
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "email", "subject", "submitted_at")
+    search_fields = ("name", "email", "subject", "message")
+    date_hierarchy = "submitted_at"
+    ordering = ("-submitted_at",)
+
+    readonly_fields = ("name", "email", "subject", "message", "submitted_at")
+
+    fieldsets = (
+        ("Message Details", {"fields": ("name", "email", "subject", "message")}),
+        ("Submission Info", {"fields": ("submitted_at",)}),
+    )
+
+    actions = [export_as_csv]
+
+    def has_add_permission(self, request):
+        return False  # prevent manual adding
+
+    def has_change_permission(self, request, obj=None):
+        return False  # make it view-only
 @admin.register(UrgentNeed)
 class UrgentNeedAdmin(admin.ModelAdmin):
     list_display = ("title", "required_amount", "donated_amount", "donation_percentage", "is_active", "priority", "created_at")
@@ -140,3 +179,7 @@ class ImpactMakersAdmin(admin.ModelAdmin):
     search_fields = ("title", "subtitle")
     ordering = ("priority", "-updated_at")
     inlines = [ImpactItemInline]    
+    
+admin.site.site_header = "Strive Foundation Admin"
+admin.site.site_title = "Strive Foundation Admin"
+admin.site.index_title = "Strive Foundation Admin"

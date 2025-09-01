@@ -23,8 +23,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-   # 'django.contrib.admin',
-    'config.admin_apps.MyAdminConfig',
+    'jazzmin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -164,3 +164,56 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Strive Admin",
+    "site_header": "Strive Foundation",
+    "site_brand": "Strive Admin",
+    "welcome_sign": "Welcome to Strive Admin",
+    "copyright": "Strive Foundation",
+    "show_ui_builder": False,
+    "order_with_respect_to": [],
+
+    # Left sidebar menu — group models into clean sections
+    "side_menu": [
+        {"app": "users", "label": "Users & Auth", "models": [
+            "users.user", "users.profile",
+        ]},
+        {"label": "Patients", "models": [
+            "patients.patient", "patients.appointment", "patients.treatmentrecord",
+        ]},
+        {"label": "Donations", "models": [
+            "donors.donor", "donors.donation", "donors.campaign",
+        ]},
+        {"label": "Volunteers", "models": [
+            "volunteers.volunteer", "volunteers.activity", "volunteers.task",
+        ]},
+        {"label": "Core Content", "models": [
+            "core.mediaitem", "core.legacyitem", "core.contactmessage",
+            "core.urgentneed", "core.impactstats", "core.impacttextbox",
+            "core.strapline", "core.slide", "core.getinvolved",
+        ]},
+        {"label": "Legacy & Events", "models": [
+            "core.iprcitem", "core.event", "core.eventdetail", "core.eventimage",
+        ]},
+    ],
+
+    # Icons (nice to have)
+    "icons": {
+        "users.user": "fas fa-user",
+        "users.profile": "fas fa-id-badge",
+        "patients.patient": "fas fa-user-injured",
+        "patients.appointment": "fas fa-calendar-check",
+        "donors.donation": "fas fa-hand-holding-heart",
+        "donors.donor": "fas fa-user-friends",
+        "volunteers.volunteer": "fas fa-hands-helping",
+        "core.mediaitem": "fas fa-photo-video",
+        "core.urgentneed": "fas fa-exclamation-circle",
+        "core.impactstats": "fas fa-chart-line",
+        "core.strapline": "fas fa-heading",
+        "core.slide": "fas fa-images",
+        "core.event": "fas fa-bullhorn",
+        "core.eventimage": "fas fa-image",
+        "core.getinvolved": "fas fa-bullseye",
+    },
+}
