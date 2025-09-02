@@ -70,13 +70,13 @@ The patient registration is divided into 3 steps:
 **Request Body:**
 ```json
 {
-  "registration_type": "patient",  // or "caregiver"
+  "registration_type": "patient",  
   "first_name": "John",
   "last_name": "Doe",
   "date_of_birth": "1990-05-10",  // Format: YYYY-MM-DD
   "gender": "male",  // Options: "male", "female", "other"
   "phone_number": "03001234567",
-  "whatsapp_number": "03001234567",  // Optional
+  "whatsapp_number": "03001234567",
   "address": "123 Main Street, Block A",
   "city": "Karachi",
   "province_state": "Sindh",
