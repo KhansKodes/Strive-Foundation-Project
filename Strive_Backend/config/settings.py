@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'unfold',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -175,9 +175,132 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-UNFOLD = {
-    "SITE_HEADER": "Strive Admin",
-    "SITE_TITLE": "Strive Admin",
-    "SHOW_HISTORY": True,
-    "SHOW_VIEW_ON_SITE": True,
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Strive Admin",
+    "site_header": "Strive Foundation",
+    "site_brand": "Strive Admin",
+    "welcome_sign": "Welcome to Strive Admin",
+    "copyright": "Strive Foundation",
+    
+    # UI Customizations
+    "show_ui_builder": True,
+    "changeform_format": "horizontal_tabs",
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    
+    # Theme settings
+    "dark_mode_theme": "darkly",
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "brand_colour": "navbar-success",
+    "accent": "accent-success",
+    "navbar": "navbar-success navbar-dark",
+    
+    # UI Tweaks
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    
+    "actions_sticky_top": True,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": True,
+    
+    # Custom Links
+    "custom_links": {
+        "core": [{
+            "name": "Analytics Dashboard", 
+            "url": "admin:index", 
+            "icon": "fas fa-chart-line",
+            "permissions": ["core.view_analytics"]
+        }]
+    },
+
+    # Left-side grouped menu (models are referenced as "app_label.modelname_lower")
+    "side_menu": [
+        { "label": "Urgent Need", "models": [
+            "core.urgentneed",
+        ]},
+        { "label": "Impact", "models": [
+            "core.impactstats", "core.impacttextbox",
+        ]},
+        { "label": "Legacy & Events", "models": [
+            "core.iprcitem", "core.event", "core.eventdetail", "core.eventimage",
+        ]},
+        { "label": "Content", "models": [
+            "core.slide", "core.strapline", "core.getinvolved", "core.spotlight",
+            "core.spotlightitem", "core.impactmakers", "core.impactitem",
+            # If you have a MediaItem model and want it here:
+            # "core.mediaitem",
+        ]},
+        { "label": "Contact", "models": [
+            "core.contactmessage",
+        ]},
+        { "app": "auth", "label": "Authentication & Authorization" },  # Users/Groups
+    ],
+
+    # (Optional) nice icons
+    "icons": {
+        "core.urgentneed": "fas fa-exclamation-circle",
+        "core.impactstats": "fas fa-chart-line",
+        "core.impacttextbox": "fas fa-align-left",
+        "core.iprcitem": "fas fa-list",
+        "core.event": "fas fa-bullhorn",
+        "core.eventdetail": "fas fa-file-alt",
+        "core.eventimage": "fas fa-image",
+        "core.slide": "fas fa-images",
+        "core.strapline": "fas fa-heading",
+        "core.getinvolved": "fas fa-hands-helping",
+        "core.spotlight": "fas fa-star",
+        "core.spotlightitem": "fas fa-star-half-alt",
+        "core.impactmakers": "fas fa-users",
+        "core.impactitem": "fas fa-user-friends",
+        "core.contactmessage": "fas fa-envelope",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-user-shield",
+    },
 }
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    #"theme": "darkly",
+    #"dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary btn-lg",
+        "secondary": "btn-secondary btn-lg",
+        "info": "btn-info btn-lg",
+        "warning": "btn-warning btn-lg",
+        "danger": "btn-danger btn-lg",
+        "success": "btn-success btn-lg"
+    },
+    "actions_sticky_top": True
+}
+
+# Custom CSS for modern look
+JAZZMIN_SETTINGS["custom_css"] = "css/custom.css"
