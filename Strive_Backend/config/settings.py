@@ -304,3 +304,35 @@ JAZZMIN_UI_TWEAKS = {
 
 # Custom CSS for modern look
 JAZZMIN_SETTINGS["custom_css"] = "css/custom.css"
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-primary navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary btn-lg",
+        "info": "btn-info btn-lg",
+        "warning": "btn-warning btn-lg",
+        "danger": "btn-danger btn-lg",
+        "success": "btn-success btn-lg"
+    },
+    "actions_sticky_top": True
+}
