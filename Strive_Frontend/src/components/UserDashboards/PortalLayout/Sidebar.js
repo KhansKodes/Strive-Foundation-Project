@@ -1,28 +1,38 @@
 import React from "react";
-import { FiX } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
+import "./PortalLayout.css";
 
-export default function Sidebar({ open, menu = [], activeKey, onChange, onClose }) {
+/**
+ * Sidebar
+ * - Collapsible on mobile
+ * - Highlights active route
+ */
+export default function Sidebar({ isOpen, onClose, menu = [], brand = "Strive Portal" }) {
   return (
-    <aside className={`portal-sidebar ${open ? "open" : "closed"}`} aria-hidden={!open}>
-      <div className="sidebar-head">
-        <span className="brand">Strive</span>
-        <button className="sidebar-close" onClick={onClose} aria-label="Close sidebar">
-          <FiX />
-        </button>
+    <aside className={`portal-sidebar ${isOpen ? "open" : ""}`}>
+      <div className="portal-sidebar__brand">
+        <span className="portal-brand__logo">⚕️</span>
+        <span className="portal-brand__text">{brand}</span>
+        <button className="portal-sidebar__close" onClick={onClose} aria-label="Close sidebar">×</button>
       </div>
 
-      <nav className="sidebar-nav">
-        {menu.map((m) => (
-          <button
-            key={m.key}
-            className={`nav-item ${activeKey === m.key ? "active" : ""}`}
-            onClick={() => onChange(m.key)}
+      <nav className="portal-sidebar__nav">
+        {menu.map((item) => (
+          <NavLink
+            key={item.key}
+            to={item.to}
+            className={({ isActive }) => "portal-nav__link" + (isActive ? " active" : "")}
+            onClick={onClose}
           >
-            {m.icon && <span className="nav-ico">{m.icon}</span>}
-            <span>{m.label}</span>
-          </button>
+            <span className="bullet">•</span>
+            <span>{item.label}</span>
+          </NavLink>
         ))}
       </nav>
+
+      <div className="portal-sidebar__footer">
+        <small>© {new Date().getFullYear()} Strive</small>
+      </div>
     </aside>
   );
 }

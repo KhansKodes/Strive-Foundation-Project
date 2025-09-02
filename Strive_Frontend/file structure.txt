@@ -36,12 +36,23 @@ src/
 │   │   ├── Footer.js
 │   │   ├── Header.css
 │   │   ├── Header.js
+│   │   ├── LoadingSpinner.css       ← NEW
+│   │   ├── LoadingSpinner.js        ← NEW
 │   │   ├── MainLayout.js
 │   │   └── navLinks.js
 │   │
 │   ├── MediaCenter/
 │   │   ├── MediaCenter.css
-│   │   └── MediaCenter.js
+│   │   ├── MediaCenter.js
+│   │   ├── Downloads/               ← NEW
+│   │   │   ├── Downloads.css        ← NEW
+│   │   │   └── Downloads.js         ← NEW
+│   │   ├── Gallery/                 ← NEW
+│   │   │   ├── Gallery.css          ← NEW
+│   │   │   └── Gallery.js           ← NEW
+│   │   └── Newsroom/                ← NEW
+│   │       ├── Newsroom.css         ← NEW
+│   │       └── Newsroom.js          ← NEW
 │   │
 │   ├── OurLegacy/
 │   │   ├── LegacyEvent/

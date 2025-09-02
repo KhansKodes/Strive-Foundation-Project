@@ -1,39 +1,39 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import menuConfig from "./menuConfig";
 import "./PortalLayout.css";
 
 /**
  * PortalLayout
- * Props:
- * - title: string ("Patient Portal" / "Donor Portal" / "Volunteer Portal")
- * - menu: [{ key, label, icon?: JSX.Element }]
- * - initialActiveKey?: string
- * - children: (activeKey: string) => React.ReactNode  (render-prop)
+ * - Shared shell for all roles
+ * - Pass `role` and `user` from your auth context/router
+ * - Renders children or <Outlet/> for nested routes
  */
-export default function PortalLayout({ title, menu, initialActiveKey, children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeKey, setActiveKey] = useState(initialActiveKey || (menu?.[0]?.key ?? ""));
+export default function PortalLayout({ role = "patient", user, title, children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const menu = useMemo(() => menuConfig[role] || [], [role]);
 
   return (
-    <div className={`portal-root ${sidebarOpen ? "with-sidebar" : "sidebar-collapsed"}`}>
-      <Topbar
-        title={title}
-        sidebarOpen={sidebarOpen}
-        onToggleSidebar={() => setSidebarOpen((s) => !s)}
+    <div className="portal">
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        menu={menu}
+        brand="Strive Portal"
       />
 
-      <div className="portal-body">
-        <Sidebar
-          open={sidebarOpen}
-          menu={menu}
-          activeKey={activeKey}
-          onChange={setActiveKey}
-          onClose={() => setSidebarOpen(false)}
+      <div className="portal-main">
+        <Topbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          user={user}
+          role={role}
+          title={title || "Dashboard"}
         />
 
-        <main className="portal-content" role="main" aria-live="polite">
-          {typeof children === "function" ? children(activeKey) : children}
+        <main className="portal-content">
+          {children ? children : <Outlet />}
         </main>
       </div>
     </div>

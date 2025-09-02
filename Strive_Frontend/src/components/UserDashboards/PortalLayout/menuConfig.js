@@ -1,26 +1,27 @@
-import React from "react";
-import { FiHome, FiCalendar, FiFileText, FiMessageSquare, FiSettings, FiHeart, FiTrendingUp, FiClipboard, FiClock } from "react-icons/fi";
+// Role-based menu configuration for the sidebar
 
-export const patientMenu = [
-  { key: "overview",    label: "Overview",    icon: <FiHome /> },
-  { key: "appointments",label: "Appointments",icon: <FiCalendar /> },
-  { key: "records",     label: "Medical Records", icon: <FiFileText /> },
-  { key: "messages",    label: "Messages",    icon: <FiMessageSquare /> },
-  { key: "settings",    label: "Settings",    icon: <FiSettings /> },
-];
+const menuConfig = {
+  patient: [
+    { key: "overview", label: "Overview", to: "/portal/patient" },
+    { key: "appointments", label: "Appointments", to: "/portal/patient/appointments" },
+    { key: "treatment", label: "Treatment Plan", to: "/portal/patient/treatment" },
+    { key: "documents", label: "Documents", to: "/portal/patient/documents" },
+    { key: "support", label: "Support", to: "/portal/patient/support" },
+  ],
+  donor: [
+    { key: "overview", label: "Overview", to: "/portal/donor" },
+    { key: "donations", label: "Donations", to: "/portal/donor/donations" },
+    { key: "pledges", label: "Pledges", to: "/portal/donor/pledges" },
+    { key: "impact", label: "Impact Reports", to: "/portal/donor/impact" },
+    { key: "settings", label: "Settings", to: "/portal/donor/settings" },
+  ],
+  volunteer: [
+    { key: "overview", label: "Overview", to: "/portal/volunteer" },
+    { key: "tasks", label: "Tasks", to: "/portal/volunteer/tasks" },
+    { key: "events", label: "Events", to: "/portal/volunteer/events" },
+    { key: "hours", label: "My Hours", to: "/portal/volunteer/hours" },
+    { key: "resources", label: "Resources", to: "/portal/volunteer/resources" },
+  ],
+};
 
-export const donorMenu = [
-  { key: "overview",  label: "Overview",  icon: <FiHome /> },
-  { key: "donations", label: "Donations", icon: <FiHeart /> },
-  { key: "receipts",  label: "Receipts",  icon: <FiFileText /> },
-  { key: "impact",    label: "Impact",    icon: <FiTrendingUp /> },
-  { key: "settings",  label: "Settings",  icon: <FiSettings /> },
-];
-
-export const volunteerMenu = [
-  { key: "overview", label: "Overview",  icon: <FiHome /> },
-  { key: "tasks",    label: "Tasks",     icon: <FiClipboard /> },
-  { key: "schedule", label: "Schedule",  icon: <FiClock /> },
-  { key: "messages", label: "Messages",  icon: <FiMessageSquare /> },
-  { key: "settings", label: "Settings",  icon: <FiSettings /> },
-];
+export default menuConfig;
