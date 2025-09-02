@@ -8,28 +8,38 @@ const STORAGE_KEY = 'app_user';
  * GET  /api/auth/profile/ -> { phone, full_name, role } (or first/last depending on backend)
  */
 export async function login(phone, password) {
-  // 1) get tokens
-  const { data: tokens } = await api.post('/auth/login/', { phone, password });
-  localStorage.setItem('access', tokens.access);
-  localStorage.setItem('refresh', tokens.refresh);
+  try {
+    // 1) get tokens
+    const { data: tokens } = await api.post('/auth/login/', { phone, password });
+    localStorage.setItem('access', tokens.access);
+    localStorage.setItem('refresh', tokens.refresh);
 
-  // 2) fetch profile (Authorization attached by api.js)
-  const { data: profile } = await api.get('/auth/profile/');
+    // 2) fetch profile (Authorization attached by api.js)
+    const { data: profile } = await api.get('/auth/profile/');
 
-  // Prefer full_name; fallback to first/last if backend returns that
-  const fullName =
-    (profile.full_name || '').trim() ||
-    [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() ||
-    'User';
+    // Prefer full_name; fallback to first/last if backend returns that
+    const fullName =
+      (profile.full_name || '').trim() ||
+      [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() ||
+      'User';
 
-  const user = {
-    phone: profile.phone,
-    role: profile.role,
-    profile: { fullName },
-  };
+    const user = {
+      phone: profile.phone,
+      role: profile.role,
+      profile: { fullName },
+    };
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  return user;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    return user;
+  } catch (error) {
+    // Clear any partial data on error
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem(STORAGE_KEY);
+    
+    // Re-throw the error so LoginPage can handle it
+    throw error;
+  }
 }
 
 /** REGISTER
