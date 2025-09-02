@@ -1,0 +1,210 @@
+/* Modern UI Enhancements for Jazzmin */
+
+/* Card styling */
+.card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(104, 9, 9, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Button enhancements */
+.btn {
+    border-radius: 6px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form controls */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+}
+
+/* Table styling */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+/* Sidebar enhancements */
+.nav-sidebar .nav-item {
+    margin-bottom: 0.25rem;
+}
+
+.nav-sidebar .nav-link {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Search bar */
+.navbar .form-control {
+    border-radius: 20px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    background: none;
+    padding: 0.5rem 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    font-size: 1.2em;
+    line-height: 1;
+    vertical-align: -2px;
+}
+
+/* Action buttons */
+.object-tools .btn {
+    margin-left: 0.5rem;
+}
+
+/* Filter sidebar */
+.changelist-filter h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.changelist-filter ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.changelist-filter li {
+    margin-bottom: 0.5rem;
+}
+
+/* Dashboard stats */
+.small-box {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Modal styling */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1.5rem;
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: 8px;
+    margin: 0 2px;
+    border: none;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Select2 enhancements */
+.select2-container--default .select2-selection--single {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    height: calc(2.25rem + 2px);
+}
+
+.select2-container--default .select2-selection--multiple {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+/* Date picker styling */
+.datepicker {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
