@@ -304,6 +304,7 @@ JAZZMIN_UI_TWEAKS = {
 
 # Custom CSS for modern look
 JAZZMIN_SETTINGS["custom_css"] = "css/custom.css"
+
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
     "footer_small_text": False,
