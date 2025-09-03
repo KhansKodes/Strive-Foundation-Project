@@ -31,10 +31,6 @@ class MediaItemViewSet(viewsets.ModelViewSet):
     serializer_class = MediaItemSerializer
     #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_permissions(self):
-        """
-        Public: list, retrieve
-        Auth required: create, update, partial_update, destroy
-        """
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()] 
@@ -45,10 +41,6 @@ class LegacyItemViewSet(viewsets.ModelViewSet):
     serializer_class = LegacyItemSerializer
     #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_permissions(self):
-        """
-        Public: list, retrieve
-        Auth required: create, update, partial_update, destroy
-        """
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()] 
@@ -59,10 +51,6 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     serializer_class = ContactMessageSerializer
 
     def get_permissions(self):
-        """
-        Public: create (submit contact form)
-        Admin: list/retrieve/update/delete
-        """
         if self.action == 'create':
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
@@ -85,8 +73,7 @@ class UrgentNeedViewSet(viewsets.ModelViewSet):
 class ImpactStatsViewSet(viewsets.ModelViewSet):
     """
     /api/impact/stats/   -> list (public)
-    /api/impact/stats/{id}/  -> retrieve (public)
-    Admins can POST/PUT/PATCH/DELETE.
+    /api/impact/stats/{id}/  
     """
     queryset = ImpactStats.objects.all()
     serializer_class = ImpactStatsSerializer
@@ -112,7 +99,6 @@ class ImpactTextBoxViewSet(viewsets.ModelViewSet):
     """
     /api/impact/texts/        -> list all boxes (public)
     /api/impact/texts/{id}/   -> detail (public)
-    Admins can POST/PUT/PATCH/DELETE (unique 'position' ensures exactly one per box).
     """
     queryset = ImpactTextBox.objects.filter(is_active=True)
     serializer_class = ImpactTextBoxSerializer
@@ -121,7 +107,7 @@ class ImpactTextBoxViewSet(viewsets.ModelViewSet):
 class GetInvolvedViewSet(viewsets.ModelViewSet):
     """
     /api/get-involved/ (GET public, POST admin)
-    /api/get-involved/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    /api/get-involved/{id}/ 
     """
     queryset = GetInvolved.objects.filter(is_active=True)
     serializer_class = GetInvolvedSerializer
@@ -133,8 +119,8 @@ class GetInvolvedViewSet(viewsets.ModelViewSet):
 # -------- IPRC --------
 class IprcItemViewSet(viewsets.ModelViewSet):
     """
-    /api/legacy/iprc/ (GET public, POST admin)
-    /api/legacy/iprc/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    /api/legacy/iprc/ 
+    /api/legacy/iprc/{id}/ 
     """
     queryset = IprcItem.objects.all()  # Temporarily show all records for debugging
     serializer_class = IprcItemSerializer
@@ -145,9 +131,9 @@ class IprcItemViewSet(viewsets.ModelViewSet):
 # -------- Events --------
 class EventViewSet(viewsets.ModelViewSet):
     """
-    /api/legacy/events/ (GET public, POST admin)
-    /api/legacy/events/{id}/ (GET public, PUT/PATCH/DELETE admin)
-    /api/legacy/events/{id}/detail/ (GET public)  -> returns EventDetail + gallery
+    /api/legacy/events/ 
+    /api/legacy/events/{id}/ 
+    /api/legacy/events/{id}/detail/ 
     """
     queryset = Event.objects.all()  # Temporarily show all records for debugging
     serializer_class = EventSerializer
@@ -166,7 +152,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
 class EventDetailBySlugView(APIView):
     """
-    /api/legacy/events/slug/<slug>/detail/ (GET public)
+    /api/legacy/events/slug/<slug>/detail/ 
     """
     permission_classes = [permissions.AllowAny]
 
@@ -181,9 +167,7 @@ class EventDetailBySlugView(APIView):
 
 # Admin endpoints to manage the detail & gallery (public reads not needed here)
 class EventDetailAdminViewSet(viewsets.ModelViewSet):
-    """
-    Admin CRUD for the detail record.
-    """
+
     queryset = EventDetail.objects.select_related("event")
     serializer_class = EventDetailSerializer
     permission_classes = [permissions.AllowAny]
@@ -224,8 +208,8 @@ class DebugDataView(APIView):
 
 class StraplineViewSet(viewsets.ModelViewSet):
     """
-    /api/straplines/ (GET public, POST admin)
-    /api/straplines/{id}/ (GET public, PUT/PATCH/DELETE admin)
+    /api/straplines/ 
+    /api/straplines/{id}/ 
     """
     queryset = Strapline.objects.filter(is_active=True)
     serializer_class = StraplineSerializer
@@ -233,7 +217,7 @@ class StraplineViewSet(viewsets.ModelViewSet):
 
 class StraplineLatestView(APIView):
     """
-    /api/straplines/latest/ (GET public)
+    /api/straplines/latest/ 
     Returns the first active strapline by (priority asc, created desc).
     """
     permission_classes = [permissions.AllowAny]
@@ -247,8 +231,8 @@ class StraplineLatestView(APIView):
 
 class SlideViewSet(viewsets.ModelViewSet):
     """
-    /api/slides/      (GET public list)
-    /api/slides/{id}/ (GET public detail)
+    /api/slides/     
+    /api/slides/{id}/ 
     Admin can POST/PUT/PATCH/DELETE (multipart for image).
     """
     queryset = Slide.objects.all()
