@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'sma_endgame',
     'partners',
+    'media_center',
 ]
 
 MIDDLEWARE = [
