@@ -238,6 +238,9 @@ JAZZMIN_SETTINGS = {
         { "label": "Contact", "models": [
             "core.contactmessage",
         ]},
+        { "label": "Media Center", "models": [
+            "media_center.mediapost",
+        ]},
         { "app": "auth", "label": "Authentication & Authorization" },  # Users/Groups
     ],
 
@@ -260,6 +263,7 @@ JAZZMIN_SETTINGS = {
         "core.contactmessage": "fas fa-envelope",
         "auth.user": "fas fa-user",
         "auth.group": "fas fa-user-shield",
+        "media_center.mediapost": "fas fa-bullhorn",
     },
 }
 
