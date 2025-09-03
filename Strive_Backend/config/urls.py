@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/', include('core.urls')),
      path("api/", include("sma_endgame.urls")),
      path("api/", include("partners.urls")),
+      path("api/media-center/", include("media_center.urls", namespace="media_center")),
 ]
 
 # Serve media files during development
