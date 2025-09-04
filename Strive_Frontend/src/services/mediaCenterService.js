@@ -1,49 +1,67 @@
-// src/services/mediaCenterService.js
-
-// Point this to your backend origin. Example:
-// REACT_APP_API_BASE_URL=http://localhost:8000
-const API_BASE = process.env.REACT_APP_API_BASE_URL || "";
+// Uses the same axios instance as your other working services.
+import api from "./api";
 
 /**
- * Format "YYYY-MM-DD" to "DD MMM YYYY" (e.g., 2025-08-12 -> 12 Aug 2025)
+ * Try a list of paths until one returns 200 and an array/JSON.
  */
-function humanDate(isoDate) {
-  try {
-    const d = new Date(isoDate);
-    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
-  } catch {
-    return isoDate;
+async function getFirstOk(paths) {
+  let lastErr;
+  for (const path of paths) {
+    try {
+      const { data } = await api.get(path);
+      return data;
+    } catch (e) {
+      lastErr = e;
+      // continue trying next path
+    }
   }
+  throw lastErr || new Error("No endpoint responded");
 }
 
 /**
- * Map backend post -> frontend card shape your UI expects.
+ * Normalize backend record -> shape expected by your list UI.
  */
+function humanDate(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
+  } catch {
+    return iso;
+  }
+}
 function mapPost(p) {
   return {
     id: p.id,
     title: p.title,
-    date: humanDate(p.date),
-    img: p.image_url,                      // backend serializer provides image_url
-    excerpt: p.description,                // shown as the short text
-    readMoreUrl: p.url || `/news/${p.slug}`// external url if set; otherwise internal slug
+    date: humanDate(p.date || p.created_at || p.updated_at),
+    img: p.image_url || p.image || p.thumbnail || "",
+    excerpt: p.description || p.excerpt || "",
+    readMoreUrl: p.url || (p.slug ? `/news/${p.slug}` : "#!"),
   };
 }
 
-async function fetchJson(url) {
-  const res = await fetch(url, { credentials: "include" });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+/**
+ * Accept both array and paginated {results: []}.
+ */
+function coerceArray(data) {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.results)) return data.results;
+  return [];
 }
 
-export async function getFeaturedStories(limit = 6) {
-  const url = `${API_BASE}/api/media-center/featured-stories/?limit=${limit}`;
-  const data = await fetchJson(url);
-  return Array.isArray(data) ? data.map(mapPost) : [];
+export async function getFeaturedStories() {
+  // Support hyphen/underscore variants if your urls file differs.
+  const data = await getFirstOk([
+    "/media-center/featured-stories/",
+    "/media_center/featured-stories/",
+  ]);
+  return coerceArray(data).map(mapPost);
 }
 
-export async function getPressReleases(limit = 6) {
-  const url = `${API_BASE}/api/media-center/press-releases/?limit=${limit}`;
-  const data = await fetchJson(url);
-  return Array.isArray(data) ? data.map(mapPost) : [];
+export async function getPressReleases() {
+  const data = await getFirstOk([
+    "/media-center/press-releases/",
+    "/media_center/press-releases/",
+  ]);
+  return coerceArray(data).map(mapPost);
 }
