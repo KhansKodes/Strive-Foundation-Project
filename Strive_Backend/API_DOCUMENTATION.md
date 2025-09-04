@@ -54,7 +54,6 @@ The system now supports the following roles:
 ## Registration Process Overview
 
 The patient registration is divided into 3 steps:
-
 1. **Step 1: Basic Information** - Personal details
 2. **Step 2: Medical Confirmation** - Medical history and diagnosis
 3. **Step 3: Financial Assistance** - Financial support requirements
