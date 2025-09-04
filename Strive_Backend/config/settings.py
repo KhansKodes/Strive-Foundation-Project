@@ -238,9 +238,6 @@ JAZZMIN_SETTINGS = {
         { "label": "Contact", "models": [
             "core.contactmessage",
         ]},
-        { "label": "Media Center", "models": [
-            "media_center.mediapost",
-        ]},
         { "app": "auth", "label": "Authentication & Authorization" },  # Users/Groups
     ],
 
