@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MediaPost, GalleryItem
+from .models import MediaPost, GalleryItem, DocumentItem
 
 
 class MediaPostSerializer(serializers.ModelSerializer):
