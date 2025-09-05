@@ -1,309 +1,263 @@
-/* ====== ROOT & HERO SECTION ====== */
+/* ===========================
+   STRIVE LIFE CLUB — Polished UI
+   Drop-in replacement CSS
+   =========================== */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg: #f7f9ff;
+  --card: #ffffff;
+  --ink: #223144;
+  --ink-soft: #465571;
+  --brand: #0b5fff;
+  --brand-ink: #214099;
+  --brand-ink-2: #2e4b9b;
+  --muted: #5a6b85;
+  --border: #e3e9ff;
+  --border-2: #d9e5ff;
+  --shadow-1: 0 6px 26px #173b5b0d;
+  --shadow-2: 0 10px 44px #0c235533, 0 2px 12px #c1e6f028;
+  --radius: 16px;
+}
+
+/* ---------- Root & base ---------- */
 .slc-root {
   font-family: 'Segoe UI', Arial, sans-serif;
-  color: #223144;
+  color: var(--ink);
   min-height: 100vh;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* ---------- Hero ---------- */
 .slc-hero {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: clamp(280px, 42vw, 420px);
   display: flex;
   align-items: center;
   justify-content: center;
   background-size: cover;
   background-position: center;
   overflow: hidden;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
 }
 .slc-hero-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(15,18,38, 0.68);
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,12,34,.62), rgba(8,12,34,.62));
   z-index: 1;
 }
 .slc-hero-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative; z-index: 2;
   text-align: center;
-  width: 90%;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 32px 0;
+  width: min(760px, 92vw);
+  padding: 28px 0;
 }
 .slc-hero-title {
   color: #fff;
-  font-size: 2.8rem;
-  letter-spacing: 2px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  text-shadow: 0 2px 14px #1119;
+  font-size: clamp(1.6rem, 3.8vw, 3rem);
+  letter-spacing: .5px;
+  font-weight: 800;
+  margin-bottom: .35rem;
+  text-shadow: 0 2px 14px #0007;
 }
 .slc-hero-desc {
-  color: #f9fafb;
-  font-size: 1.2rem;
-  font-weight: 400;
-  margin-bottom: 22px;
-  text-shadow: 0 1px 8px #222a;
+  color: #f3f6ff;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 500;
+  margin-bottom: 14px;
+  text-shadow: 0 1px 8px #0006;
 }
 
-/* CSS */
+/* CTA button */
 .button-73 {
   appearance: none;
-  background-color: #FFFFFF;
-  border-radius: 40em;
-  border-style: none;
+  background-color: #fff;
+  border-radius: 999px;
+  border: none;
   box-shadow: #ADCFFF 0 -12px 6px inset;
-  box-sizing: border-box;
-  color: #000000;
+  color: #000;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system,sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -.24px;
-  margin: 0;
-  outline: none;
-  padding: 1rem 1.3rem;
-  quotes: auto;
-  text-align: center;
-  text-decoration: none;
-  transition: all .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: .85rem 1.35rem;
+  transition: transform .15s, box-shadow .15s, background .15s;
 }
+.button-73:hover { background-color: #FFC229; box-shadow: #FF6314 0 -6px 8px inset; transform: translateY(-1px) scale(1.02); }
+.button-73:active { transform: scale(.99); }
+.button-73:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
-.button-73:hover {
-  background-color: #FFC229;
-  box-shadow: #FF6314 0 -6px 8px inset;
-  transform: scale(1.125);
-}
-
-.button-73:active {
-  transform: scale(1.025);
-}
-
-@media (min-width: 768px) {
-  .button-73 {
-    font-size: 1.5rem;
-    padding: .75rem 2rem;
-  }
-}
-/* ====== HERO VIDEO CARD OVERLAP ====== */
+/* ---------- Hero video overlap ---------- */
 .slc-hero-video-overlap {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -80px;
-  margin-bottom: 32px;
+  margin-top: -70px;
+  margin-bottom: 24px;
   position: relative;
   z-index: 11;
-  height: 320px;
-  /* border: 1px solid #000; */
 }
 .slc-iframe-wrap {
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 44px #0c235533, 0 1.5px 12px #c1e6f028;
-  background: #fff;
-  border: 2.5px solid #e3e8ff;
+  box-shadow: var(--shadow-2);
+  background: var(--card);
+  border: 2px solid var(--border);
   padding: 0;
-  width: 700px;
-  max-width: 96vw;
-  transition: box-shadow 0.2s, transform 0.15s;
+  width: min(760px, 96vw);
+  height: clamp(180px, 28vw, 320px);
+  transition: box-shadow .18s, transform .12s;
 }
-.slc-iframe-wrap:hover {
-  box-shadow: 0 18px 50px #29419444, 0 2px 14px #fff;
-  transform: scale(1.018);
-}
-.slc-hero-video {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
+.slc-iframe-wrap:hover { box-shadow: 0 18px 50px #29419444, 0 2px 14px #fff; transform: translateY(-2px); }
+.slc-hero-video { width: 100%; height: 100%; border: 0; display: block; }
 
-/* ====== TABS ====== */
+/* ---------- Tabs ---------- */
 .slc-tabs {
   display: flex;
   justify-content: center;
-  gap: 0px;
-  margin-bottom: 18px;
-  margin-top: 0;
-  border-radius: 22px;
-  box-shadow: 0 1px 16px #4d67ee13;
-  overflow: hidden;
   width: max-content;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 12px;
   background: #fff;
-  
-  
+  border-radius: 14px;
+  box-shadow: 0 2px 20px #4d67ee13;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
 .slc-tab-btn {
-  color: #214099;
+  color: var(--brand-ink);
   border: none;
-  outline: none;
-  padding: 15px 32px;
-  font-size: 1.09rem;
-  font-weight: 700;
-  background: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 800;
+  background: transparent;
   cursor: pointer;
-  transition: all 0.18s;
-  border-bottom: 4px solid transparent;
-  border-radius: 0;
-  box-shadow: none;
-  border-bottom: 4px solid #3983fa;
+  transition: background .15s, color .15s;
 }
-.slc-tab-btn.active {
-  background: #0044ff;
-  color: white;
-  box-shadow: 0 8px 22px #5388ff18;
-  z-index: 2;
-  border-bottom: none;
-}
-.slc-tab-btn:not(.active):hover {
-  background: #e7eeff;
-  color: #3751ad;
-  border-bottom: 4px solid #b6ccff;
-}
+.slc-tab-btn.active { background: var(--brand); color: #fff; }
+.slc-tab-btn:not(.active):hover { background: #eef4ff; }
+.slc-tab-btn:focus-visible { outline: 3px solid #9ec1ff; outline-offset: -3px; }
 
-/* ====== TAB CONTENT ROOT ====== */
+/* ---------- Content container ---------- */
 .slc-tab-content {
   margin: 0 auto;
-  background: none;
-  border-radius: 18px;
-  padding: 20px;
-  margin-top: 16px;
-  margin: 20px 100px;
-  background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 48%, #6654F1 100%);
+  padding: 18px;
+  width: min(1100px, 94vw);
 }
 
-/* ====== RADIO FILTERS ====== */
+/* ---------- Filters ---------- */
 .slc-awaiting-filters {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-evenly;
-  gap: 19px;
-  background: #f4f7fd;
-  border-radius: 22px;
-  padding: 10px 16px;
-  box-shadow: 0 2px 14px #b6ccff14;
-  margin-bottom: 13px;
-}
-.slc-awaiting-filters span {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #3a4577;
-  margin-right: 8px;
-}
-.slc-checkbox-label {
-  border: 1.5px solid #c6d8ff;
-  border-radius: 16px;
+  gap: 10px 12px;
   background: #fff;
-  padding: 3px 11px 3px 7px;
-  margin-right: 2px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 12px #b6ccff14;
+  margin-bottom: 14px;
+}
+.slc-awaiting-filters span { font-size: 1rem; font-weight: 800; color: #304070; margin-right: 4px; }
+.slc-checkbox-label {
+  border: 1px solid #cfe0ff;
+  border-radius: 999px;
+  background: #fff;
+  padding: 6px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 0.97rem;
-  transition: background 0.16s, border 0.13s;
+  font-size: .96rem;
+  gap: 6px;
+  transition: background .12s, border .12s;
 }
-.slc-checkbox-label input[type="radio"]:checked + span {
-  color: #3a5ce0;
-  font-weight: 700;
-}
-.slc-checkbox-label input[type="radio"] {
-  accent-color: #4d67ee;
-  margin-right: 3px;
-}
+.slc-checkbox-label input[type="radio"] { accent-color: #4d67ee; }
+.slc-checkbox-label input[type="radio"]:checked + span { color: #2240d0; font-weight: 800; }
 
-/* ====== CHART BLOCK (BOTH TABS) ====== */
+/* ---------- Charts ---------- */
 .slc-chart-block {
-  background: rgba(255,255,255, 0.97);
-  border-radius: 18px;
+  background: #fff;
+  border-radius: 16px;
   box-shadow: 0 6px 24px #bed9ff18;
-  padding: 30px 24px 18px 24px;
+  padding: 18px 16px 10px;
   margin-bottom: 15px;
-  border: 1.6px solid #e2eaff;
+  border: 1px solid var(--border);
 }
 .slc-chart-title {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #3751ad;
-  margin-bottom: 4px;
-  letter-spacing: 1px;
+  font-weight: 800;
+  font-size: 1.08rem;
+  color: var(--brand-ink-2);
+  margin: 6px 8px 0;
+  letter-spacing: .2px;
 }
 
-/* ====== IMPACT ROW (TAB 2) ====== */
+/* ---------- Impact row ---------- */
 .slc-tab-impact-row {
-  display: flex;
-  gap: 38px;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1.2fr .9fr;
+  gap: 22px;
+  align-items: start;
 }
-.slc-tab-impact-details {
-  flex: 1 1 280px;
-  min-width: 280px;
-  max-width: 420px;
-  padding: 10px 0 0 0;
-}
+.slc-tab-impact-details { padding: 6px 2px; }
 .slc-tab-title {
-  font-size: 1.35rem;
-  font-weight: bold;
+  font-size: 1.15rem;
+  font-weight: 800;
   color: #264f5e;
-  margin-bottom: 10px;
-  letter-spacing: 1.2px;
+  margin-bottom: 8px;
+  letter-spacing: .3px;
 }
 .slc-tab-desc {
-  font-size: 1.09rem;
+  font-size: 1rem;
   color: #3d4767;
-  margin-bottom: 18px;
-  font-weight: 400;
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 .slc-tab-video {
-  width: 99%;
-  max-width: 350px;
-  height: 165px;
-  border-radius: 13px;
-  margin-top: 11px;
+  width: 100%;
+  height: clamp(120px, 20vw, 180px);
+  max-width: 460px;
+  border-radius: 12px;
+  margin-top: 6px;
   box-shadow: 0 3px 22px #1ec2b815;
-  border: 1.2px solid #4d67ee11;
+  border: 1px solid #e6ecff;
   object-fit: cover;
 }
 
-/* ====== PATIENT TABLE (TAB 1) ====== */
+/* ---------- List headers (awaiting tab) ---------- */
+.slc-tab-title + .slc-tab-desc { margin-bottom: 12px; }
+
+/* ---------- Patient table ---------- */
 .slc-patient-table-wrap {
   overflow-x: auto;
-  margin-top: 11px;
+  margin-top: 10px;
   background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 6px 32px #b8e2fa21, 0 1.5px 12px #d1d8ff09;
-  padding-bottom: 16px;
-  margin-bottom: 26px;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px #b8e2fa21, 0 1.5px 12px #d1d8ff09;
+  padding-bottom: 6px;
+  border: 1px solid var(--border);
 }
 .slc-patient-table {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
   min-width: 780px;
-  font-size: 1.01rem;
+  font-size: 1rem;
   background: transparent;
 }
 .slc-patient-table thead {
-  background: #e9f3fc;
+  background: #f4f7ff;
   color: #2c4e83;
 }
 .slc-patient-table th {
+  position: sticky; top: 0; z-index: 1;
   font-weight: 800;
-  font-size: 1.04rem;
-  background: #f1f4fa;
-  border-bottom: 2.2px solid #aac5fa;
-  padding: 14px 9px;
+  font-size: 1rem;
+  background: #f4f7ff;
+  border-bottom: 2px solid var(--border-2);
+  padding: 12px 9px;
   text-align: center;
 }
 .slc-patient-table td {
@@ -311,127 +265,105 @@
   color: #233256;
   padding: 11px 8px;
   background: #fff;
-  border-bottom: 1px solid #e8eaf1;
+  border-bottom: 1px solid #eef2ff;
   transition: background 0.12s;
   text-align: center;
 }
-.slc-patient-table tbody tr:nth-child(even) td {
-  background: #f6f9fd;
-}
-.slc-patient-table tbody tr:hover td {
-  background: #e6f1ff;
-}
-.slc-urgency {
-  font-weight: bold;
-  font-size: 1.07rem;
-  letter-spacing: 0.5px;
-}
+.slc-patient-table tbody tr:nth-child(even) td { background: #f9fbff; }
+.slc-patient-table tbody tr:hover td { background: #eef5ff; }
+
+/* Progress */
 .slc-progress-bar-wrap {
-  width: 90px;
-  background: #eaf5fc;
-  height: 13px;
-  border-radius: 10px;
+  width: 110px;
+  background: #edf4ff;
+  height: 12px;
+  border-radius: 999px;
   overflow: hidden;
   margin: 0 auto 5px auto;
   position: relative;
-  box-shadow: 0 2px 10px #42ecba12;
+  box-shadow: inset 0 1px 2px #00000010;
 }
 .slc-progress-bar {
   height: 100%;
-  border-radius: 10px;
+  border-radius: 999px;
   transition: width 0.35s cubic-bezier(.8,0,.28,1.05);
 }
 .slc-progress-percent {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #2b4b26;
+  font-size: .95rem;
+  font-weight: 800;
+  color: #214b27;
   margin-left: 2px;
 }
 
-/* ====== SHARED: GLASS CARD EFFECT ====== */
+/* Urgency tag */
+.slc-urgency { font-weight: 800; font-size: 1rem; letter-spacing: .3px; }
+
+/* ---------- Glass util ---------- */
 .glass-card {
-  background: rgba(255,255,255,0.93);
-  border-radius: 18px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 16px;
   box-shadow: 0 2px 36px #c5e1fd18;
-  border: 1.2px solid #dae7fd;
-  backdrop-filter: blur(1.5px);
+  border: 1px solid #dae7fd;
+  backdrop-filter: blur(1.2px);
 }
 
-/* ====== RESPONSIVENESS ====== */
+/* ---------- Accessibility focus for links in table (if you add <a>) ---------- */
+.slc-patient-table a:focus-visible {
+  outline: 3px solid #9ec1ff;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Responsive tweaks ---------- */
 @media (max-width: 950px) {
-  .slc-tab-impact-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 26px;
-  }
-  .slc-chart-block, .slc-tab-impact-details {
-    max-width: 99vw;
-    min-width: 220px;
-  }
+  .slc-tab-impact-row { grid-template-columns: 1fr; gap: 18px; }
+  .slc-tab-video { height: 140px; max-width: 100%; }
 }
-@media (max-width: 650px) {
-  .slc-hero {
-    height: 130px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+
+@media (max-width: 760px) {
+  .slc-hero-video-overlap { margin-top: -40px; }
+  .slc-iframe-wrap { height: 180px; }
+
+  /* Table -> cards (no JSX change needed) */
+  .slc-patient-table { min-width: unset; border: 0; }
+  .slc-patient-table thead { display: none; }
+  .slc-patient-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+    background: #fff;
+    padding: 12px;
+    margin: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-1);
   }
-  .slc-hero-title {
-    font-size: 1.12rem;
+  .slc-patient-table td {
+    background: transparent;
+    border: 0;
+    text-align: left;
+    padding: 4px 2px;
   }
-  .slc-hero-desc {
-    font-size: 0.93rem;
-  }
-  .button-73 {
-    padding: 9px 18px;
-    font-size: 1rem;
-    margin-top: 4px;
-  }
-  .slc-hero-video-overlap {
-    margin-top: -36px;
-    margin-bottom: 10px;
-  }
-  .slc-iframe-wrap {
-    width: 97vw;
-    height: 120px;
-  }
-  .slc-tab-video {
-    height: 90px;
-    max-width: 97vw;
-  }
-  .slc-patient-table th, .slc-patient-table td {
-    padding: 7px 3px;
-    font-size: 0.94rem;
-  }
-  .slc-tab-content {
-    padding: 16px 1px 18px 1px;
-  }
+
+  /* Labels per column using nth-child (keeps your JSX unchanged) */
+  .slc-patient-table td:nth-child(1)::before { content: "Name: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(2)::before { content: "Age: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(3)::before { content: "Province: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(4)::before { content: "SMA Type: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(5)::before { content: "Amount Needed: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(6)::before { content: "Raised: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(7)::before { content: "Progress: "; font-weight: 800; color: var(--muted); }
+  .slc-patient-table td:nth-child(8)::before { content: "Urgency: "; font-weight: 800; color: var(--muted); }
+
+  .slc-progress-bar-wrap { width: 100%; }
 }
-@media (max-width: 500px) {
-  .slc-root {
-    font-size: 92%;
-  }
-  .slc-hero-content {
-    padding: 7px 0;
-  }
-  .slc-hero {
-    height: 86px;
-  }
-  .slc-tabs {
-    flex-direction: column;
-    width: 100%;
-    border-radius: 0;
-  }
-  .slc-tab-btn {
-    padding: 12px 7px;
-    font-size: 1rem;
-    border-radius: 0;
-    width: 100%;
-    border-bottom: 1px solid #eceffb;
-  }
-  .slc-iframe-wrap {
-    height: 72px;
-  }
-  .slc-tab-video {
-    height: 54px;
-  }
+
+@media (max-width: 520px) {
+  .slc-patient-table tbody tr { grid-template-columns: 1fr; }
+  .slc-hero { height: 220px; }
+  .button-73 { font-size: 1rem; padding: .7rem 1.15rem; }
 }
+
+/* Optional: make names look interactive without changing JSX */
+.slc-patient-table td:first-child { font-weight: 800; color: #0b57d0; }
+.slc-patient-table tbody tr:hover td:first-child { text-decoration: underline; cursor: pointer; }
