@@ -46,3 +46,37 @@ class GalleryItemSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         url = obj.image.url
         return request.build_absolute_uri(url) if request else url        
+
+
+class DocumentItemSerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
+    size_bytes = serializers.ReadOnlyField()
+    ext = serializers.ReadOnlyField()
+
+    class Meta:
+        model = DocumentItem
+        fields = [
+            "id",
+            "type",
+            "date",
+            "title",
+            "description",
+            "url",         # external link if provided
+            "file_url",    # absolute URL to uploaded file (if any)
+            "image_url",   # absolute URL to thumb/cover (if any)
+            "size_bytes",  # so frontend can render “4.6 MB”
+            "ext",         # e.g., PDF, PNG
+        ]
+
+    def _abs(self, path):
+        if not path:
+            return None
+        req = self.context.get("request")
+        return req.build_absolute_uri(path) if req else path
+
+    def get_file_url(self, obj):
+        return self._abs(getattr(obj.file, "url", None))
+
+    def get_image_url(self, obj):
+        return self._abs(getattr(obj.image, "url", None))        
