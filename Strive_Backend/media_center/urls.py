@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import FeaturedStoriesList, PressReleasesList, MediaPostDetail
+from .views import (FeaturedStoriesList, PressReleasesList, MediaPostDetail,
+       GalleryPhotosList, GalleryVideosList, GalleryCampaignList, GalleryCombinedList)
 
 app_name = "media_center"
 
@@ -7,4 +8,8 @@ urlpatterns = [
     path("featured-stories/", FeaturedStoriesList.as_view(), name="featured-stories"),
     path("press-releases/", PressReleasesList.as_view(), name="press-releases"),
     path("post/<slug:slug>/", MediaPostDetail.as_view(), name="post-detail"),  # optional
+    path("gallery/photos/", GalleryPhotosList.as_view(), name="gallery-photos"),
+    path("gallery/videos/", GalleryVideosList.as_view(), name="gallery-videos"),
+    path("gallery/campaign-highlights/", GalleryCampaignList.as_view(), name="gallery-campaign"),
+    path("gallery/", GalleryCombinedList.as_view(), name="gallery-combined"),  # optional
 ]
