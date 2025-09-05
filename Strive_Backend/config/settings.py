@@ -260,8 +260,10 @@ JAZZMIN_SETTINGS = {
         "core.contactmessage": "fas fa-envelope",
         "auth.user": "fas fa-user",
         "auth.group": "fas fa-user-shield",
+        
         "media_center.mediapost": "fas fa-bullhorn",
-         "media_center.galleryitem": "fas fa-photo-video",
+        "media_center.galleryitem": "fas fa-photo-video",
+        "media_center.documentitem": "fas fa-file-alt",
     },
 }
 
