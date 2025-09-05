@@ -1,10 +1,42 @@
-import React, { useState } from "react";
+// src/components/SMAEndgame/StriveLifeClub/StriveLifeClubPage.js
+import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import "./StriveLifeClubPage.css";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+  Legend,
 } from "recharts";
 
-// Dummy Data for charts and patients
+/* ---------------------------------------
+   Helpers
+----------------------------------------*/
+const slugify = (str = "") =>
+  String(str)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+const urgencyColor = (urgency) => {
+  switch (urgency) {
+    case "Critical":
+      return "#e74c3c";
+    case "High":
+      return "#f39c12";
+    default:
+      return "#27ae60";
+  }
+};
+
+/* ---------------------------------------
+   Dummy data
+----------------------------------------*/
 const impactData = [
   { year: "2021", Treated: 20, Supported: 12 },
   { year: "2022", Treated: 38, Supported: 16 },
@@ -43,7 +75,7 @@ const awaitingGraphData = {
   ],
 };
 
-const patientList = [
+const RAW_PATIENTS = [
   {
     name: "Ahmed Khan",
     age: 2,
@@ -93,39 +125,35 @@ const chartOptions = [
 const HERO_BG =
   "https://media.istockphoto.com/id/926196952/photo/beautiful-nature-background.jpg?s=170667a&w=0&k=20&c=3CI8wa6kKzgUv09X_rQhermyjeGhaAlp9HiAe9v65rE=";
 const SAMPLE_VIDEO = "https://www.w3schools.com/html/mov_bbb.mp4";
-const YOUTUBE_EMBED = "https://www.youtube.com/embed/X6Tsqg-tNU8?autoplay=1&mute=1&loop=1&playlist=X6Tsqg-tNU8";
+const YOUTUBE_EMBED =
+  "https://www.youtube.com/embed/X6Tsqg-tNU8?autoplay=1&mute=1&loop=1&playlist=X6Tsqg-tNU8";
 
+/* ---------------------------------------
+   Component
+----------------------------------------*/
 export default function StriveLifeClubPage() {
   const [activeTab, setActiveTab] = useState("awaiting");
   const [checkedChart, setCheckedChart] = useState("province");
 
-  const getAwaitingChartData = () => awaitingGraphData[checkedChart] || [];
+  // Precompute slugs once
+  const patientList = useMemo(
+    () => RAW_PATIENTS.map((p) => ({ ...p, slug: slugify(p.name) })),
+    []
+  );
 
-  // Helper: Urgency color
-  const urgencyColor = (urgency) => {
-    switch (urgency) {
-      case "Critical":
-        return "#e74c3c";
-      case "High":
-        return "#f39c12";
-      default:
-        return "#27ae60";
-    }
-  };
+  const getAwaitingChartData = () => awaitingGraphData[checkedChart] || [];
 
   return (
     <div className="slc-root">
-      {/* HERO SECTION */}
-      <div
-        className="slc-hero"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
-      >
+      {/* HERO */}
+      <div className="slc-hero" style={{ backgroundImage: `url(${HERO_BG})` }}>
         <div className="slc-hero-overlay" />
         <div className="slc-hero-content">
           <h1 className="slc-hero-title">STRIVE LIFE CLUB</h1>
           <div className="slc-hero-desc">
             <span>
-              <b>Saving Lives</b> through collective action — join us to give children with SMA a second chance.
+              <b>Saving Lives</b> through collective action — join us to give
+              children with SMA a second chance.
             </span>
           </div>
           <button className="button-73">DONATE NOW!</button>
@@ -148,14 +176,18 @@ export default function StriveLifeClubPage() {
       </div>
 
       {/* TABS */}
-      <div className="slc-tabs">
+      <div className="slc-tabs" role="tablist" aria-label="Strive Life Club Sections">
         <button
+          role="tab"
+          aria-selected={activeTab === "awaiting"}
           className={`slc-tab-btn ${activeTab === "awaiting" ? "active" : ""}`}
           onClick={() => setActiveTab("awaiting")}
         >
           Patients Awaiting Treatment
         </button>
         <button
+          role="tab"
+          aria-selected={activeTab === "impact"}
           className={`slc-tab-btn ${activeTab === "impact" ? "active" : ""}`}
           onClick={() => setActiveTab("impact")}
         >
@@ -165,7 +197,6 @@ export default function StriveLifeClubPage() {
 
       {/* TAB CONTENT */}
       <div className="slc-tab-content">
-
         {activeTab === "impact" ? (
           <div className="slc-tab-impact-row">
             <div className="slc-chart-block glass-card impact-chart">
@@ -207,12 +238,12 @@ export default function StriveLifeClubPage() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+
             <div className="slc-tab-impact-details">
-              <div className="slc-tab-title">
-                Transforming Futures — One Child at a Time
-              </div>
+              <div className="slc-tab-title">Transforming Futures — One Child at a Time</div>
               <div className="slc-tab-desc">
-                Over <b>100+ SMA children</b> have received lifesaving therapies through your support.<br />
+                Over <b>100+ SMA children</b> have received lifesaving therapies through your support.
+                <br />
                 Our journey continues with every new smile we create!
               </div>
               <video
@@ -229,7 +260,7 @@ export default function StriveLifeClubPage() {
           </div>
         ) : (
           <>
-            {/* Chart filters */}
+            {/* Filters */}
             <div className="slc-awaiting-filters">
               <span>See graph:</span>
               {chartOptions.map((option) => (
@@ -245,7 +276,8 @@ export default function StriveLifeClubPage() {
                 </label>
               ))}
             </div>
-            {/* Chart */}
+
+            {/* Awaiting chart */}
             <div className="slc-chart-block glass-card">
               <div className="slc-chart-title">Patients Awaiting Support</div>
               <ResponsiveContainer width="100%" height={240}>
@@ -275,11 +307,16 @@ export default function StriveLifeClubPage() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            {/* Table of patients */}
-            <div className="slc-tab-title" style={{ marginTop: 28 }}>Current Patients Awaiting Treatment</div>
-            <div className="slc-tab-desc" style={{ marginBottom: 18 }}>
-              Every patient on this list urgently needs your help. Your donation bridges the gap between hope and healing.
+
+            {/* Table */}
+            <div className="slc-tab-title" style={{ marginTop: 28 }}>
+              Current Patients Awaiting Treatment
             </div>
+            <div className="slc-tab-desc" style={{ marginBottom: 18 }}>
+              Every patient on this list urgently needs your help. Your donation bridges the gap between
+              hope and healing.
+            </div>
+
             <div className="slc-patient-table-wrap">
               <table className="slc-patient-table">
                 <thead>
@@ -295,40 +332,49 @@ export default function StriveLifeClubPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {patientList.map((p, i) => (
-                    <tr key={i}>
-                      <td>{p.name}</td>
-                      <td>{p.age}</td>
-                      <td>{p.province}</td>
-                      <td>{p.smaType}</td>
-                      <td>Rs. {p.amountRequired.toLocaleString()}</td>
-                      <td>Rs. {p.raised.toLocaleString()}</td>
-                      <td>
-                        <div className="slc-progress-bar-wrap">
-                          <div
-                            className="slc-progress-bar"
-                            style={{
-                              width: `${Math.min((p.raised / p.amountRequired) * 100, 100)}%`,
-                              background: urgencyColor(p.urgency),
-                              boxShadow: `0 1px 8px ${urgencyColor(p.urgency)}33`
-                            }}
-                          ></div>
-                        </div>
-                        <span className="slc-progress-percent">
-                          {Math.round((p.raised / p.amountRequired) * 100)}%
-                        </span>
-                      </td>
-                      <td>
-                        <span className="slc-urgency" style={{ color: urgencyColor(p.urgency) }}>
-                          {p.urgency}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {patientList.map((p, i) => {
+                    const pct = Math.min((p.raised / p.amountRequired) * 100, 100);
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <Link to={`/patients/${p.slug}`} state={{ patientId: p.id }}>
+                            {p.name}
+                          </Link>
+                        </td>
+                        <td>{p.age}</td>
+                        <td>{p.province}</td>
+                        <td>{p.smaType}</td>
+                        <td>Rs. {p.amountRequired.toLocaleString()}</td>
+                        <td>Rs. {p.raised.toLocaleString()}</td>
+                        <td>
+                          <div className="slc-progress-bar-wrap" aria-hidden="true">
+                            <div
+                              className="slc-progress-bar"
+                              style={{
+                                width: `${pct}%`,
+                                background: urgencyColor(p.urgency),
+                                boxShadow: `0 1px 8px ${urgencyColor(p.urgency)}33`,
+                              }}
+                            />
+                          </div>
+                          <span className="slc-progress-percent">{Math.round(pct)}%</span>
+                        </td>
+                        <td>
+                          <span
+                            className="slc-urgency"
+                            style={{ color: urgencyColor(p.urgency) }}
+                          >
+                            {p.urgency}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
-            {/* Video */}
+
+            {/* Supporting video */}
             <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
               <video
                 src={SAMPLE_VIDEO}

@@ -17,6 +17,7 @@ import RegisterPatientPage from '../components/Auth/RegisterPatientPage';
 
 import SMAEndgamePage from '../components/SMAEndgame/SMAEndgamePage';
 import StriveLifeClubPage from '../components/SMAEndgame/StriveLifeClub/StriveLifeClubPage';
+import PatientDetailPage from "../components/SMAEndgame/StriveLifeClub/PatientDetailPage";
 import StriveBeaconInitiativePage from '../components/SMAEndgame/StriveBeaconInitiative/StriveBeaconInitiativePage';
 import StriveCureLabPage from '../components/SMAEndgame/StriveCureLab/StriveCureLabPage';
 
@@ -47,6 +48,7 @@ export default function AppRoutes() {
 
         <Route path="sma-endgame" element={<SMAEndgamePage />} />
         <Route path="sma-endgame/life-club" element={<StriveLifeClubPage />} />
+        <Route path="/patients/:slug" element={<PatientDetailPage />} />
         <Route path="sma-endgame/beacon-initiative" element={<StriveBeaconInitiativePage />} />
         <Route path="sma-endgame/cure-lab" element={<StriveCureLabPage />} />
 

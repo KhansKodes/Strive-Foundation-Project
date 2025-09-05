@@ -1,80 +1,88 @@
-import React, { useState } from 'react';
-import './ContactForm.css';
-import api from '../../services/api';
+import React, { useState } from "react";
+import api from "../../services/api";
+import "./ContactForm.css";
 
 export default function ContactForm() {
-  const [f, setF] = useState({ name: '', email: '', subject: '', message: '' });
+  const [f, setF] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const handleChange = e =>
-    setF({ ...f, [e.target.name]: e.target.value });
+  const onChange = (e) => setF({ ...f, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
-      await api.post('/contact/', f);
+      await api.post("/contact/", f); // backend contract unchanged
       setSent(true);
-      setF({ name: '', email: '', subject: '', message: '' });
+      setF({ name: "", email: "", subject: "", message: "" });
       setTimeout(() => setSent(false), 2500);
-    } catch (err) {
-      setError('Failed to send message. Please try again.');
+    } catch {
+      setError("Failed to send message. Please try again.");
     }
   };
 
   return (
-    <form className="contactform" onSubmit={handleSubmit} autoComplete="off">
-      <div className="form-row">
-        <div className="form-group">
+    <form className="cpf" onSubmit={onSubmit} noValidate autoComplete="off">
+      <div className="cpf-row">
+        <div className="cpf-field">
           <input
-            name="name"
             id="name"
+            name="name"
             value={f.name}
-            onChange={handleChange}
-            required
+            onChange={onChange}
             placeholder=" "
+            required
           />
           <label htmlFor="name">Name</label>
         </div>
-        <div className="form-group">
+
+        <div className="cpf-field">
           <input
-            name="email"
             id="email"
+            name="email"
             type="email"
             value={f.email}
-            onChange={handleChange}
-            required
+            onChange={onChange}
             placeholder=" "
+            required
           />
           <label htmlFor="email">Email</label>
         </div>
       </div>
-      <div className="form-group">
+
+      <div className="cpf-field">
         <input
-          name="subject"
           id="subject"
+          name="subject"
           value={f.subject}
-          onChange={handleChange}
-          required
+          onChange={onChange}
           placeholder=" "
+          required
         />
         <label htmlFor="subject">Subject</label>
       </div>
-      <div className="form-group">
+
+      <div className="cpf-field">
         <textarea
-          name="message"
           id="message"
+          name="message"
           rows="5"
           value={f.message}
-          onChange={handleChange}
-          required
+          onChange={onChange}
           placeholder=" "
+          required
         />
         <label htmlFor="message">Message</label>
       </div>
-      {error && <div style={{ color: 'red', marginBottom: 8 }}>{error}</div>}
-      <button type="submit" className={sent ? "sent" : ""} disabled={sent}>
+
+      {error && <p className="cpf-error" role="alert">{error}</p>}
+
+      <button
+        type="submit"
+        className={`cpf-submit ${sent ? "is-sent" : ""}`}
+        disabled={sent}
+      >
         {sent ? "Message Sent!" : "Send Message"}
       </button>
     </form>

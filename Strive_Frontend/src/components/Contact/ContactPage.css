@@ -1,122 +1,148 @@
+/* ===== Contact Page (scoped) ===== */
 :root {
-  --primary-purple: #553CDA;
-  --primary-blue: #4E21CA;
-  --whatsapp: #23c261;
-  --phone: #4E21CA;
-  --email: #1565C0;
-  --bg-gradient: linear-gradient(120deg, #f7f8fc 40%, #e9ebff 100%);
+  --cp-ink: #0f172a;           /* slate-900 */
+  --cp-muted: #475569;         /* slate-600 */
+  --cp-border: rgba(148, 163, 184, 0.28);
+  --cp-glass: rgba(255, 255, 255, 0.78);
+  --cp-ring: rgba(14, 165, 233, 0.25);
+  --cp-brand: #0ea5e9;         /* sky-500 */
+  --cp-brand-strong: #3b82f6;  /* blue-500 */
+  --cp-radius-xl: 22px;
+  --cp-max: 1200px;
 }
 
-
-.contact-section {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 100px;
-}
-
-.contact-container {
-  /* background: #fff; */
-  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-  border-radius: 20px;
-  box-shadow: 0 8px 44px 0 rgba(80,60,160,0.11);
-  width: 100%;
-  padding: 34px 22px 32px 22px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.contact-header {
-  text-align: center;
-  margin-bottom: 30px;
-  width: 100%;
-}
-.contact-header h1 {
-  font-size: 2rem;
-  color: var(--primary-purple);
-  font-weight: 800;
-  margin-bottom: 7px;
-  letter-spacing: 1px;
-}
-.contact-header p {
-  color: #444;
-  font-size: 1.11rem;
-  opacity: 0.8;
-}
-
-.contact-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  align-items: center;
-}
-
-.contact-links {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-  width: 100%;
-  margin-top: 10px;
-}
-.contact-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1.07rem;
-  font-weight: 500;
-  padding: 12px 16px;
-  border-radius: 10px;
-  background: #f8fafc;
-  box-shadow: 0 1px 8px 0 rgba(90,60,160,0.08);
-  border: 1.4px solid #f3f2fe;
-  color: #333;
-  transition: 0.14s;
-  text-decoration: none;
-}
-.contact-link.whatsapp { color: var(--whatsapp); border-color: #d4faea; }
-.contact-link.phone    { color: var(--phone); border-color: #e5e1fa; }
-.contact-link.email    { color: var(--email); border-color: #dbe9fa; }
-.contact-link:hover {
-  background: #f0f3fd;
-  box-shadow: 0 4px 20px 0 rgba(80,60,160,0.13);
-  transform: translateY(-1px) scale(1.01);
-}
-
-.map-wrapper {
-  width: 100%;
-  border-radius: 16px;
+.contact-page {
+  position: relative;
+  min-height: 100%;
+  padding: clamp(28px, 4vw, 48px) 16px 24px;
   overflow: hidden;
-  margin: 28px 0 0 0;
-  min-height: 200px;
-  box-shadow: 0 4px 26px 0 rgba(80,60,160,0.10);
-  border: 1.5px solid #f4f4fa;
-  background: #f8f8ff;
+  isolation: isolate;
+  background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 35%, #ffffff 100%);
 }
 
-.contact-map {
-  border: none;
+/* subtle color blobs behind the card */
+.cp-bg::before,
+.cp-bg::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(40% 40% at 20% 10%, rgba(14,165,233,.25), transparent 60%),
+    radial-gradient(36% 36% at 90% 30%, rgba(99,102,241,.20), transparent 60%);
+  filter: blur(70px);
+  z-index: -1;
+}
+.cp-bg { position: absolute; inset: 0; z-index: -2; }
+
+.cp-container {
+  max-width: var(--cp-max);
+  margin: 0 auto;
+}
+
+/* Glass card */
+.cp-card {
+  background: var(--cp-glass);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-radius-xl);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: clamp(18px, 3.5vw, 32px);
+  box-shadow: 0 20px 50px rgba(2, 6, 23, 0.12);
+}
+
+.cp-header h1 {
+  margin: 0 0 6px;
+  font-size: clamp(26px, 3.2vw, 38px);
+  color: var(--cp-ink);
+  letter-spacing: .02em;
+  text-align: center;
+}
+.cp-header p {
+  margin: 0 0 18px;
+  color: var(--cp-muted);
+  text-align: center;
+}
+
+/* inside card layout */
+.cp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* was 1.1fr .9fr */
+  gap: clamp(18px, 3vw, 28px);
+  align-items: stretch;             /* stretch both sides equally */
+}
+
+.cp-image {
+  position: relative;
+  min-height: 100%;                 /* make it fill same height */
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--cp-border);
+  display: flex;                    /* ensure inner fills */
+}
+
+.cp-image-fill {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(.9);
+}
+
+.cp-image-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.55);
+}
+
+
+/* Quick links */
+.cp-links {
+  margin-top: 12px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.cp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  height: 300px;
-  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--cp-border);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--cp-ink);
+  text-decoration: none;
+  font-weight: 500;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.cp-link svg { font-size: 1.05rem; }
+.cp-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(14,165,233,.35);
+  box-shadow: 0 10px 20px rgba(2,6,23,.08);
+}
+.cp-link--whatsapp { color: #047857; }      /* emerald-700 */
+.cp-link--phone    { color: var(--cp-brand-strong); }
+.cp-link--email    { color: #7c3aed; }      /* violet-600 */
+
+/* Map */
+.cp-mapWrap {
+  margin-top: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--cp-border);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.12);
+}
+.cp-map {
+  display: block;
+  width: 100%;
+  height: min(520px, 58vh);
+  border: 0;
 }
 
-@media (max-width: 1350px) {
-  .contact-section {
-      padding: 40px 40px;
-  }
-
-}
-
-@media (max-width: 800px) {
-  .contact-container { max-width: 97vw; }
-  .contact-map { height: 170px; }
-}
-@media (max-width: 500px) {
-  .contact-header h1 { font-size: 1.23rem; }
-  .contact-container { border-radius: 10px; padding: 7px 2vw 13px 2vw;}
-  .map-wrapper { border-radius: 7px; min-height: 120px; }
-  .contact-map { height: 110px; border-radius: 7px;}
-  .contact-link { font-size: 0.96rem; padding: 8px 8px; border-radius: 6px;}
+/* responsive */
+@media (max-width: 980px) {
+  .cp-grid { grid-template-columns: 1fr; }
+  .cp-image { order: 2; min-height: 260px; }
 }

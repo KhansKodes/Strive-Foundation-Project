@@ -1,102 +1,93 @@
-.contactform {
-  background: #f9fafe;
-  border-radius: 14px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;  
-  padding: 26px 15px 16px 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  width: 100%;
+/* ===== Contact Form (scoped) ===== */
+.cpf {
+  display: grid;
+  gap: 14px;
 }
 
-.form-row {
-  display: flex;
-  gap: 16px;
+.cpf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
+@media (max-width: 560px) { .cpf-row { grid-template-columns: 1fr; } }
 
-.form-row .form-group {
-  flex: 1;
-}
-
-.form-group {
+.cpf-field {
   position: relative;
-  margin-bottom: 0;
-  width: 100%;
 }
 
-.contactform input,
-.contactform textarea {
+.cpf-field input,
+.cpf-field textarea {
   width: 100%;
-  font-size: 1.07rem;
-  padding: 13px 12px 10px 13px;
-  border: 1.3px solid #d7d6e9;
-  border-radius: 7px;
+  border: 1px solid rgba(148,163,184,.35);
+  background: #f8fafc;
+  color: #0f172a;
+  border-radius: 999px;           /* pill for inputs */
+  padding: 16px 18px;
+  font-size: .98rem;
   outline: none;
-  background: #fff;
-  transition: border-color 0.13s, background 0.15s;
-  margin-bottom: 2px;
-  resize: none;
-  font-family: inherit;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
-.contactform input:focus,
-.contactform textarea:focus {
-  border-color: #553CDA;
-  background: #f7f9fe;
+.cpf-field textarea {
+  border-radius: 18px;
+  resize: vertical;
+  min-height: 130px;
 }
-.contactform label {
+
+.cpf-field label {
   position: absolute;
   left: 16px;
-  top: 13px;
-  font-size: 1rem;
-  color: #6e6e6e;
-  background: transparent;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
   pointer-events: none;
-  transition: 0.17s;
-  opacity: 0.68;
-}
-.contactform input:focus + label,
-.contactform input:not(:placeholder-shown) + label,
-.contactform textarea:focus + label,
-.contactform textarea:not(:placeholder-shown) + label {
-  top: -15px;
-  left: 7px;
-  background: transparent;
-  font-size: 0.88rem;
-  color: #553CDA;
-  opacity: 1;
-  padding: 0 3px;
-  font-weight: 500;
+  transition: all .18s ease;
+  padding: 0 6px;
 }
 
-.contactform button {
-  background: linear-gradient(90deg, #553CDA 0%, #4E21CA 100%);
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 7px;
-  padding: 12px 0;
-  font-size: 1.13rem;
-  letter-spacing: 0.2px;
-  box-shadow: 0 2px 7px 0 rgba(80,60,160,0.07);
-  margin-top: 7px;
+/* Floating label behavior */
+.cpf-field input:focus + label,
+.cpf-field input:not(:placeholder-shown) + label,
+.cpf-field textarea:focus + label,
+.cpf-field textarea:not(:placeholder-shown) + label {
+  top: -10px;
+  transform: none;
+  font-size: 12px;
+  color: #0ea5e9;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.cpf-field input:focus,
+.cpf-field textarea:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14,165,233,.25);
+  background: #ffffff;
+}
+
+.cpf-error {
+  margin: -2px 0 4px;
+  color: #dc2626;
+  font-size: .93rem;
+}
+
+/* Submit button with gradient */
+.cpf-submit {
+  appearance: none;
+  border: 0;
   cursor: pointer;
-  transition: background 0.13s, transform 0.10s;
-}
-.contactform button:hover,
-.contactform button:focus {
-  background: linear-gradient(90deg, #4E21CA 0%, #553CDA 100%);
-  transform: translateY(-1.5px) scale(1.01);
-}
-.contactform button.sent {
-  background: #15ce62;
+  width: 100%;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font-weight: 700;
   color: #fff;
-  pointer-events: none;
+  background: linear-gradient(90deg, #0ea5e9 0%, #7c3aed 100%);
+  box-shadow: 0 12px 22px rgba(124,58,237,.18);
+  transition: transform .15s ease, box-shadow .2s ease, filter .15s ease, opacity .2s ease;
 }
-
-/* Mobile: stack fields vertically */
-@media (max-width: 700px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
+.cpf-submit:hover { transform: translateY(-1px); box-shadow: 0 14px 26px rgba(2,6,23,.15); }
+.cpf-submit:active { transform: translateY(0); filter: brightness(.97); }
+.cpf-submit:disabled { opacity: .7; cursor: default; }
+.cpf-submit.is-sent {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  box-shadow: 0 12px 22px rgba(34,197,94,.22);
 }
