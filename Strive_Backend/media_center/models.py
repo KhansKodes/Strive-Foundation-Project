@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+import os
 
 class MediaPost(models.Model):
     class PostType(models.TextChoices):
@@ -87,4 +88,59 @@ class GalleryItem(models.Model):
                 raise ValidationError({"url": "Video URL is required for Videos."})
 
     def __str__(self):
-        return f"{self.get_type_display()} — {self.title}"        
+        return f"{self.get_type_display()} — {self.title}"    
+
+
+class DocumentItem(models.Model):
+    class DocType(models.TextChoices):
+        FLYER = "FLYER", "Flyer"
+        REPORT = "REPORT", "Report"
+        AUDIT = "AUDIT", "Audit Report"
+
+    type = models.CharField(max_length=16, choices=DocType.choices, db_index=True)
+    date = models.DateField(db_index=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+
+    # Either upload a file or paste an external URL (at least one is required)
+    file = models.FileField(upload_to="media_center/docs/", blank=True, null=True)
+    url = models.URLField(blank=True)
+
+    # Optional cover/thumb for the card
+    image = models.ImageField(upload_to="media_center/docs_thumbs/", blank=True, null=True)
+
+    is_published = models.BooleanField(default=True)
+    sort_order = models.IntegerField(default=0, help_text="Lower numbers show first.")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["sort_order", "-date", "-created_at"]
+        indexes = [
+            models.Index(fields=["type", "is_published", "date"]),
+            models.Index(fields=["sort_order"]),
+        ]
+        verbose_name = "Document"
+        verbose_name_plural = "Documents"
+
+    def clean(self):
+        if not self.file and not self.url:
+            raise ValidationError("Provide either a file upload or an external URL.")
+
+    # Helpers for serializer
+    @property
+    def ext(self):
+        if self.file and self.file.name:
+            return os.path.splitext(self.file.name)[1].replace(".", "").upper()
+        return ""
+
+    @property
+    def size_bytes(self):
+        try:
+            return self.file.size if self.file else 0
+        except Exception:
+            return 0
+
+    def __str__(self):
+        return f"{self.get_type_display()} — {self.title}"            
