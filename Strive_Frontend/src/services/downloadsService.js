@@ -1,7 +1,6 @@
-// src/services/downloadsService.js
 import api from "./api";
 
-/** "2025-07-01" -> "Jul 2025" */
+// Helpers ----------------------------------------------------
 function monthYear(iso) {
   try {
     const d = new Date(iso);
@@ -11,7 +10,6 @@ function monthYear(iso) {
   }
 }
 
-/** 3565158 (bytes) -> "3.4 MB" (or "900 KB") */
 function humanSize(bytes) {
   const b = Number(bytes || 0);
   if (!b) return "";
@@ -21,14 +19,27 @@ function humanSize(bytes) {
   return `${mb.toFixed(1)} MB`;
 }
 
-/** Coerce array or paginated {results: []} */
-function rowsOf(data) {
-  if (Array.isArray(data)) return data;
-  if (data && Array.isArray(data.results)) return data.results;
-  return [];
+/** Pull everything, even if DRF returns paginated results */
+async function fetchAll(url) {
+  let rows = [];
+  let nextUrl = url;
+
+  // If your backend is same-origin with baseURL, we can follow absolute "next" links too.
+  while (nextUrl) {
+    const { data } = await api.get(nextUrl);
+    if (Array.isArray(data)) {
+      rows = data;                // non-paginated: done
+      break;
+    }
+    const pageRows = Array.isArray(data?.results) ? data.results : [];
+    rows = rows.concat(pageRows);
+    nextUrl = data?.next || null; // absolute or relative; axios handles both
+    if (!data || (!data.results && !data.next)) break;
+  }
+
+  return rows;
 }
 
-/** Map backend record to your card shape */
 function mapDoc(d) {
   const fileUrl = d.file_url || d.url || "#";
   return {
@@ -36,23 +47,24 @@ function mapDoc(d) {
     title: d.title,
     date: monthYear(d.date),
     size: humanSize(d.size_bytes),
-    type: (d.ext || "").toUpperCase(),  // "PDF", "PNG", "JPG" badge
-    thumb: d.image_url || "",           // card image (optional)
-    file: fileUrl,                      // used by both View and Download buttons
+    type: (d.ext || "").toUpperCase(),        // badge (PDF/PNG/JPG…)
+    thumb: d.image_url || "",
+    file: fileUrl,                             // used by View/Download buttons
   };
 }
 
+// Public API -------------------------------------------------
 export async function fetchFlyers() {
-  const { data } = await api.get("/media-center/docs/flyers/");
-  return rowsOf(data).map(mapDoc);
+  const rows = await fetchAll("/media-center/docs/flyers/");
+  return rows.map(mapDoc);
 }
 
 export async function fetchReports() {
-  const { data } = await api.get("/media-center/docs/reports/");
-  return rowsOf(data).map(mapDoc);
+  const rows = await fetchAll("/media-center/docs/reports/");
+  return rows.map(mapDoc);
 }
 
 export async function fetchAudits() {
-  const { data } = await api.get("/media-center/docs/audit/");
-  return rowsOf(data).map(mapDoc);
+  const rows = await fetchAll("/media-center/docs/audit/");
+  return rows.map(mapDoc);
 }

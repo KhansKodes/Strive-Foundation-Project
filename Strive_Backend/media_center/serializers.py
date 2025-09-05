@@ -76,7 +76,13 @@ class DocumentItemSerializer(serializers.ModelSerializer):
         return req.build_absolute_uri(path) if req else path
 
     def get_file_url(self, obj):
-        return self._abs(getattr(obj.file, "url", None))
+        # Only access .url if a file is attached
+        if getattr(obj, "file", None) and getattr(obj.file, "name", ""):
+            return self._abs(obj.file.url)
+        return None
 
     def get_image_url(self, obj):
-        return self._abs(getattr(obj.image, "url", None))        
+        # Only access .url if an image is attached
+        if getattr(obj, "image", None) and getattr(obj.image, "name", ""):
+            return self._abs(obj.image.url)
+        return None       
