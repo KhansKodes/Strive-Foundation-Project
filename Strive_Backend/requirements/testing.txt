@@ -1,0 +1,23 @@
+# Testing requirements for Strive Foundation Django Backend
+-r base.txt
+
+# Testing framework and utilities
+pytest==8.3.3
+pytest-django==4.9.0
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+pytest-xdist==3.6.0  # For parallel test execution
+
+# Test data factories
+factory-boy==3.3.1
+faker==33.1.0
+
+# HTTP testing
+requests==2.32.3
+responses==0.25.3
+
+# Coverage reporting
+coverage==7.6.8
+
+# Performance testing
+locust==2.32.4

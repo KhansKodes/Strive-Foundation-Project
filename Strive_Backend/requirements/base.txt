@@ -1,0 +1,27 @@
+# Base requirements for Strive Foundation Django Backend
+# Core Django Framework
+Django==5.2.4
+asgiref==3.9.1
+
+# Django REST Framework for API
+djangorestframework==3.16.0
+
+# Authentication & JWT Tokens
+djangorestframework_simplejwt==5.5.1
+PyJWT==2.10.1
+
+# Database Support
+psycopg2-binary==2.9.10
+sqlparse==0.5.3
+
+# CORS Headers for Frontend Integration
+django-cors-headers==4.7.0
+
+# Image Processing
+Pillow==11.3.0
+
+# Environment Configuration
+python-decouple==3.8
+
+# Timezone Data
+tzdata==2025.2

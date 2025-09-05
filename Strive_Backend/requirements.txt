@@ -1,11 +1,44 @@
-asgiref==3.9.1
+# Strive Foundation Django Backend Requirements
+# 
+# For organized requirements by environment, see the requirements/ folder:
+# - requirements/base.txt - Core dependencies
+# - requirements/development.txt - Development tools
+# - requirements/production.txt - Production-specific packages
+# - requirements/testing.txt - Testing frameworks
+#
+# This file maintains backward compatibility and includes all current dependencies
+
+# Django Framework
 Django==5.2.4
-django-cors-headers==4.7.0
+asgiref==3.9.1
+
+# Django REST Framework
 djangorestframework==3.16.0
+
+# Authentication & JWT
 djangorestframework_simplejwt==5.5.1
-pillow==11.3.0
-psycopg2-binary==2.9.10
 PyJWT==2.10.1
+
+# Database
+psycopg2-binary==2.9.10
+
+# CORS Headers
+django-cors-headers==4.7.0
+
+# Image Processing
+Pillow==11.3.0
+
+# Environment Configuration
 python-decouple==3.8
+
+# Django Admin Theme
+django-jazzmin==3.0.0
+
+# HTTP Requests (for API testing)
+requests==2.32.3
+
+# Database & SQL
 sqlparse==0.5.3
+
+# Timezone Data
 tzdata==2025.2

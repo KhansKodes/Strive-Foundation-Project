@@ -1,0 +1,19 @@
+# Production requirements for Strive Foundation Django Backend
+-r base.txt
+
+# Production-specific packages
+gunicorn==23.0.0
+whitenoise==6.8.2
+
+# Production database optimization
+dj-database-url==2.2.0
+
+# Security enhancements
+django-secure==1.0.2
+
+# Monitoring and logging
+sentry-sdk==2.18.0
+
+# Static file serving
+django-storages==1.14.4
+boto3==1.35.63  # For AWS S3 storage if needed
