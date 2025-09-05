@@ -121,8 +121,8 @@ class DocumentItem(models.Model):
             models.Index(fields=["type", "is_published", "date"]),
             models.Index(fields=["sort_order"]),
         ]
-        verbose_name = "Document"
-        verbose_name_plural = "Documents"
+        verbose_name = "Downloads"
+        verbose_name_plural = "Downloads"
 
     def clean(self):
         if not self.file and not self.url:
