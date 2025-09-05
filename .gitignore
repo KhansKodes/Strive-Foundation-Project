@@ -1,5 +1,309 @@
+# ================================
+# STRIVE FOUNDATION PROJECT GITIGNORE
+# ================================
+# This .gitignore covers both Django Backend and React Frontend
 
-# Python bytecode
+# ================================
+# ENVIRONMENT & SECRETS
+# ================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+.envrc
+
+# ================================
+# DJANGO BACKEND SPECIFIC
+# ================================
+
+# Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Database migrations (keep initial migrations, ignore others)
+Strive_Backend/*/migrations/[0-9][0-9][0-9][0-9]_*.py
+Strive_Backend/*/migrations/[0-9][0-9][0-9][0-9]_*.pyc
+
+# Media files (user uploads)
+Strive_Backend/media/
+!Strive_Backend/media/.gitkeep
+
+# Static files collected
+Strive_Backend/staticfiles/
+Strive_Backend/static_collected/
+
+# Django secret key and settings
+Strive_Backend/config/local_settings.py
+Strive_Backend/config/production_settings.py
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+.env/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Pipenv
+Pipfile.lock
+
+# ================================
+# REACT FRONTEND SPECIFIC
+# ================================
+
+# Dependencies
+Strive_Frontend/node_modules/
+Strive_Frontend/npm-debug.log*
+Strive_Frontend/yarn-debug.log*
+Strive_Frontend/yarn-error.log*
+Strive_Frontend/lerna-debug.log*
+
+# Runtime data
+Strive_Frontend/pids
+Strive_Frontend/*.pid
+Strive_Frontend/*.seed
+Strive_Frontend/*.pid.lock
+
+# Coverage directory used by tools like istanbul
+Strive_Frontend/coverage/
+Strive_Frontend/.nyc_output
+
+# Build outputs
+Strive_Frontend/build/
+Strive_Frontend/dist/
+
+# Optional npm cache directory
+Strive_Frontend/.npm
+
+# Optional REPL history
+Strive_Frontend/.node_repl_history
+
+# Output of 'npm pack'
+Strive_Frontend/*.tgz
+
+# Yarn Integrity file
+Strive_Frontend/.yarn-integrity
+
+# parcel-bundler cache
+Strive_Frontend/.cache
+Strive_Frontend/.parcel-cache
+
+# next.js build output
+Strive_Frontend/.next
+
+# nuxt.js build output
+Strive_Frontend/.nuxt
+
+# vuepress build output
+Strive_Frontend/.vuepress/dist
+
+# Serverless directories
+Strive_Frontend/.serverless/
+
+# FuseBox cache
+Strive_Frontend/.fusebox/
+
+# DynamoDB Local files
+Strive_Frontend/.dynamodb/
+
+# ESLint cache
+Strive_Frontend/.eslintcache
+
+# Storybook build outputs
+Strive_Frontend/.out
+Strive_Frontend/.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# ================================
+# OPERATING SYSTEM FILES
+# ================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ================================
+# EDITOR AND IDE FILES
+# ================================
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# Atom
+.atom/
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ================================
+# LOGS AND TEMPORARY FILES
+# ================================
+*.log
+*.tmp
+*.temp
+logs/
+log/
+
+# ================================
+# BACKUP FILES
+# ================================
+*.bak
+*.backup
+*.old
+*.orig
+
+# ================================
+# COMPRESSED FILES
+# ================================
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# But keep specific compressed files that are part of the project
+!Strive_Frontend/src/components.zip
+
+# ================================
+# TESTING
+# ================================
+.pytest_cache/
+.coverage
+htmlcov/
+test-results/
+test_output/
+
+# ================================
+# DEPLOYMENT
+# ================================
+.vercel
+.netlify
+.firebase/
+.firebaserc
+firebase.json
+
+# ================================
+# CUSTOM PROJECT FILES
+# ================================
+# Add any project-specific files to ignore here
+todo.txt
+notes.txt
+scratch.py
+test_*.py
+!test_api.py  # Keep the main API test file
+
+# Documentation drafts
+docs/drafts/
+*.draft.md
