@@ -13,7 +13,7 @@ async function getFirstOk(paths) {
     } catch (e) {
       lastErr = e;
       // continue trying next path
-    }
+    } 
   }
   throw lastErr || new Error("No endpoint responded");
 }
