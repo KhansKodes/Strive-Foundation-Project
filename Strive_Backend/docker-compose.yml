@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: strive_db        # must match your .env DB_NAME
+      POSTGRES_USER: postgres       # must match your .env DB_USER
+      POSTGRES_PASSWORD: "1234"     # must match your .env DB_PASSWORD
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .                    # build from current folder
+      dockerfile: Dockerfile        # Dockerfile will live here
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app                      # live-reload your code
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    env_file:
+      - ./.env                      # uses the .env you created
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
+  static_volume:
+  media_volume:

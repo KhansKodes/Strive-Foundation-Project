@@ -42,3 +42,11 @@ sqlparse==0.5.3
 
 # Timezone Data
 tzdata==2025.2
+
+# Gunicorn
+gunicorn
+
+# Django CORS Headers
+django-cors-headers
+
+Pillow
